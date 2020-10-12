@@ -11,24 +11,24 @@ type Context interface {
 	Input() input.Interface
 }
 
-func newContext(g *game) Context {
+func newContext(g *gome) Context {
 	context := new(context)
-	context.game = g
+	context.gome = g
 	return context
 }
 
 type context struct {
-	game *game
+	gome *gome
 }
 
 func (c *context) QuitGame() {
-	c.game.Quit()
+	c.gome.Quit()
 }
 
 func (c *context) Graphics() graphics.Interface {
-	return c.game.adapterSystem.Graphics()
+	return c.gome.adapterSystem.Graphics()
 }
 
 func (c *context) Input() input.Interface {
-	return c.game.adapterSystem.Input()
+	return c.gome.adapterSystem.Input()
 }

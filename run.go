@@ -2,13 +2,13 @@ package game
 
 import "github.com/GomeBox/gome/adapters/graphics"
 
-func Run(instance Interface, settings Settings) error {
-	g := new(game)
-	err := g.initialize(instance, settings)
+func Run(game Interface, settings Settings) error {
+	g := new(gome)
+	err := g.initialize(game, settings)
 	if err != nil {
 		return err
 	}
-	errChan := g.loop(instance)
+	errChan := g.loop(game)
 	err = <-errChan
 	if err != nil {
 		return err

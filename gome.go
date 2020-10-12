@@ -5,13 +5,13 @@ import (
 	"github.com/GomeBox/gome/adapters"
 )
 
-type game struct {
+type gome struct {
 	quit          bool
 	Error         chan error
 	adapterSystem adapters.System
 }
 
-func (g *game) initialize(instance Interface, settings Settings) error {
+func (g *gome) initialize(instance Interface, settings Settings) error {
 	var err error
 	a, err := instance.Initialize()
 	if err != nil {
@@ -33,18 +33,18 @@ func (g *game) initialize(instance Interface, settings Settings) error {
 	return nil
 }
 
-func checkAdapters(adapters adapters.System, g *game) error {
+func checkAdapters(adapters adapters.System, g *gome) error {
 	if adapters.Graphics() == nil {
-		return errors.New("game.checkAdapters(): Graphics adapter is nil")
+		return errors.New("gome.checkAdapters(): Graphics adapter is nil")
 	}
 	if adapters.Input() == nil {
-		return errors.New("game.checkAdapters(): input adapter is nil")
+		return errors.New("gome.checkAdapters(): input adapter is nil")
 	}
 	g.adapterSystem = adapters
 	return nil
 }
 
-func (g *game) loop(instance Interface) chan error {
+func (g *gome) loop(instance Interface) chan error {
 	context := newContext(g)
 	errChan := make(chan error, 1)
 	var err error
@@ -64,6 +64,6 @@ func (g *game) loop(instance Interface) chan error {
 	return errChan
 }
 
-func (g *game) Quit() {
+func (g *gome) Quit() {
 	g.quit = true
 }
