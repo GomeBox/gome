@@ -6,11 +6,12 @@ type Controller interface {
 
 type ButtonType int
 
+//goland:noinspection GoUnusedConst,GoUnusedConst,GoUnusedConst,GoUnusedConst,GoUnusedConst,GoUnusedConst
 const (
-	Button_A ButtonType = iota
-	Button_B
-	Button_X
-	Button_Y
-	Button_Start
-	Button_Select
+	ButtonA ButtonType = iota
+	ButtonB
+	ButtonX
+	ButtonY
+	ButtonStart
+	ButtonSelect
 )
