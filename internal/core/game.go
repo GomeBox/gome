@@ -1,19 +1,23 @@
-package game
+package core
 
 import (
 	"errors"
 	"github.com/GomeBox/gome/adapters"
 )
 
-type gome struct {
+type Game struct {
 	quit          bool
 	Error         chan error
 	adapterSystem adapters.System
 }
 
-func (g *gome) initialize(instance Interface, settings Settings) error {
+type UpdateCallBack func() error
+type DrawCallback func() error
+type InitializeCallback func() (adapters.System, error)
+
+func (g *Game) Initialize(initialize InitializeCallback, settings Settings) error {
 	var err error
-	a, err := instance.Initialize()
+	a, err := initialize()
 	if err != nil {
 		return err
 	}
@@ -25,7 +29,7 @@ func (g *gome) initialize(instance Interface, settings Settings) error {
 	if err != nil {
 		return err
 	}
-	err = g.adapterSystem.Graphics().ShowWindow(settings.WindowSettings)
+	err = g.adapterSystem.Graphics().ShowWindow(settings.WindowSettings())
 	if err != nil {
 		return err
 	}
@@ -33,7 +37,7 @@ func (g *gome) initialize(instance Interface, settings Settings) error {
 	return nil
 }
 
-func checkAdapters(adapters adapters.System, g *gome) error {
+func checkAdapters(adapters adapters.System, g *Game) error {
 	if adapters.Graphics() == nil {
 		return errors.New("gome.checkAdapters(): Graphics adapter is nil")
 	}
@@ -44,17 +48,16 @@ func checkAdapters(adapters adapters.System, g *gome) error {
 	return nil
 }
 
-func (g *gome) loop(instance Interface) chan error {
-	context := newContext(g)
+func (g *Game) Loop(update UpdateCallBack, draw DrawCallback) chan error {
 	errChan := make(chan error, 1)
 	var err error
 	go func() {
 		for !g.quit {
-			err = instance.Update(context)
+			err = update()
 			if err != nil {
 				break
 			}
-			err = instance.Draw(context)
+			err = draw()
 			if err != nil {
 				break
 			}
@@ -64,6 +67,10 @@ func (g *gome) loop(instance Interface) chan error {
 	return errChan
 }
 
-func (g *gome) Quit() {
+func (g *Game) AdapterSystem() adapters.System {
+	return g.adapterSystem
+}
+
+func (g *Game) Quit() {
 	g.quit = true
 }

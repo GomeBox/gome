@@ -1,14 +1,24 @@
-package game
+package gome
 
-import "github.com/GomeBox/gome/adapters/graphics"
+import (
+	"github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/internal/core"
+)
 
 func Run(game Interface, settings Settings) error {
-	g := new(gome)
-	err := g.initialize(game, settings)
+	g := new(core.Game)
+	c := newContextWrapper(g)
+	update := func() error {
+		return game.Update(c)
+	}
+	draw := func() error {
+		return game.Draw(c)
+	}
+	err := g.Initialize(game.Initialize, settings)
 	if err != nil {
 		return err
 	}
-	errChan := g.loop(game)
+	errChan := g.Loop(update, draw)
 	err = <-errChan
 	if err != nil {
 		return err
@@ -17,13 +27,17 @@ func Run(game Interface, settings Settings) error {
 }
 
 type Settings struct {
-	WindowSettings graphics.WindowSettings
+	windowSettings graphics.WindowSettings
+}
+
+func (s Settings) WindowSettings() *graphics.WindowSettings {
+	return &s.windowSettings
 }
 
 func NewSettings() Settings {
 	s := new(Settings)
-	s.WindowSettings = *new(graphics.WindowSettings)
-	s.WindowSettings.Resolution.Width = 800
-	s.WindowSettings.Resolution.Height = 600
+	s.windowSettings = *new(graphics.WindowSettings)
+	s.windowSettings.Resolution.Width = 800
+	s.windowSettings.Resolution.Height = 600
 	return *s
 }

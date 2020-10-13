@@ -1,8 +1,9 @@
-package game
+package gome
 
 import (
 	"github.com/GomeBox/gome/adapters/graphics"
 	"github.com/GomeBox/gome/adapters/input"
+	"github.com/GomeBox/gome/internal/core"
 )
 
 type Context interface {
@@ -11,24 +12,24 @@ type Context interface {
 	Input() input.Interface
 }
 
-func newContext(g *gome) Context {
-	context := new(context)
-	context.gome = g
+type contextWrapper struct {
+	game *core.Game
+}
+
+func newContextWrapper(g *core.Game) *contextWrapper {
+	context := new(contextWrapper)
+	context.game = g
 	return context
 }
 
-type context struct {
-	gome *gome
+func (c *contextWrapper) QuitGame() {
+	c.game.Quit()
 }
 
-func (c *context) QuitGame() {
-	c.gome.Quit()
+func (c *contextWrapper) Graphics() graphics.Interface {
+	return c.game.AdapterSystem().Graphics()
 }
 
-func (c *context) Graphics() graphics.Interface {
-	return c.gome.adapterSystem.Graphics()
-}
-
-func (c *context) Input() input.Interface {
-	return c.gome.adapterSystem.Input()
+func (c *contextWrapper) Input() input.Interface {
+	return c.game.AdapterSystem().Input()
 }

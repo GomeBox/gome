@@ -1,7 +1,7 @@
 package graphics
 
 type Interface interface {
-	ShowWindow(windowSettings WindowSettings) error
+	ShowWindow(windowSettings *WindowSettings) error
 }
 
 type WindowSettings struct {
