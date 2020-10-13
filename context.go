@@ -11,9 +11,9 @@ type Context interface {
 	//QuitGame stops the game loop and causes the Gome.Run to return
 	QuitGame()
 	//Graphics returns the graphics adapter
-	Graphics() graphics.Interface
+	Graphics() graphics.Port
 	//Graphics returns the input adapter
-	Input() input.Interface
+	Input() input.Port
 }
 
 type contextWrapper struct {
@@ -30,10 +30,10 @@ func (context *contextWrapper) QuitGame() {
 	context.runner.Quit()
 }
 
-func (context *contextWrapper) Graphics() graphics.Interface {
+func (context *contextWrapper) Graphics() graphics.Port {
 	return context.runner.AdapterSystem().Graphics()
 }
 
-func (context *contextWrapper) Input() input.Interface {
+func (context *contextWrapper) Input() input.Port {
 	return context.runner.AdapterSystem().Input()
 }
