@@ -65,23 +65,20 @@ func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 	defer func() { runner.running = false }()
 	//errChan := make(chan error, 1)
 	var err error
-	go func() {
-		for !runner.quit {
-			err = runner.adapterSystem.Update()
-			if err != nil {
-				break
-			}
-			err = update()
-			if err != nil {
-				break
-			}
-			err = draw()
-			if err != nil {
-				break
-			}
+	for !runner.quit {
+		err = runner.adapterSystem.Update()
+		if err != nil {
+			break
 		}
-		//errChan <- err
-	}()
+		err = update()
+		if err != nil {
+			break
+		}
+		err = draw()
+		if err != nil {
+			break
+		}
+	}
 	return err
 }
 
