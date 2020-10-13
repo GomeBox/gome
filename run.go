@@ -5,11 +5,15 @@ import (
 	"github.com/GomeBox/gome/internal/core"
 )
 
+//Gome is used to run a Game
 type Gome interface {
+	//Run starts the Game. Returns when the game ends
 	Run(game Game, settings Settings) error
+	//ChangeGameRunner is used for testing purposes only
 	ChangeGameRunner(runner core.GameRunner)
 }
 
+//New returns a new instance of Gome
 func New() Gome {
 	g := new(gome)
 	g.gameRunner = core.CreateGameRunner()

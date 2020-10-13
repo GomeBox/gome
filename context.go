@@ -6,9 +6,13 @@ import (
 	"github.com/GomeBox/gome/internal/core"
 )
 
+//Context is passed to Game.Update and Game.Draw to access the game's systems, etc.
 type Context interface {
+	//QuitGame stops the game loop and causes the Gome.Run to return
 	QuitGame()
+	//Graphics returns the graphics adapter
 	Graphics() graphics.Interface
+	//Graphics returns the input adapter
 	Input() input.Interface
 }
 
