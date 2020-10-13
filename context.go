@@ -13,23 +13,23 @@ type Context interface {
 }
 
 type contextWrapper struct {
-	game *core.Game
+	runner core.GameRunner
 }
 
-func newContextWrapper(g *core.Game) *contextWrapper {
+func newContextWrapper(runner core.GameRunner) *contextWrapper {
 	context := new(contextWrapper)
-	context.game = g
+	context.runner = runner
 	return context
 }
 
-func (c *contextWrapper) QuitGame() {
-	c.game.Quit()
+func (context *contextWrapper) QuitGame() {
+	context.runner.Quit()
 }
 
-func (c *contextWrapper) Graphics() graphics.Interface {
-	return c.game.AdapterSystem().Graphics()
+func (context *contextWrapper) Graphics() graphics.Interface {
+	return context.runner.AdapterSystem().Graphics()
 }
 
-func (c *contextWrapper) Input() input.Interface {
-	return c.game.AdapterSystem().Input()
+func (context *contextWrapper) Input() input.Interface {
+	return context.runner.AdapterSystem().Input()
 }

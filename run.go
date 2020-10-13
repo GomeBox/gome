@@ -1,24 +1,41 @@
 package gome
 
 import (
-	"github.com/GomeBox/gome/adapters/graphics"
+	"errors"
 	"github.com/GomeBox/gome/internal/core"
 )
 
-func Run(game Game, settings Settings) error {
-	g := new(core.Game)
-	c := newContextWrapper(g)
+type Gome interface {
+	Run(game Game, settings Settings) error
+	ChangeGameRunner(runner core.GameRunner)
+}
+
+func New() Gome {
+	g := new(gome)
+	g.gameRunner = core.CreateGameRunner()
+	return g
+}
+
+type gome struct {
+	gameRunner core.GameRunner
+}
+
+func (gome *gome) Run(game Game, settings Settings) error {
+	if gome.gameRunner.Running() {
+		return errors.New("game is already running")
+	}
+	err := gome.gameRunner.Initialize(game.Initialize, settings)
+	if err != nil {
+		return err
+	}
+	c := newContextWrapper(gome.gameRunner)
 	update := func() error {
 		return game.Update(c)
 	}
 	draw := func() error {
 		return game.Draw(c)
 	}
-	err := g.Initialize(game.Initialize, settings)
-	if err != nil {
-		return err
-	}
-	errChan := g.Loop(update, draw)
+	errChan := gome.gameRunner.Loop(update, draw)
 	err = <-errChan
 	if err != nil {
 		return err
@@ -26,18 +43,6 @@ func Run(game Game, settings Settings) error {
 	return nil
 }
 
-type Settings struct {
-	windowSettings graphics.WindowSettings
-}
-
-func (s Settings) WindowSettings() *graphics.WindowSettings {
-	return &s.windowSettings
-}
-
-func NewSettings() Settings {
-	s := new(Settings)
-	s.windowSettings = *new(graphics.WindowSettings)
-	s.windowSettings.Resolution.Width = 800
-	s.windowSettings.Resolution.Height = 600
-	return *s
+func (gome *gome) ChangeGameRunner(runner core.GameRunner) {
+	gome.gameRunner = runner
 }
