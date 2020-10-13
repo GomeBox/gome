@@ -7,7 +7,6 @@ import (
 
 type Game struct {
 	quit          bool
-	Error         chan error
 	adapterSystem adapters.System
 }
 
@@ -53,6 +52,10 @@ func (g *Game) Loop(update UpdateCallBack, draw DrawCallback) chan error {
 	var err error
 	go func() {
 		for !g.quit {
+			err = g.adapterSystem.Update()
+			if err != nil {
+				break
+			}
 			err = update()
 			if err != nil {
 				break
