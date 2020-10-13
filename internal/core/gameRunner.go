@@ -11,7 +11,7 @@ type InitializeCallback func() (adapters.System, error)
 
 type GameRunner interface {
 	Initialize(initialize InitializeCallback, settings Settings) error
-	Loop(update UpdateCallBack, draw DrawCallback) chan error
+	Loop(update UpdateCallBack, draw DrawCallback) error
 	Running() bool
 	AdapterSystem() adapters.System
 	Quit()
@@ -60,10 +60,10 @@ func checkAdapters(adapters adapters.System, g *gameRunner) error {
 	return nil
 }
 
-func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) chan error {
+func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 	runner.running = true
 	defer func() { runner.running = false }()
-	errChan := make(chan error, 1)
+	//errChan := make(chan error, 1)
 	var err error
 	go func() {
 		for !runner.quit {
@@ -80,9 +80,9 @@ func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) chan er
 				break
 			}
 		}
-		errChan <- err
+		//errChan <- err
 	}()
-	return errChan
+	return err
 }
 
 func (runner *gameRunner) AdapterSystem() adapters.System {

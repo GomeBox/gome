@@ -35,8 +35,8 @@ func (gome *gome) Run(game Game, settings Settings) error {
 	draw := func() error {
 		return game.Draw(c)
 	}
-	errChan := gome.gameRunner.Loop(update, draw)
-	err = <-errChan
+	err = gome.gameRunner.Loop(update, draw)
+	//err = <-errChan
 	if err != nil {
 		return err
 	}
