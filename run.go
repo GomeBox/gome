@@ -5,7 +5,7 @@ import (
 	"github.com/GomeBox/gome/internal/core"
 )
 
-func Run(game Interface, settings Settings) error {
+func Run(game Game, settings Settings) error {
 	g := new(core.Game)
 	c := newContextWrapper(g)
 	update := func() error {
