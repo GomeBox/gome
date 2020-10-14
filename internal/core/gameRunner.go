@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"github.com/GomeBox/gome/adapters"
 )
 
@@ -41,7 +42,7 @@ func (runner *gameRunner) Initialize(initialize InitializeCallback, settings Set
 	if err != nil {
 		return err
 	}
-	err = runner.adapterSystem.Graphics().ShowWindow(settings.WindowSettings())
+	err = runner.adapterSystem.Graphics().WindowAdapter().ShowWindow(settings.WindowSettings())
 	if err != nil {
 		return err
 	}
@@ -76,6 +77,7 @@ func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 		}
 		err = draw()
 		if err != nil {
+			fmt.Println("Err draw")
 			break
 		}
 	}

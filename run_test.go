@@ -2,6 +2,8 @@ package gome
 
 import (
 	"github.com/GomeBox/gome/adapters"
+	g "github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/adapters/input"
 	"github.com/GomeBox/gome/internal/core"
 	"testing"
 )
@@ -25,18 +27,63 @@ func (runner *gameRunnerMock) Running() bool {
 }
 
 func (runner *gameRunnerMock) AdapterSystem() adapters.System {
-	return nil
+	return new(adapterSystemMock)
 }
 
 func (runner *gameRunnerMock) Quit() {
 
 }
 
+type adapterSystemMock struct {
+}
+
+func (adapterSystem *adapterSystemMock) Initialize() error {
+	return nil
+}
+
+func (adapterSystem *adapterSystemMock) Update() error {
+	return nil
+}
+
+func (adapterSystem *adapterSystemMock) Input() input.Port {
+	return new(inputMock)
+}
+
+func (adapterSystem *adapterSystemMock) Graphics() g.Adapters {
+	return new(graphicsMock)
+}
+
+type inputMock struct {
+}
+
+func (input *inputMock) Keyboard() input.Keyboard {
+	return nil
+}
+
+func (input *inputMock) ControllerCount() int {
+	return 0
+}
+
+func (input *inputMock) Controller(number int) (*input.Controller, error) {
+	return nil, nil
+}
+
+type graphicsMock struct {
+}
+
+func (graphics *graphicsMock) TextureLoader() g.TextureLoader {
+	return nil
+}
+
+func (graphics *graphicsMock) WindowAdapter() g.WindowAdapter {
+	return nil
+}
+
 type gameMock struct {
 }
 
 func (game *gameMock) Initialize() (adapters.System, error) {
-	return nil, nil
+	return new(adapterSystemMock), nil
 }
 
 func (game *gameMock) Update(context Context) error {

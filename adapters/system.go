@@ -14,5 +14,5 @@ type System interface {
 	//Input returns the Inputadapter that is used to access keyboard, controllers, etc.
 	Input() input.Port
 	//Graphics returns the Graphicsadapter that is used to draw the game to the screen
-	Graphics() graphics.Port
+	Graphics() graphics.Adapters
 }

@@ -1,7 +1,7 @@
 package graphics
 
-//Port is to be implemented by the graphics adapter
-type Port interface {
+//WindowAdapter is to be implemented by the graphics adapter
+type WindowAdapter interface {
 	//ShowWindow opens a game window
 	ShowWindow(windowSettings *WindowSettings) error
 }
