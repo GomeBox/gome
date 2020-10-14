@@ -1,5 +1,7 @@
 package graphics
 
+import "github.com/GomeBox/gome/primitives"
+
 //WindowAdapter is to be implemented by the graphics adapter
 type WindowAdapter interface {
 	//ShowWindow opens a game window
@@ -9,11 +11,6 @@ type WindowAdapter interface {
 //WindowSettings contains all the settings needed to show the game window
 type WindowSettings struct {
 	Fullscreen bool
-	Resolution Dimensions
+	Resolution primitives.Dimensions
 	Title      string
-}
-
-//Dimensions defines a width and a height of an entity
-type Dimensions struct {
-	Width, Height int
 }

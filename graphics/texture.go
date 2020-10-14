@@ -1,9 +1,12 @@
 package graphics
 
-import "github.com/GomeBox/gome/adapters/graphics"
+import (
+	"github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/primitives"
+)
 
 type Texture interface {
-	Draw() error
+	Draw(source, dest *primitives.Rectangle) error
 }
 
 func NewTexture(drawer graphics.TextureDrawer) Texture {
@@ -16,8 +19,8 @@ type texture struct {
 	drawer graphics.TextureDrawer
 }
 
-func (texture *texture) Draw() error {
-	err := texture.drawer.Draw()
+func (texture *texture) Draw(source, dest *primitives.Rectangle) error {
+	err := texture.drawer.Draw(source, dest)
 	if err != nil {
 		return err
 	}
