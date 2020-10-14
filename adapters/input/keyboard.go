@@ -50,9 +50,52 @@ const (
 	Key7
 	Key8
 	Key9
-	KeyCtrl
-	KeyAlt
+	KeyLeftCtrl
+	KeyRightCtrl
+	KeyLeftAlt
+	KeyRightAlt
 	KeySpace
 	KeyReturn
 	KeyEsc
+	KeyBackslash
+	KeyBackspace
+	KeyCapslock
+	KeyComma
+	KeyDelete
+	KeyEnd
+	KeyEquals
+	KeyF1
+	KeyF2
+	KeyF3
+	KeyF4
+	KeyF5
+	KeyF6
+	KeyF7
+	KeyF8
+	KeyF9
+	KeyF10
+	KeyF11
+	KeyF12
+	KeyF13
+	KeyHome
+	KeyInsert
+	KeyNum0
+	KeyNum1
+	KeyNum2
+	KeyNum3
+	KeyNum4
+	KeyNum5
+	KeyNum6
+	KeyNum7
+	KeyNum8
+	KeyNum9
+	KeyPageDown
+	KeyPageUp
+	KeyPause
+	KeyPeriod
+	KeyRightBracket
+	KeyLeftBracket
+	KeySemicolon
+	KeySlash
+	KeyTab
 )
