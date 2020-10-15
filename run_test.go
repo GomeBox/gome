@@ -75,6 +75,14 @@ func (graphics *graphicsMock) TextureLoader() g.TextureLoader {
 	return nil
 }
 
+func (graphics *graphicsMock) FontLoader() g.FontLoader {
+	return nil
+}
+
+func (graphics *graphicsMock) ScreenPresenter() g.ScreenPresenter {
+	return nil
+}
+
 func (graphics *graphicsMock) WindowAdapter() g.WindowAdapter {
 	return nil
 }

@@ -2,7 +2,6 @@ package core
 
 import (
 	"errors"
-	"fmt"
 	"github.com/GomeBox/gome/adapters"
 )
 
@@ -64,7 +63,6 @@ func checkAdapters(adapters adapters.System, g *gameRunner) error {
 func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 	runner.running = true
 	defer func() { runner.running = false }()
-	//errChan := make(chan error, 1)
 	var err error
 	for !runner.quit {
 		err = runner.adapterSystem.Update()
@@ -77,7 +75,10 @@ func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 		}
 		err = draw()
 		if err != nil {
-			fmt.Println("Err draw")
+			break
+		}
+		err = runner.adapterSystem.Graphics().ScreenPresenter().Present()
+		if err != nil {
 			break
 		}
 	}

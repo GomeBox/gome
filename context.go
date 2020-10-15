@@ -26,7 +26,12 @@ func newContextWrapper(runner core.GameRunner) *contextWrapper {
 	context.runner = runner
 	textureLoader := runner.AdapterSystem().Graphics().TextureLoader()
 	windowAdapter := runner.AdapterSystem().Graphics().WindowAdapter()
-	context.graphics = graphics.NewSystem(graphics.Adapters{TextureLoader: textureLoader, WindowAdapter: windowAdapter})
+	fontLoader := runner.AdapterSystem().Graphics().FontLoader()
+	context.graphics = graphics.NewSystem(
+		graphics.Adapters{
+			TextureLoader: textureLoader,
+			WindowAdapter: windowAdapter,
+			FontLoader:    fontLoader})
 
 	return context
 }
