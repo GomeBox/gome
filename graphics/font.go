@@ -6,7 +6,7 @@ import (
 )
 
 type Font interface {
-	CreateText(text string, color primitives.Color) (graphics.TextDrawer, error)
+	CreateText(text string, color primitives.Color) (Text, error)
 }
 
 func NewFont(creator graphics.TextCreator) Font {
@@ -19,10 +19,10 @@ type font struct {
 	creator graphics.TextCreator
 }
 
-func (font *font) CreateText(text string, color primitives.Color) (graphics.TextDrawer, error) {
+func (font *font) CreateText(text string, color primitives.Color) (Text, error) {
 	drawer, err := font.creator.Create(text, color)
 	if err != nil {
 		return nil, err
 	}
-	return drawer, nil
+	return newText(drawer), nil
 }

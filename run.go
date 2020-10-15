@@ -33,11 +33,11 @@ func (gome *gome) Run(game Game, settings Settings) error {
 		return err
 	}
 	c := newContextWrapper(gome.gameRunner)
-	update := func() error {
-		return game.Update(c)
+	update := func(timeDelta float32) error {
+		return game.Update(timeDelta, c)
 	}
-	draw := func() error {
-		return game.Draw(c)
+	draw := func(timeDelta float32) error {
+		return game.Draw(timeDelta, c)
 	}
 	err = gome.gameRunner.Loop(update, draw)
 	//err = <-errChan

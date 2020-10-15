@@ -94,12 +94,12 @@ func (game *gameMock) Initialize() (adapters.System, error) {
 	return new(adapterSystemMock), nil
 }
 
-func (game *gameMock) Update(context Context) error {
+func (game *gameMock) Update(timeDelta float32, context Context) error {
 	context.QuitGame()
 	return nil
 }
 
-func (game *gameMock) Draw(context Context) error {
+func (game *gameMock) Draw(timeDelta float32, context Context) error {
 	return nil
 }
 

@@ -3,10 +3,11 @@ package core
 import (
 	"errors"
 	"github.com/GomeBox/gome/adapters"
+	"time"
 )
 
-type UpdateCallBack func() error
-type DrawCallback func() error
+type UpdateCallBack func(timeDelta float32) error
+type DrawCallback func(timeDelta float32) error
 type InitializeCallback func() (adapters.System, error)
 
 type GameRunner interface {
@@ -60,26 +61,38 @@ func checkAdapters(adapters adapters.System, g *gameRunner) error {
 	return nil
 }
 
+var elapsedTime float32
+var frameStart time.Time
+
 func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 	runner.running = true
 	defer func() { runner.running = false }()
 	var err error
 	for !runner.quit {
+		frameStart = time.Now()
+		err = runner.adapterSystem.Graphics().ScreenPresenter().Clear()
+		if err != nil {
+			break
+		}
 		err = runner.adapterSystem.Update()
 		if err != nil {
 			break
 		}
-		err = update()
+		err = update(elapsedTime)
 		if err != nil {
 			break
 		}
-		err = draw()
+		err = draw(elapsedTime)
 		if err != nil {
 			break
 		}
 		err = runner.adapterSystem.Graphics().ScreenPresenter().Present()
 		if err != nil {
 			break
+		}
+		elapsedTime = float32(time.Since(frameStart).Nanoseconds()) / 1000000.0
+		if elapsedTime == 0.0 {
+			elapsedTime = 1.0
 		}
 	}
 	return err
