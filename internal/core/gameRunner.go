@@ -3,19 +3,19 @@ package core
 import (
 	"errors"
 	"github.com/GomeBox/gome/adapters"
+	"github.com/GomeBox/gome/game"
 	"time"
 )
 
-type InitializeCallback func() error
-type UpdateCallback func(timeDelta float32) error
-type DrawCallback func(timeDelta float32) error
+type InitializeCallback func(context game.Context) error
+type UpdateCallback func(timeDelta float32, context game.Context) error
+type DrawCallback func(timeDelta float32, context game.Context) error
 type CreateAdapters func() (adapters.System, error)
 
 type GameRunner interface {
 	Init(createAdapters CreateAdapters, settings Settings) error
 	Loop(initialize InitializeCallback, update UpdateCallback, draw DrawCallback) error
 	Running() bool
-	AdapterSystem() adapters.System
 	Quit()
 }
 
@@ -67,7 +67,7 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 	runner.running = true
 	defer func() { runner.running = false }()
 	var err error
-	err = runner.onInitialize(initialize)
+	context, err := runner.onInitialize(initialize)
 	if err != nil {
 		return err
 	}
@@ -81,11 +81,11 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 		if err != nil {
 			break
 		}
-		err = update(elapsedTime)
+		err = update(elapsedTime, context)
 		if err != nil {
 			break
 		}
-		err = draw(elapsedTime)
+		err = draw(elapsedTime, context)
 		if err != nil {
 			break
 		}
@@ -101,20 +101,17 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 	return err
 }
 
-func (runner *gameRunner) onInitialize(callback InitializeCallback) error {
+func (runner *gameRunner) onInitialize(callback InitializeCallback) (game.Context, error) {
 	err := runner.adapterSystem.Graphics().WindowAdapter().ShowWindow(runner.settings.WindowSettings())
 	if err != nil {
-		return err
+		return nil, err
 	}
-	err = callback()
+	context := newContextWrapper(runner.adapterSystem, runner)
+	err = callback(context)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
-}
-
-func (runner *gameRunner) AdapterSystem() adapters.System {
-	return runner.adapterSystem
+	return context, nil
 }
 
 func (runner *gameRunner) Quit() {
