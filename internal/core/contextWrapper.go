@@ -10,11 +10,13 @@ type contextWrapper struct {
 	runner   GameRunner
 	graphics graphics.System
 	input    input.System
+	adapters adapters.System
 }
 
 func newContextWrapper(system adapters.System, runner GameRunner) *contextWrapper {
 	context := new(contextWrapper)
 	context.runner = runner
+	context.adapters = system
 	textureLoader := system.Graphics().TextureLoader()
 	windowAdapter := system.Graphics().WindowAdapter()
 	fontLoader := system.Graphics().FontLoader()
@@ -23,6 +25,9 @@ func newContextWrapper(system adapters.System, runner GameRunner) *contextWrappe
 			TextureLoader: textureLoader,
 			WindowAdapter: windowAdapter,
 			FontLoader:    fontLoader})
+	context.input = input.NewSystem(
+		input.Adapters{
+			Keyboard: system.Input().Keyboard()})
 
 	return context
 }
@@ -37,4 +42,16 @@ func (context *contextWrapper) Graphics() graphics.System {
 
 func (context *contextWrapper) Input() input.System {
 	return context.input
+}
+
+func (context *contextWrapper) Update() error {
+	err := context.adapters.Update()
+	if err != nil {
+		return err
+	}
+	err = context.Input().Update()
+	if err != nil {
+		return err
+	}
+	return err
 }

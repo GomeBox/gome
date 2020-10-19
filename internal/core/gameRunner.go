@@ -77,7 +77,7 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 		if err != nil {
 			break
 		}
-		err = runner.adapterSystem.Update()
+		err = context.Update()
 		if err != nil {
 			break
 		}
@@ -101,7 +101,7 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 	return err
 }
 
-func (runner *gameRunner) onInitialize(callback InitializeCallback) (game.Context, error) {
+func (runner *gameRunner) onInitialize(callback InitializeCallback) (*contextWrapper, error) {
 	err := runner.adapterSystem.Graphics().WindowAdapter().ShowWindow(runner.settings.WindowSettings())
 	if err != nil {
 		return nil, err

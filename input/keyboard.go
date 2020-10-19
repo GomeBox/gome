@@ -24,7 +24,7 @@ type keyboard struct {
 
 func (keyboard *keyboard) RegisterKey(keyType primitives.KeyType) (Key, error) {
 	pressed, err := keyboard.adapter.KeyPressed(keyType)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 	var keyInstance *key
@@ -37,7 +37,6 @@ func (keyboard *keyboard) RegisterKey(keyType primitives.KeyType) (Key, error) {
 		}
 		keyboard.registeredKeys[keyType] = keyInstance
 	}
-
 	return keyInstance, nil
 }
 

@@ -25,6 +25,7 @@ type gome struct {
 	gameRunner core.GameRunner
 }
 
+//Run starts a game and starts the game loop. Returns, when the game is ended
 func (gome *gome) Run(game game.Interface, settings game.Settings) error {
 	if gome.gameRunner.Running() {
 		return errors.New("game is already running")

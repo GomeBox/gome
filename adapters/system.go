@@ -9,7 +9,7 @@ import (
 type System interface {
 	//Initialize is called once at the start of the game and should initialize all systems
 	Initialize() error
-	//Update is called periodically by the game loop and should update all systems
+	//Update is called periodically by the game loop and should update all adapters
 	Update() error
 	//Input returns the Inputadapter that is used to access keyboard, controllers, etc.
 	Input() input.Adapters
