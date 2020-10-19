@@ -8,8 +8,12 @@ import (
 type GameMock struct {
 }
 
-func (game *GameMock) Initialize() (adapters.System, error) {
+func (game *GameMock) CreateAdapters() (adapters.System, error) {
 	return new(AdapterSystem), nil
+}
+
+func (game *GameMock) Initialize(context game.Context) error {
+	return nil
 }
 
 func (game *GameMock) Update(timeDelta float32, context game.Context) error {

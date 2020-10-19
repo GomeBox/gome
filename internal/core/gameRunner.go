@@ -6,19 +6,20 @@ import (
 	"time"
 )
 
-type UpdateCallBack func(timeDelta float32) error
+type InitializeCallback func() error
+type UpdateCallback func(timeDelta float32) error
 type DrawCallback func(timeDelta float32) error
-type InitializeCallback func() (adapters.System, error)
+type CreateAdapters func() (adapters.System, error)
 
 type GameRunner interface {
-	Initialize(initialize InitializeCallback, settings Settings) error
-	Loop(update UpdateCallBack, draw DrawCallback) error
+	Init(createAdapters CreateAdapters, settings Settings) error
+	Loop(initialize InitializeCallback, update UpdateCallback, draw DrawCallback) error
 	Running() bool
 	AdapterSystem() adapters.System
 	Quit()
 }
 
-func CreateGameRunner() GameRunner {
+func NewGameRunner() GameRunner {
 	return new(gameRunner)
 }
 
@@ -26,11 +27,12 @@ type gameRunner struct {
 	running       bool
 	quit          bool
 	adapterSystem adapters.System
+	settings      Settings
 }
 
-func (runner *gameRunner) Initialize(initialize InitializeCallback, settings Settings) error {
+func (runner *gameRunner) Init(createAdapters CreateAdapters, settings Settings) error {
 	var err error
-	a, err := initialize()
+	a, err := createAdapters()
 	if err != nil {
 		return err
 	}
@@ -42,10 +44,7 @@ func (runner *gameRunner) Initialize(initialize InitializeCallback, settings Set
 	if err != nil {
 		return err
 	}
-	err = runner.adapterSystem.Graphics().WindowAdapter().ShowWindow(settings.WindowSettings())
-	if err != nil {
-		return err
-	}
+	runner.settings = settings
 	runner.quit = false
 	return nil
 }
@@ -64,10 +63,14 @@ func checkAdapters(adapters adapters.System, runner *gameRunner) error {
 var elapsedTime float32
 var frameStart time.Time
 
-func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
+func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallback, draw DrawCallback) error {
 	runner.running = true
 	defer func() { runner.running = false }()
 	var err error
+	err = runner.onInitialize(initialize)
+	if err != nil {
+		return err
+	}
 	for !runner.quit {
 		frameStart = time.Now()
 		err = runner.adapterSystem.Graphics().ScreenPresenter().Clear()
@@ -96,6 +99,18 @@ func (runner *gameRunner) Loop(update UpdateCallBack, draw DrawCallback) error {
 		}
 	}
 	return err
+}
+
+func (runner *gameRunner) onInitialize(callback InitializeCallback) error {
+	err := runner.adapterSystem.Graphics().WindowAdapter().ShowWindow(runner.settings.WindowSettings())
+	if err != nil {
+		return err
+	}
+	err = callback()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (runner *gameRunner) AdapterSystem() adapters.System {

@@ -19,7 +19,7 @@ type Gome interface {
 //New returns a new instance of Gome
 func New() Gome {
 	g := new(gome)
-	g.gameRunner = core.CreateGameRunner()
+	g.gameRunner = core.NewGameRunner()
 	return g
 }
 
@@ -31,7 +31,7 @@ func (gome *gome) Run(game game.Interface, settings game.Settings) error {
 	if gome.gameRunner.Running() {
 		return errors.New("game is already running")
 	}
-	err := gome.gameRunner.Initialize(game.Initialize, settings)
+	err := gome.gameRunner.Init(game.CreateAdapters, settings)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,10 @@ func (gome *gome) Run(game game.Interface, settings game.Settings) error {
 	draw := func(timeDelta float32) error {
 		return game.Draw(timeDelta, c)
 	}
-	err = gome.gameRunner.Loop(update, draw)
+	initialize := func() error {
+		return game.Initialize(c)
+	}
+	err = gome.gameRunner.Loop(initialize, update, draw)
 	if err != nil {
 		return err
 	}

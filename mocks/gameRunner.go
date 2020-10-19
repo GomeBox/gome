@@ -10,12 +10,12 @@ type GameRunnerMock struct {
 	InitializeCnt int
 }
 
-func (runner *GameRunnerMock) Initialize(initialize core.InitializeCallback, settings core.Settings) error {
-	runner.InitializeCnt++
+func (runner *GameRunnerMock) Loop(initialize core.InitializeCallback, update core.UpdateCallback, draw core.DrawCallback) error {
 	return nil
 }
 
-func (runner *GameRunnerMock) Loop(update core.UpdateCallBack, draw core.DrawCallback) error {
+func (runner *GameRunnerMock) Init(createAdapters core.CreateAdapters, settings core.Settings) error {
+	runner.InitializeCnt++
 	return nil
 }
 
