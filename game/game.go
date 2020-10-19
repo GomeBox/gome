@@ -1,9 +1,11 @@
-package gome
+package game
 
-//Game must be implemented to be run by Gome
-type Game interface {
+import "github.com/GomeBox/gome/adapters"
+
+//Interface must be implemented to be run by Gome
+type Interface interface {
 	//Initialize is called by Gome once after calling Gome.Run
-	Initialize() (Adapters, error)
+	Initialize() (adapters.System, error)
 	//Update is called by Gome periodically to update the game's state
 	Update(timeDelta float32, context Context) error
 	//Draw is called by Gome periodically to draw the game to the screen

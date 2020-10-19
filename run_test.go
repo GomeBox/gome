@@ -1,6 +1,7 @@
 package gome
 
 import (
+	game2 "github.com/GomeBox/gome/game"
 	"github.com/GomeBox/gome/mocks"
 	"testing"
 )
@@ -9,7 +10,7 @@ func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
 	gome := New()
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
-	settings := NewSettings()
+	settings := game2.NewSettings()
 	gome.ChangeGameRunner(runner)
 	runner.IsRunning = true
 	var err error
@@ -24,7 +25,7 @@ func TestRun_InitializingGameRunner(t *testing.T) {
 	gome := New()
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
-	settings := NewSettings()
+	settings := game2.NewSettings()
 	gome.ChangeGameRunner(runner)
 
 	_ = gome.Run(game, settings)

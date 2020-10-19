@@ -1,4 +1,4 @@
-package gome
+package game
 
 import "github.com/GomeBox/gome/adapters/graphics"
 
