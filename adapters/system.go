@@ -12,7 +12,7 @@ type System interface {
 	//Update is called periodically by the game loop and should update all systems
 	Update() error
 	//Input returns the Inputadapter that is used to access keyboard, controllers, etc.
-	Input() input.Port
+	Input() input.Adapters
 	//Graphics returns the Graphicsadapter that is used to draw the game to the screen
 	Graphics() graphics.Adapters
 }

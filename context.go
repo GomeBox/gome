@@ -1,8 +1,8 @@
 package gome
 
 import (
-	"github.com/GomeBox/gome/adapters/input"
 	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/input"
 	"github.com/GomeBox/gome/internal/core"
 )
 
@@ -13,12 +13,13 @@ type Context interface {
 	//Graphics returns the graphics adapter
 	Graphics() graphics.System
 	//Graphics returns the input adapter
-	Input() input.Port
+	Input() input.System
 }
 
 type contextWrapper struct {
 	runner   core.GameRunner
 	graphics graphics.System
+	input    input.System
 }
 
 func newContextWrapper(runner core.GameRunner) *contextWrapper {
@@ -44,6 +45,6 @@ func (context *contextWrapper) Graphics() graphics.System {
 	return context.graphics
 }
 
-func (context *contextWrapper) Input() input.Port {
-	return context.runner.AdapterSystem().Input()
+func (context *contextWrapper) Input() input.System {
+	return context.input
 }

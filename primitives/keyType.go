@@ -1,9 +1,4 @@
-package input
-
-//Keyboard gives access to the computers keyboard
-type Keyboard interface {
-	KeyPressed(keyType KeyType) (bool, error)
-}
+package primitives
 
 //KeyType defines a keyboards key
 type KeyType int

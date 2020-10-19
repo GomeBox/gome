@@ -50,14 +50,14 @@ func (runner *gameRunner) Initialize(initialize InitializeCallback, settings Set
 	return nil
 }
 
-func checkAdapters(adapters adapters.System, g *gameRunner) error {
-	if adapters.Graphics() == nil {
+func checkAdapters(adapters adapters.System, runner *gameRunner) error {
+	if adapters.Graphics == nil {
 		return errors.New("gome.checkAdapters(): Graphics adapter is nil")
 	}
-	if adapters.Input() == nil {
+	if adapters.Input == nil {
 		return errors.New("gome.checkAdapters(): input adapter is nil")
 	}
-	g.adapterSystem = adapters
+	runner.adapterSystem = adapters
 	return nil
 }
 
