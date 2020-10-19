@@ -1,13 +1,14 @@
-package gome
+package tests
 
 import (
+	gome2 "github.com/GomeBox/gome"
 	game2 "github.com/GomeBox/gome/game"
 	"github.com/GomeBox/gome/mocks"
 	"testing"
 )
 
 func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
-	gome := New()
+	gome := gome2.New()
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
 	settings := game2.NewSettings()
@@ -22,7 +23,7 @@ func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
 }
 
 func TestRun_InitializingGameRunner(t *testing.T) {
-	gome := New()
+	gome := gome2.New()
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
 	settings := game2.NewSettings()
