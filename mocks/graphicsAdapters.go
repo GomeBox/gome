@@ -5,6 +5,10 @@ import "github.com/GomeBox/gome/adapters/graphics"
 type GraphicsAdapters struct {
 }
 
+func (graphics *GraphicsAdapters) TextureCreator() graphics.TextureCreator {
+	return nil
+}
+
 func (graphics *GraphicsAdapters) TextureLoader() graphics.TextureLoader {
 	return nil
 }

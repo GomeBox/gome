@@ -11,8 +11,8 @@ type System interface {
 	Initialize() error
 	//Update is called periodically by the game loop and should update all adapters
 	Update() error
-	//Input returns the Inputadapter that is used to access keyboard, controllers, etc.
+	//Input returns the Input-adapter that is used to access keyboard, controllers, etc.
 	Input() input.Adapters
-	//Graphics returns the Graphicsadapter that is used to draw the game to the screen
+	//Graphics returns the Graphics-adapter that is used to draw the game to the screen
 	Graphics() graphics.Adapters
 }

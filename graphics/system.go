@@ -15,7 +15,7 @@ type Adapters struct {
 type System interface {
 	LoadTexture(fileName string) (Texture, error)
 	LoadFont(fileName string, size int) (Font, error)
-	CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error)
+	CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (Texture, error)
 }
 
 func NewSystem(adapters Adapters) System {
@@ -49,7 +49,7 @@ func (sys *system) LoadFont(fileName string, size int) (Font, error) {
 	return NewFont(drawer), nil
 }
 
-func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error) {
+func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (Texture, error) {
 	drawer, err := sys.textureCreator.Create(dimensions, color)
 	if err != nil {
 		return nil, err
