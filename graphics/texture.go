@@ -8,20 +8,21 @@ import (
 type Texture interface {
 	Draw(source, dest *primitives.Rectangle) error
 	DrawF(source *primitives.Rectangle, dest *primitives.RectangleF) error
+	Dimensions() primitives.Dimensions
 }
 
-func NewTexture(drawer graphics.TextureDrawer) Texture {
+func NewTexture(tex graphics.Texture) Texture {
 	texture := new(texture)
-	texture.drawer = drawer
+	texture.tex = tex
 	return texture
 }
 
 type texture struct {
-	drawer graphics.TextureDrawer
+	tex graphics.Texture
 }
 
 func (texture *texture) Draw(source, dest *primitives.Rectangle) error {
-	err := texture.drawer.Draw(source, dest)
+	err := texture.tex.Draw(source, dest)
 	if err != nil {
 		return err
 	}
@@ -29,9 +30,13 @@ func (texture *texture) Draw(source, dest *primitives.Rectangle) error {
 }
 
 func (texture *texture) DrawF(source *primitives.Rectangle, dest *primitives.RectangleF) error {
-	err := texture.drawer.DrawF(source, dest)
+	err := texture.tex.DrawF(source, dest)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (texture *texture) Dimensions() primitives.Dimensions {
+	return texture.tex.Dimensions()
 }
