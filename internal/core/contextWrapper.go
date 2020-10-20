@@ -18,13 +18,15 @@ func newContextWrapper(system adapters.System, runner GameRunner) *contextWrappe
 	context.runner = runner
 	context.adapters = system
 	textureLoader := system.Graphics().TextureLoader()
+	textureCreator := system.Graphics().TextureCreator()
 	windowAdapter := system.Graphics().WindowAdapter()
 	fontLoader := system.Graphics().FontLoader()
 	context.graphics = graphics.NewSystem(
 		graphics.Adapters{
-			TextureLoader: textureLoader,
-			WindowAdapter: windowAdapter,
-			FontLoader:    fontLoader})
+			TextureCreator: textureCreator,
+			TextureLoader:  textureLoader,
+			WindowAdapter:  windowAdapter,
+			FontLoader:     fontLoader})
 	context.input = input.NewSystem(
 		input.Adapters{
 			Keyboard: system.Input().Keyboard()})
