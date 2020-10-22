@@ -2,7 +2,8 @@ package mocks
 
 import (
 	"github.com/GomeBox/gome/adapters"
-	"github.com/GomeBox/gome/internal/core"
+	"github.com/GomeBox/gome/game"
+	internalGame "github.com/GomeBox/gome/internal/game"
 )
 
 type GameRunnerMock struct {
@@ -10,11 +11,11 @@ type GameRunnerMock struct {
 	InitializeCnt int
 }
 
-func (runner *GameRunnerMock) Loop(initialize core.InitializeCallback, update core.UpdateCallback, draw core.DrawCallback) error {
+func (runner *GameRunnerMock) Loop(initialize internalGame.InitializeCallback, update internalGame.UpdateCallback, draw internalGame.DrawCallback) error {
 	return nil
 }
 
-func (runner *GameRunnerMock) Init(createAdapters core.CreateAdapters, settings core.Settings) error {
+func (runner *GameRunnerMock) Init(createAdapters internalGame.CreateAdapters, settings game.Settings) error {
 	runner.InitializeCnt++
 	return nil
 }
