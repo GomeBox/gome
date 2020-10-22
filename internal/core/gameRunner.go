@@ -2,7 +2,6 @@ package core
 
 import (
 	"errors"
-	"fmt"
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/game"
 	"time"
@@ -94,11 +93,12 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 		if err != nil {
 			break
 		}
+		//TODO: Framecount should be customizable
+		time.Sleep(time.Millisecond)
 		elapsedTime = float32(time.Since(frameStart).Milliseconds()) // / 1000000.0
 		if elapsedTime <= 0 {
 			elapsedTime = 1.0
 		}
-		fmt.Println(elapsedTime)
 	}
 	return err
 }
