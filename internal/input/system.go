@@ -9,20 +9,20 @@ type Adapters struct {
 	Keyboard adapters.KeyboardAdapter
 }
 
-func NewSystem(adapters Adapters) input.System {
-	system := new(system)
+func NewSystem(adapters Adapters) *System {
+	system := new(System)
 	system.keyboard = newKeyboard(adapters.Keyboard)
 	return system
 }
 
-type system struct {
+type System struct {
 	keyboard *keyboard
 }
 
-func (sys *system) Keyboard() input.Keyboard {
+func (sys *System) Keyboard() input.Keyboard {
 	return sys.keyboard
 }
 
-func (sys *system) Update() error {
+func (sys *System) Update() error {
 	return sys.keyboard.Update()
 }

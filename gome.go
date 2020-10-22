@@ -10,7 +10,7 @@ import (
 type Gome interface {
 	//Run starts the Interface. Returns when the game ends
 	Run(game game.Interface) error
-	Settings() *game.Settings
+	Settings() game.Settings
 }
 
 //New returns a new instance of Gome
