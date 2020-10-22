@@ -7,15 +7,16 @@ import (
 )
 
 type GomeImpl struct {
-	GameRunner core.GameRunner
+	GameRunner   core.GameRunner
+	GameSettings game.Settings
 }
 
 //Run starts a game and starts the game loop. Returns, when the game is ended
-func (gome *GomeImpl) Run(game game.Interface, settings game.Settings) error {
+func (gome *GomeImpl) Run(game game.Interface) error {
 	if gome.GameRunner.Running() {
 		return errors.New("game is already running")
 	}
-	err := gome.GameRunner.Init(game.CreateAdapters, settings)
+	err := gome.GameRunner.Init(game.CreateAdapters, gome.GameSettings)
 	if err != nil {
 		return err
 	}
@@ -24,4 +25,8 @@ func (gome *GomeImpl) Run(game game.Interface, settings game.Settings) error {
 		return err
 	}
 	return nil
+}
+
+func (gome *GomeImpl) Settings() *game.Settings {
+	return &gome.GameSettings
 }

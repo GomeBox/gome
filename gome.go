@@ -9,12 +9,14 @@ import (
 //Gome is used to run a game
 type Gome interface {
 	//Run starts the Interface. Returns when the game ends
-	Run(game game.Interface, settings game.Settings) error
+	Run(game game.Interface) error
+	Settings() *game.Settings
 }
 
 //New returns a new instance of Gome
 func New() Gome {
 	g := new(internal.GomeImpl)
 	g.GameRunner = core.NewGameRunner()
+	g.GameSettings = game.NewSettings()
 	return g
 }
