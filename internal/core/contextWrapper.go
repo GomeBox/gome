@@ -5,6 +5,7 @@ import (
 	"github.com/GomeBox/gome/graphics"
 	"github.com/GomeBox/gome/input"
 	internalGraphics "github.com/GomeBox/gome/internal/graphics"
+	internalInput "github.com/GomeBox/gome/internal/input"
 )
 
 type contextWrapper struct {
@@ -32,8 +33,8 @@ func newContextWrapper(system adapters.System, runner GameRunner) (*contextWrapp
 		return nil, err
 	}
 	context.graphics = tmpGraphics
-	context.input = input.NewSystem(
-		input.Adapters{
+	context.input = internalInput.NewSystem(
+		internalInput.Adapters{
 			Keyboard: system.Input().Keyboard()})
 
 	return context, nil
