@@ -17,6 +17,6 @@ type Gome interface {
 func New() Gome {
 	g := new(internal.GomeImpl)
 	g.GameRunner = internalGame.NewGameRunner()
-	g.GameSettings = game.NewSettings()
+	g.GameSettings = internalGame.NewSettings()
 	return g
 }

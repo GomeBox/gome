@@ -13,7 +13,7 @@ type DrawCallback func(timeDelta float32, context game.Context) error
 type CreateAdapters func() (adapters.System, error)
 
 type GameRunner interface {
-	Init(createAdapters CreateAdapters, settings Settings) error
+	Init(createAdapters CreateAdapters, settings game.Settings) error
 	Loop(initialize InitializeCallback, update UpdateCallback, draw DrawCallback) error
 	Running() bool
 	Quit()
@@ -27,10 +27,10 @@ type gameRunner struct {
 	running       bool
 	quit          bool
 	adapterSystem adapters.System
-	settings      Settings
+	settings      game.Settings
 }
 
-func (runner *gameRunner) Init(createAdapters CreateAdapters, settings Settings) error {
+func (runner *gameRunner) Init(createAdapters CreateAdapters, settings game.Settings) error {
 	var err error
 	a, err := createAdapters()
 	if err != nil {
