@@ -26,7 +26,7 @@ func NewSystem(adapters Adapters) (System, error) {
 	sys.textureCreator = adapters.TextureCreator
 	sys.windowAdapter = adapters.WindowAdapter
 	window, err := newWindow(adapters.WindowAdapter)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 	sys.window = window
