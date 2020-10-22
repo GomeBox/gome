@@ -9,7 +9,7 @@ type Font interface {
 	CreateText(text string, color primitives.Color) (Text, error)
 }
 
-func NewFont(creator graphics.TextCreator) Font {
+func newFont(creator graphics.TextCreator) Font {
 	font := new(font)
 	font.creator = creator
 	return font

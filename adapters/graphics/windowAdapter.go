@@ -1,7 +1,13 @@
 package graphics
 
+import "github.com/GomeBox/gome/primitives"
+
 //WindowAdapter is to be implemented by the graphics adapter
 type WindowAdapter interface {
-	//ShowWindow opens a game window
-	ShowWindow(windowSettings *WindowSettings) error
+	//OpenWindow opens a game window
+	OpenWindow(windowSettings *WindowSettings) error
+	//IsOpen returns true if the window was opened
+	IsOpen() bool
+	//Size returns the window's dimensions
+	Size() primitives.Dimensions
 }

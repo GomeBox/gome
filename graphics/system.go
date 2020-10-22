@@ -16,14 +16,21 @@ type System interface {
 	LoadTexture(fileName string) (Texture, error)
 	LoadFont(fileName string, size int) (Font, error)
 	CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (Texture, error)
+	Window() Window
 }
 
-func NewSystem(adapters Adapters) System {
+func NewSystem(adapters Adapters) (System, error) {
 	sys := new(system)
 	sys.textureLoader = adapters.TextureLoader
 	sys.fontLoader = adapters.FontLoader
 	sys.textureCreator = adapters.TextureCreator
-	return sys
+	sys.windowAdapter = adapters.WindowAdapter
+	window, err := newWindow(adapters.WindowAdapter)
+	if err == nil {
+		return nil, err
+	}
+	sys.window = window
+	return sys, nil
 }
 
 type system struct {
@@ -31,6 +38,7 @@ type system struct {
 	textureLoader  graphics.TextureLoader
 	fontLoader     graphics.FontLoader
 	windowAdapter  graphics.WindowAdapter
+	window         Window
 }
 
 func (sys *system) LoadTexture(filename string) (Texture, error) {
@@ -38,7 +46,7 @@ func (sys *system) LoadTexture(filename string) (Texture, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewTexture(drawer), nil
+	return newTexture(drawer), nil
 }
 
 func (sys *system) LoadFont(fileName string, size int) (Font, error) {
@@ -46,7 +54,7 @@ func (sys *system) LoadFont(fileName string, size int) (Font, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewFont(drawer), nil
+	return newFont(drawer), nil
 }
 
 func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (Texture, error) {
@@ -54,5 +62,9 @@ func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primi
 	if err != nil {
 		return nil, err
 	}
-	return NewTexture(drawer), nil
+	return newTexture(drawer), nil
+}
+
+func (sys *system) Window() Window {
+	return sys.window
 }

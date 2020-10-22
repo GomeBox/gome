@@ -2,6 +2,7 @@ package core
 
 import (
 	"errors"
+	"fmt"
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/game"
 	"time"
@@ -93,20 +94,24 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 		if err != nil {
 			break
 		}
-		elapsedTime = float32(time.Since(frameStart).Nanoseconds()) / 1000000.0
-		if elapsedTime == 0.0 {
+		elapsedTime = float32(time.Since(frameStart).Milliseconds()) // / 1000000.0
+		if elapsedTime <= 0 {
 			elapsedTime = 1.0
 		}
+		fmt.Println(elapsedTime)
 	}
 	return err
 }
 
 func (runner *gameRunner) onInitialize(callback InitializeCallback) (*contextWrapper, error) {
-	err := runner.adapterSystem.Graphics().WindowAdapter().ShowWindow(runner.settings.WindowSettings())
+	err := runner.adapterSystem.Graphics().WindowAdapter().OpenWindow(runner.settings.WindowSettings())
 	if err != nil {
 		return nil, err
 	}
-	context := newContextWrapper(runner.adapterSystem, runner)
+	context, err := newContextWrapper(runner.adapterSystem, runner)
+	if err != nil {
+		return nil, err
+	}
 	err = callback(context)
 	if err != nil {
 		return nil, err

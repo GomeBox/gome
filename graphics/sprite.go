@@ -12,7 +12,7 @@ type Sprite interface {
 	Draw() error
 }
 
-func NexTextureSprite(texture Texture, position primitives.PointF) Sprite {
+func NewTextureSprite(texture Texture, position primitives.PointF) Sprite {
 	return &textureSprite{
 		texture: texture,
 		destRect: primitives.RectangleF{

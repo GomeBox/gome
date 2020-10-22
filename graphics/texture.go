@@ -11,7 +11,7 @@ type Texture interface {
 	Dimensions() primitives.Dimensions
 }
 
-func NewTexture(tex graphics.Texture) Texture {
+func newTexture(tex graphics.Texture) Texture {
 	texture := new(texture)
 	texture.tex = tex
 	return texture

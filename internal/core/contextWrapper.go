@@ -13,7 +13,7 @@ type contextWrapper struct {
 	adapters adapters.System
 }
 
-func newContextWrapper(system adapters.System, runner GameRunner) *contextWrapper {
+func newContextWrapper(system adapters.System, runner GameRunner) (*contextWrapper, error) {
 	context := new(contextWrapper)
 	context.runner = runner
 	context.adapters = system
@@ -21,17 +21,21 @@ func newContextWrapper(system adapters.System, runner GameRunner) *contextWrappe
 	textureCreator := system.Graphics().TextureCreator()
 	windowAdapter := system.Graphics().WindowAdapter()
 	fontLoader := system.Graphics().FontLoader()
-	context.graphics = graphics.NewSystem(
+	tmpGraphics, err := graphics.NewSystem(
 		graphics.Adapters{
 			TextureCreator: textureCreator,
 			TextureLoader:  textureLoader,
 			WindowAdapter:  windowAdapter,
 			FontLoader:     fontLoader})
+	if err != nil {
+		return nil, err
+	}
+	context.graphics = tmpGraphics
 	context.input = input.NewSystem(
 		input.Adapters{
 			Keyboard: system.Input().Keyboard()})
 
-	return context
+	return context, nil
 }
 
 func (context *contextWrapper) QuitGame() {
