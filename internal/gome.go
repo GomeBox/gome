@@ -27,6 +27,6 @@ func (gome *GomeImpl) Run(game game.Interface) error {
 	return nil
 }
 
-func (gome *GomeImpl) Settings() *game.Settings {
-	return &gome.GameSettings
+func (gome *GomeImpl) Settings() game.Settings {
+	return gome.GameSettings
 }

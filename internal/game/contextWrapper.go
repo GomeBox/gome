@@ -11,7 +11,7 @@ import (
 type contextWrapper struct {
 	runner   GameRunner
 	graphics graphics.System
-	input    input.System
+	input    *internalInput.System
 	adapters adapters.System
 }
 
@@ -57,7 +57,7 @@ func (context *contextWrapper) Update() error {
 	if err != nil {
 		return err
 	}
-	err = context.Input().Update()
+	err = context.input.Update()
 	if err != nil {
 		return err
 	}
