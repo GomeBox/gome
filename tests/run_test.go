@@ -1,18 +1,18 @@
 package tests
 
 import (
-	gome2 "github.com/GomeBox/gome"
 	game2 "github.com/GomeBox/gome/game"
+	"github.com/GomeBox/gome/internal"
 	"github.com/GomeBox/gome/mocks"
 	"testing"
 )
 
 func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
-	gome := gome2.New()
+	gome := internal.GomeImpl{}
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
 	settings := game2.NewSettings()
-	gome.ChangeGameRunner(runner)
+	gome.GameRunner = runner
 	runner.IsRunning = true
 	var err error
 	err = gome.Run(game, settings)
@@ -23,11 +23,11 @@ func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
 }
 
 func TestRun_InitializingGameRunner(t *testing.T) {
-	gome := gome2.New()
+	gome := internal.GomeImpl{}
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
 	settings := game2.NewSettings()
-	gome.ChangeGameRunner(runner)
+	gome.GameRunner = runner
 
 	_ = gome.Run(game, settings)
 	want := 1
