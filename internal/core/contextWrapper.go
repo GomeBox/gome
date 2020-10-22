@@ -4,6 +4,7 @@ import (
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/graphics"
 	"github.com/GomeBox/gome/input"
+	internalGraphics "github.com/GomeBox/gome/internal/graphics"
 )
 
 type contextWrapper struct {
@@ -21,8 +22,8 @@ func newContextWrapper(system adapters.System, runner GameRunner) (*contextWrapp
 	textureCreator := system.Graphics().TextureCreator()
 	windowAdapter := system.Graphics().WindowAdapter()
 	fontLoader := system.Graphics().FontLoader()
-	tmpGraphics, err := graphics.NewSystem(
-		graphics.Adapters{
+	tmpGraphics, err := internalGraphics.NewSystem(
+		internalGraphics.Adapters{
 			TextureCreator: textureCreator,
 			TextureLoader:  textureLoader,
 			WindowAdapter:  windowAdapter,
