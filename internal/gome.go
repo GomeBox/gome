@@ -3,11 +3,11 @@ package internal
 import (
 	"errors"
 	"github.com/GomeBox/gome/game"
-	"github.com/GomeBox/gome/internal/core"
+	internalGame "github.com/GomeBox/gome/internal/game"
 )
 
 type GomeImpl struct {
-	GameRunner   core.GameRunner
+	GameRunner   internalGame.GameRunner
 	GameSettings game.Settings
 }
 
