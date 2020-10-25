@@ -1,7 +1,8 @@
-package graphics
+package sprite
 
 import (
 	"errors"
+	"github.com/GomeBox/gome/graphics"
 	"github.com/GomeBox/gome/primitives"
 )
 
@@ -12,7 +13,7 @@ type Sprite interface {
 	Draw() error
 }
 
-func NewTextureSprite(texture Texture, position primitives.PointF) Sprite {
+func NewTextureSprite(texture graphics.Texture, position primitives.PointF) Sprite {
 	return &textureSprite{
 		texture: texture,
 		destRect: primitives.RectangleF{
@@ -26,7 +27,7 @@ func NewTextureSprite(texture Texture, position primitives.PointF) Sprite {
 }
 
 type textureSprite struct {
-	texture  Texture
+	texture  graphics.Texture
 	destRect primitives.RectangleF
 }
 
