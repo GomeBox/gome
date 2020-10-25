@@ -1,56 +1,33 @@
 package sprite
 
 import (
-	"errors"
-	"github.com/GomeBox/gome/graphics"
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Sprite interface {
+type drawer interface {
+	DrawTo(pos *primitives.PointF) error
 	Dimensions() primitives.Dimensions
-	Position() primitives.PointF
-	SetPosition(pos *primitives.PointF) error
-	Draw() error
 }
 
-func NewTextureSprite(texture graphics.Texture, position primitives.PointF) Sprite {
-	return &textureSprite{
-		texture: texture,
-		destRect: primitives.RectangleF{
-			PointF: position,
-			DimensionsF: primitives.DimensionsF{
-				Width:  float32(texture.Dimensions().Width),
-				Height: float32(texture.Dimensions().Height),
-			},
-		},
-	}
+type sprite struct {
+	drawer   drawer
+	position primitives.PointF
 }
 
-type textureSprite struct {
-	texture  graphics.Texture
-	destRect primitives.RectangleF
+func (sprite *sprite) Dimensions() primitives.Dimensions {
+	return sprite.Dimensions()
 }
 
-func (t *textureSprite) Dimensions() primitives.Dimensions {
-	return t.Dimensions()
+func (sprite *sprite) Position() primitives.PointF {
+	return sprite.position
 }
 
-func (t *textureSprite) Position() primitives.PointF {
-	return primitives.PointF{
-		X: t.destRect.X,
-		Y: t.destRect.Y,
-	}
-}
-
-func (t *textureSprite) SetPosition(pos *primitives.PointF) error {
-	if pos == nil {
-		return errors.New("argument pos may not be nil")
-	}
-	t.destRect.X = pos.X
-	t.destRect.Y = pos.Y
+func (sprite *sprite) SetPosition(x, y float32) error {
+	sprite.position.X = x
+	sprite.position.Y = y
 	return nil
 }
 
-func (t *textureSprite) Draw() error {
-	return t.texture.DrawF(nil, &t.destRect)
+func (sprite *sprite) Draw() error {
+	return sprite.drawer.DrawTo(&sprite.position)
 }
