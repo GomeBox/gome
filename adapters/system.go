@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/adapters/graphics"
 	"github.com/GomeBox/gome/adapters/input"
 )
@@ -15,4 +16,6 @@ type System interface {
 	Input() input.Adapters
 	//Graphics returns the Graphics-adapter that is used to draw the game to the screen
 	Graphics() graphics.Adapters
+	//Audio returns the Audio-adapter that is used to draw the game to the screen
+	Audio() audio.Adapters
 }

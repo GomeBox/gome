@@ -2,8 +2,10 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters"
+	"github.com/GomeBox/gome/audio"
 	"github.com/GomeBox/gome/graphics"
 	"github.com/GomeBox/gome/input"
+	internalAudio "github.com/GomeBox/gome/internal/audio"
 	internalGraphics "github.com/GomeBox/gome/internal/graphics"
 	internalInput "github.com/GomeBox/gome/internal/input"
 )
@@ -13,6 +15,7 @@ type contextWrapper struct {
 	graphics graphics.System
 	input    *internalInput.System
 	adapters adapters.System
+	audio    audio.System
 }
 
 func newContextWrapper(system adapters.System, runner GameRunner) (*contextWrapper, error) {
@@ -36,7 +39,12 @@ func newContextWrapper(system adapters.System, runner GameRunner) (*contextWrapp
 	context.input = internalInput.NewSystem(
 		internalInput.Adapters{
 			Keyboard: system.Input().Keyboard()})
-
+	songLoader := system.Audio().SongLoader()
+	soundLoader := system.Audio().SoundLoader()
+	context.audio = internalAudio.NewSystem(
+		internalAudio.Adapters{
+			SoundLoader: soundLoader,
+			SongLoader:  songLoader})
 	return context, nil
 }
 
@@ -50,6 +58,10 @@ func (context *contextWrapper) Graphics() graphics.System {
 
 func (context *contextWrapper) Input() input.System {
 	return context.input
+}
+
+func (context *contextWrapper) Audio() audio.System {
+	return context.audio
 }
 
 func (context *contextWrapper) Update() error {
