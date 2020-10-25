@@ -12,4 +12,6 @@ type TextDrawer interface {
 	DrawF(position *primitives.PointF) error
 	//DrawScaledF draws the text into the defined destRect
 	DrawScaledF(destRect *primitives.RectangleF) error
+	//Dimensions returns the size of the text
+	Dimensions() primitives.Dimensions
 }

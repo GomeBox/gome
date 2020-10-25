@@ -29,3 +29,7 @@ func (text *text) DrawF(position *primitives.PointF) error {
 	}
 	return nil
 }
+
+func (text *text) Dimensions() primitives.Dimensions {
+	return text.Dimensions()
+}
