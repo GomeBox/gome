@@ -11,18 +11,18 @@ type Adapters struct {
 }
 
 func NewSystem(adapters Adapters) audio.System {
-	system := system{
+	system := System{
 		soundLoader: adapters.SoundLoader,
 		songLoader:  adapters.SongLoader}
 	return &system
 }
 
-type system struct {
+type System struct {
 	soundLoader adapters.SoundLoader
 	songLoader  adapters.SongLoader
 }
 
-func (sys *system) LoadSound(fileName string) (audio.Sound, error) {
+func (sys *System) LoadSound(fileName string) (audio.Sound, error) {
 	player, err := sys.soundLoader.Load(fileName)
 	if err != nil {
 		return nil, err
@@ -30,10 +30,10 @@ func (sys *system) LoadSound(fileName string) (audio.Sound, error) {
 	return &sound{soundPlayer: player}, nil
 }
 
-func (sys *system) LoadSong(fileName string) (audio.Song, error) {
+func (sys *System) LoadSong(fileName string) (audio.Song, error) {
 	player, err := sys.songLoader.Load(fileName)
 	if err != nil {
 		return nil, err
 	}
-	return &song{songPlayer: player}, err
+	return &song{songPlayer: player}, nil
 }
