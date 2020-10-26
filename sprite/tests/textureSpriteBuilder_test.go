@@ -11,7 +11,7 @@ func TestFromTexture_Get(t *testing.T) {
 	textureMock := new(mocks.Texture)
 	s := sprite.FromTexture(textureMock).Get()
 	if s == nil {
-		t.Error("Sprite not properly created")
+		t.Error("sprite not properly created")
 	}
 }
 

@@ -11,7 +11,7 @@ func TestFromText_Get(t *testing.T) {
 	textMock := new(mocks.Text)
 	s := sprite.FromText(textMock).Get()
 	if s == nil {
-		t.Error("Sprite not properly created")
+		t.Error("sprite not properly created")
 	}
 }
 
