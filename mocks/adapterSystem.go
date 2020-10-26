@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/adapters/graphics"
 	"github.com/GomeBox/gome/adapters/input"
 )
@@ -22,4 +23,8 @@ func (adapterSystem *AdapterSystem) Input() input.Adapters {
 
 func (adapterSystem *AdapterSystem) Graphics() graphics.Adapters {
 	return new(GraphicsAdapters)
+}
+
+func (adapterSystem *AdapterSystem) Audio() audio.Adapters {
+	return new(AudioAdapters)
 }
