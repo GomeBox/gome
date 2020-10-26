@@ -22,13 +22,13 @@ func TestDimensions_ToDimensionsF(t *testing.T) {
 	}
 }
 
-type testParams struct {
+type areEqualTestParams struct {
 	f1, f2         float32
 	expectedResult bool
 }
 
 func TestAreEqual(t *testing.T) {
-	testParams := []testParams{
+	testParams := []areEqualTestParams{
 		{
 			f1:             10.1234,
 			f2:             10.1234,
