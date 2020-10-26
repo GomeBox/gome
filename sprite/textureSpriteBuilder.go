@@ -2,6 +2,7 @@ package sprite
 
 import (
 	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/internal/sprite"
 	"github.com/GomeBox/gome/primitives"
 )
 
@@ -29,13 +30,9 @@ type textureSpriteBuilder struct {
 }
 
 func (builder *textureSpriteBuilder) Get() Interface {
-	drawer := newTextureDrawer(builder.texture)
-	drawer.sourceRect = builder.sourceRect
-	sprite := sprite{
-		drawer:   drawer,
-		position: builder.pos,
-	}
-	return &sprite
+	drawer := sprite.NewTextureDrawer(builder.texture, builder.sourceRect)
+	s := sprite.New(drawer, builder.pos)
+	return s
 }
 
 func (builder *textureSpriteBuilder) SetPosition(x, y float32) TextureSpriteBuilder {
