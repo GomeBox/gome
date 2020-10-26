@@ -5,9 +5,14 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
+//TextureSpriteBuilder contains functions to create a sprite containing a texture
 type TextureSpriteBuilder interface {
+	//Get creates the sprite
 	Get() Interface
+	//SetPosition sets the initial position that the sprite will have after it is created
 	SetPosition(x, y float32) TextureSpriteBuilder
+	//SetSourceRect can be used to define, which part of the texture should be drawn. If not called or if nil is passed,
+	//the whole texture will be drawn
 	SetSourceRect(sourceRect *primitives.Rectangle) TextureSpriteBuilder
 }
 
