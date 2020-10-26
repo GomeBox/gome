@@ -1,8 +1,14 @@
 package primitives
 
+import "fmt"
+
 //Color is a RGBA-Color
 type Color struct {
 	R, G, B, A uint8
+}
+
+func (color Color) String() string {
+	return fmt.Sprintf("R:%d, G:%d, B:%d, A:%d", color.R, color.G, color.B, color.A)
 }
 
 var definedColors *DefinedColors
