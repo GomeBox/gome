@@ -15,8 +15,6 @@ type Gome interface {
 
 //New returns a new instance of Gome
 func New() Gome {
-	g := new(internal.GomeImpl)
-	g.GameRunner = internalGame.NewGameRunner()
-	g.GameSettings = internalGame.NewSettings()
+	g := internal.NewGome(internalGame.NewGameRunner())
 	return g
 }
