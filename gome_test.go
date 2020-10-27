@@ -1,4 +1,4 @@
-package tests
+package gome
 
 import (
 	"github.com/GomeBox/gome/internal"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
+func TestGome_ErrorIfAlreadyRunning(t *testing.T) {
 	gome := internal.GomeImpl{}
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)
@@ -20,7 +20,7 @@ func TestRun_ErrorIfAlreadyRunning(t *testing.T) {
 	}
 }
 
-func TestRun_InitializingGameRunner(t *testing.T) {
+func TestGome_InitializingGameRunner(t *testing.T) {
 	gome := internal.GomeImpl{}
 	runner := new(mocks.GameRunnerMock)
 	game := new(mocks.GameMock)

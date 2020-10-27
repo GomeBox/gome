@@ -2,12 +2,18 @@ package sprite
 
 import (
 	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/internal/sprite"
 	"github.com/GomeBox/gome/primitives"
 )
 
+//TextureSpriteBuilder contains functions to create a sprite containing a texture
 type TextureSpriteBuilder interface {
+	//Get creates the sprite
 	Get() Interface
+	//SetPosition sets the initial position that the sprite will have after it is created
 	SetPosition(x, y float32) TextureSpriteBuilder
+	//SetSourceRect can be used to define, which part of the texture should be drawn. If not called or if nil is passed,
+	//the whole texture will be drawn
 	SetSourceRect(sourceRect *primitives.Rectangle) TextureSpriteBuilder
 }
 
@@ -24,13 +30,9 @@ type textureSpriteBuilder struct {
 }
 
 func (builder *textureSpriteBuilder) Get() Interface {
-	drawer := newTextureDrawer(builder.texture)
-	drawer.sourceRect = builder.sourceRect
-	sprite := sprite{
-		drawer:   drawer,
-		position: builder.pos,
-	}
-	return &sprite
+	drawer := sprite.NewTextureDrawer(builder.texture, builder.sourceRect)
+	s := sprite.New(drawer, builder.pos)
+	return s
 }
 
 func (builder *textureSpriteBuilder) SetPosition(x, y float32) TextureSpriteBuilder {
