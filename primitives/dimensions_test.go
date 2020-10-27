@@ -1,7 +1,6 @@
-package tests
+package primitives
 
 import (
-	"github.com/GomeBox/gome/primitives"
 	"math"
 	"testing"
 )
@@ -9,7 +8,7 @@ import (
 func TestDimensions_ToDimensionsF(t *testing.T) {
 	wantWidth := float32(123.0)
 	wantHeight := float32(234.0)
-	dimensions := primitives.Dimensions{
+	dimensions := Dimensions{
 		Width:  int(wantWidth),
 		Height: int(wantHeight),
 	}

@@ -1,9 +1,9 @@
-package tests
+package audio
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/adapters/audio/mocks"
-	internalAudio "github.com/GomeBox/gome/internal/audio"
+	"github.com/GomeBox/gome/audio"
 	"testing"
 )
 
@@ -14,11 +14,11 @@ func TestSystem_LoadSong_PassesFilename(t *testing.T) {
 		got = fileName
 		return nil, nil
 	}}
-	a := internalAudio.Adapters{
+	a := Adapters{
 		SoundLoader: nil,
 		SongLoader:  songLoaderMock,
 	}
-	system := internalAudio.NewSystem(a)
+	system := NewSystem(a)
 	_, err := system.LoadSong(want)
 	if err != nil {
 		t.Errorf("expected err to be nil but was %v", err)
@@ -37,11 +37,11 @@ func TestSystem_LoadSound_PassesFilename(t *testing.T) {
 		got = fileName
 		return nil, nil
 	}}
-	a := internalAudio.Adapters{
+	a := Adapters{
 		SoundLoader: soundLoaderMock,
 		SongLoader:  nil,
 	}
-	system := internalAudio.NewSystem(a)
+	system := NewSystem(a)
 	_, err := system.LoadSound(want)
 	if err != nil {
 		t.Errorf("expected err to be nil but was %v", err)
@@ -51,4 +51,18 @@ func TestSystem_LoadSound_PassesFilename(t *testing.T) {
 		t.Errorf("fileName was not passed to soundLoader. got %v, want %v", got, want)
 		return
 	}
+}
+
+func createMockSystem(soundMock *mocks.Sound, songMock *mocks.Song) audio.System {
+	soundLoaderMock := mocks.SoundLoader{OnLoad: func(fileName string) (adapters.Sound, error) {
+		return soundMock, nil
+	}}
+	songLoaderMock := mocks.SongLoader{OnLoad: func(fileName string) (adapters.Song, error) {
+		return songMock, nil
+	}}
+	a := Adapters{
+		SoundLoader: soundLoaderMock,
+		SongLoader:  songLoaderMock,
+	}
+	return NewSystem(a)
 }

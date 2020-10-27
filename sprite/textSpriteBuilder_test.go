@@ -1,25 +1,24 @@
-package tests
+package sprite
 
 import (
 	"github.com/GomeBox/gome/graphics/mocks"
 	"github.com/GomeBox/gome/primitives"
-	"github.com/GomeBox/gome/sprite"
 	"testing"
 )
 
-func TestFromTexture_Get(t *testing.T) {
-	textureMock := new(mocks.Texture)
-	s := sprite.FromTexture(textureMock).Get()
+func TestFromText_Get(t *testing.T) {
+	textMock := new(mocks.Text)
+	s := FromText(textMock).Get()
 	if s == nil {
 		t.Error("sprite not properly created")
 	}
 }
 
-func TestFromTexture_SetPosition(t *testing.T) {
-	textureMock := new(mocks.Texture)
+func TestFromText_SetPosition(t *testing.T) {
+	textMock := new(mocks.Text)
 	wantX := float32(123.24)
 	wantY := float32(234.56)
-	s := sprite.FromTexture(textureMock).SetPosition(wantX, wantY).Get()
+	s := FromText(textMock).SetPosition(wantX, wantY).Get()
 	gotX := s.Position().X
 	gotY := s.Position().Y
 	if wantY != gotY {
@@ -30,19 +29,19 @@ func TestFromTexture_SetPosition(t *testing.T) {
 	}
 }
 
-func TestFromTexture_DrawerProperlySet(t *testing.T) {
-	textureMock := new(mocks.Texture)
+func TestFromText_DrawerProperlySet(t *testing.T) {
+	textMock := new(mocks.Text)
 	drawCalled := false
-	textureMock.OnDrawF = func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
+	textMock.OnDrawF = func(f *primitives.PointF) error {
 		drawCalled = true
 		return nil
 	}
-	s := sprite.FromTexture(textureMock).Get()
+	s := FromText(textMock).Get()
 	err := s.Draw()
 	if err != nil {
 		t.Errorf("err was expected to be nil but was %v", err)
 	}
 	if !drawCalled {
-		t.Error("Texture.DrawF was not called")
+		t.Error("Text.DrawF was not called")
 	}
 }

@@ -1,22 +1,21 @@
-package tests
+package primitives
 
 import (
-	"github.com/GomeBox/gome/primitives"
 	"testing"
 )
 
 type colorTestParams struct {
 	colorName     string
-	testFunction  func() primitives.Color
-	expectedColor primitives.Color
+	testFunction  func() Color
+	expectedColor Color
 }
 
 func TestColors(t *testing.T) {
 	testParams := []colorTestParams{
 		{
 			colorName:    "White",
-			testFunction: primitives.Colors().White,
-			expectedColor: primitives.Color{
+			testFunction: Colors().White,
+			expectedColor: Color{
 				R: 255,
 				G: 255,
 				B: 255,

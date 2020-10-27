@@ -1,4 +1,4 @@
-package tests
+package gome
 
 import (
 	"github.com/GomeBox/gome/internal"
