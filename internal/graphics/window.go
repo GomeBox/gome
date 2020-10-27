@@ -7,13 +7,10 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newWindow(adapter adapters.WindowAdapter) (graphics.Window, error) {
-	if adapter == nil {
-		return nil, errors.New("argument nil: adapter")
-	}
+func newWindow(adapter adapters.WindowAdapter) graphics.Window {
 	w := new(window)
 	w.adapter = adapter
-	return w, nil
+	return w
 }
 
 type window struct {

@@ -4,33 +4,22 @@ import (
 	"errors"
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/game"
+	"github.com/GomeBox/gome/internal/game/interfaces"
 	"time"
 )
 
-type InitializeCallback func(context game.Context) error
-type UpdateCallback func(timeDelta float32, context game.Context) error
-type DrawCallback func(timeDelta float32, context game.Context) error
-type CreateAdapters func() (adapters.System, error)
-
-type GameRunner interface {
-	Init(createAdapters CreateAdapters, settings game.Settings) error
-	Loop(initialize InitializeCallback, update UpdateCallback, draw DrawCallback) error
-	Running() bool
-	Quit()
+func NewRunner() *runner {
+	return new(runner)
 }
 
-func NewGameRunner() GameRunner {
-	return new(gameRunner)
-}
-
-type gameRunner struct {
+type runner struct {
 	running       bool
 	quit          bool
 	adapterSystem adapters.System
 	settings      game.Settings
 }
 
-func (runner *gameRunner) Init(createAdapters CreateAdapters, settings game.Settings) error {
+func (runner *runner) Init(createAdapters interfaces.CreateAdapters, settings game.Settings) error {
 	var err error
 	a, err := createAdapters()
 	if err != nil {
@@ -49,7 +38,7 @@ func (runner *gameRunner) Init(createAdapters CreateAdapters, settings game.Sett
 	return nil
 }
 
-func checkAdapters(adapters adapters.System, runner *gameRunner) error {
+func checkAdapters(adapters adapters.System, runner *runner) error {
 	if adapters.Graphics() == nil {
 		return errors.New("gome.checkAdapters(): Graphics adapter is nil")
 	}
@@ -63,7 +52,7 @@ func checkAdapters(adapters adapters.System, runner *gameRunner) error {
 var elapsedTime float32
 var frameStart time.Time
 
-func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallback, draw DrawCallback) error {
+func (runner *runner) Loop(initialize interfaces.InitializeCallback, update interfaces.UpdateCallback, draw interfaces.DrawCallback) error {
 	runner.running = true
 	defer func() { runner.running = false }()
 	var err error
@@ -103,15 +92,13 @@ func (runner *gameRunner) Loop(initialize InitializeCallback, update UpdateCallb
 	return err
 }
 
-func (runner *gameRunner) onInitialize(callback InitializeCallback) (*contextWrapper, error) {
+func (runner *runner) onInitialize(callback interfaces.InitializeCallback) (*context, error) {
 	err := runner.adapterSystem.Graphics().WindowAdapter().OpenWindow(runner.settings.WindowSettings())
 	if err != nil {
 		return nil, err
 	}
-	context, err := newContextWrapper(runner.adapterSystem, runner)
-	if err != nil {
-		return nil, err
-	}
+	system := NewSystem(runner.adapterSystem)
+	context := newContext(runner, system)
 	err = callback(context)
 	if err != nil {
 		return nil, err
@@ -119,10 +106,10 @@ func (runner *gameRunner) onInitialize(callback InitializeCallback) (*contextWra
 	return context, nil
 }
 
-func (runner *gameRunner) Quit() {
+func (runner *runner) Quit() {
 	runner.quit = true
 }
 
-func (runner *gameRunner) Running() bool {
+func (runner *runner) Running() bool {
 	return runner.running
 }

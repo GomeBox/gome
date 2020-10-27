@@ -4,9 +4,10 @@ import (
 	"errors"
 	"github.com/GomeBox/gome/game"
 	internalGame "github.com/GomeBox/gome/internal/game"
+	"github.com/GomeBox/gome/internal/game/interfaces"
 )
 
-func NewGome(runner internalGame.GameRunner) *GomeImpl {
+func NewGome(runner interfaces.Runner) *GomeImpl {
 	g := new(GomeImpl)
 	g.gameRunner = runner
 	g.gameSettings = internalGame.NewSettings()
@@ -14,7 +15,7 @@ func NewGome(runner internalGame.GameRunner) *GomeImpl {
 }
 
 type GomeImpl struct {
-	gameRunner   internalGame.GameRunner
+	gameRunner   interfaces.Runner
 	gameSettings game.Settings
 }
 

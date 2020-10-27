@@ -13,21 +13,18 @@ type Adapters struct {
 	WindowAdapter  adapters.WindowAdapter
 }
 
-func NewSystem(adapters Adapters) (graphics.System, error) {
-	sys := new(system)
+func NewSystem(adapters Adapters) *System {
+	sys := new(System)
 	sys.textureLoader = adapters.TextureLoader
 	sys.fontLoader = adapters.FontLoader
 	sys.textureCreator = adapters.TextureCreator
 	sys.windowAdapter = adapters.WindowAdapter
-	window, err := newWindow(adapters.WindowAdapter)
-	if err != nil {
-		return nil, err
-	}
+	window := newWindow(adapters.WindowAdapter)
 	sys.window = window
-	return sys, nil
+	return sys
 }
 
-type system struct {
+type System struct {
 	textureCreator adapters.TextureCreator
 	textureLoader  adapters.TextureLoader
 	fontLoader     adapters.FontLoader
@@ -35,7 +32,7 @@ type system struct {
 	window         graphics.Window
 }
 
-func (sys *system) LoadTexture(filename string) (graphics.Texture, error) {
+func (sys *System) LoadTexture(filename string) (graphics.Texture, error) {
 	drawer, err := sys.textureLoader.Load(filename)
 	if err != nil {
 		return nil, err
@@ -43,7 +40,7 @@ func (sys *system) LoadTexture(filename string) (graphics.Texture, error) {
 	return newTexture(drawer), nil
 }
 
-func (sys *system) LoadFont(fileName string, size int) (graphics.Font, error) {
+func (sys *System) LoadFont(fileName string, size int) (graphics.Font, error) {
 	drawer, err := sys.fontLoader.Load(fileName, size)
 	if err != nil {
 		return nil, err
@@ -51,7 +48,7 @@ func (sys *system) LoadFont(fileName string, size int) (graphics.Font, error) {
 	return newFont(drawer), nil
 }
 
-func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (graphics.Texture, error) {
+func (sys *System) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (graphics.Texture, error) {
 	drawer, err := sys.textureCreator.Create(dimensions, color)
 	if err != nil {
 		return nil, err
@@ -59,6 +56,6 @@ func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primi
 	return newTexture(drawer), nil
 }
 
-func (sys *system) Window() graphics.Window {
+func (sys *System) Window() graphics.Window {
 	return sys.window
 }

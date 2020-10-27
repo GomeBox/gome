@@ -10,7 +10,7 @@ type Adapters struct {
 	SongLoader  adapters.SongLoader
 }
 
-func NewSystem(adapters Adapters) audio.System {
+func NewSystem(adapters Adapters) *System {
 	system := System{
 		soundLoader: adapters.SoundLoader,
 		songLoader:  adapters.SongLoader}
