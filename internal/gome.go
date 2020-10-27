@@ -6,21 +6,28 @@ import (
 	internalGame "github.com/GomeBox/gome/internal/game"
 )
 
+func NewGome(runner internalGame.GameRunner) *GomeImpl {
+	g := new(GomeImpl)
+	g.gameRunner = runner
+	g.gameSettings = internalGame.NewSettings()
+	return g
+}
+
 type GomeImpl struct {
-	GameRunner   internalGame.GameRunner
-	GameSettings game.Settings
+	gameRunner   internalGame.GameRunner
+	gameSettings game.Settings
 }
 
 //Run starts a game and starts the game loop. Returns, when the game is ended
 func (gome *GomeImpl) Run(game game.Interface) error {
-	if gome.GameRunner.Running() {
+	if gome.gameRunner.Running() {
 		return errors.New("game is already running")
 	}
-	err := gome.GameRunner.Init(game.CreateAdapters, gome.GameSettings)
+	err := gome.gameRunner.Init(game.CreateAdapters, gome.gameSettings)
 	if err != nil {
 		return err
 	}
-	err = gome.GameRunner.Loop(game.Initialize, game.Update, game.Draw)
+	err = gome.gameRunner.Loop(game.Initialize, game.Update, game.Draw)
 	if err != nil {
 		return err
 	}
@@ -28,5 +35,5 @@ func (gome *GomeImpl) Run(game game.Interface) error {
 }
 
 func (gome *GomeImpl) Settings() game.Settings {
-	return gome.GameSettings
+	return gome.gameSettings
 }
