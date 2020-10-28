@@ -1,10 +1,10 @@
 package game
 
 import (
-	"github.com/GomeBox/gome/internal/audio"
+	audio "github.com/GomeBox/gome/internal/audio/interfaces"
 	"github.com/GomeBox/gome/internal/game/mocks"
-	"github.com/GomeBox/gome/internal/graphics"
-	"github.com/GomeBox/gome/internal/input"
+	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
+	input "github.com/GomeBox/gome/internal/input/interfaces"
 	"testing"
 )
 
@@ -42,7 +42,7 @@ func TestContext_Graphics(t *testing.T) {
 	runnerMock := new(mocks.Runner)
 	systemMock := new(mocks.System)
 	graphicsCalled := false
-	systemMock.OnGraphics = func() *graphics.System {
+	systemMock.OnGraphics = func() graphics.System {
 		graphicsCalled = true
 		return nil
 	}
@@ -57,7 +57,7 @@ func TestContext_Audio(t *testing.T) {
 	runnerMock := new(mocks.Runner)
 	systemMock := new(mocks.System)
 	audioCalled := false
-	systemMock.OnAudio = func() *audio.System {
+	systemMock.OnAudio = func() audio.System {
 		audioCalled = true
 		return nil
 	}
@@ -72,7 +72,7 @@ func TestContext_Input(t *testing.T) {
 	runnerMock := new(mocks.Runner)
 	systemMock := new(mocks.System)
 	inputCalled := false
-	systemMock.OnInput = func() *input.System {
+	systemMock.OnInput = func() input.System {
 		inputCalled = true
 		return nil
 	}

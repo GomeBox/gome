@@ -97,7 +97,8 @@ func (runner *runner) onInitialize(callback interfaces.InitializeCallback) (*con
 	if err != nil {
 		return nil, err
 	}
-	system := NewSystem(runner.adapterSystem)
+	systemsFactory := newSystemsFactory(runner.adapterSystem)
+	system := NewSystem(runner.adapterSystem, systemsFactory)
 	context := newContext(runner, system)
 	err = callback(context)
 	if err != nil {

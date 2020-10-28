@@ -6,10 +6,8 @@ import (
 	input "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
-type System interface {
-	Initialize() error
-	Update() error
-	Graphics() graphics.System
-	Input() input.System
-	Audio() audio.System
+type SystemsFactory interface {
+	CreateGraphicsSystem() graphics.System
+	CreateInputSystem() input.System
+	CreateAudioSystem() audio.System
 }

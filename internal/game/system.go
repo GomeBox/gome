@@ -2,14 +2,13 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters"
-	"github.com/GomeBox/gome/internal/audio"
+	audio "github.com/GomeBox/gome/internal/audio/interfaces"
 	"github.com/GomeBox/gome/internal/game/interfaces"
-	"github.com/GomeBox/gome/internal/graphics"
-	"github.com/GomeBox/gome/internal/input"
+	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
+	input "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
-func NewSystem(adapters adapters.System) interfaces.System {
-	factory := newSystemsFactory(adapters)
+func NewSystem(adapters adapters.System, factory interfaces.SystemsFactory) interfaces.System {
 	return &system{
 		adapterSystem: adapters,
 		graphics:      factory.CreateGraphicsSystem(),
@@ -20,9 +19,9 @@ func NewSystem(adapters adapters.System) interfaces.System {
 
 type system struct {
 	adapterSystem adapters.System
-	graphics      *graphics.System
-	input         *input.System
-	audio         *audio.System
+	graphics      graphics.System
+	input         input.System
+	audio         audio.System
 }
 
 func (system *system) Initialize() error {
@@ -37,14 +36,14 @@ func (system *system) Update() error {
 	return system.input.Update()
 }
 
-func (system *system) Input() *input.System {
+func (system *system) Input() input.System {
 	return system.input
 }
 
-func (system *system) Audio() *audio.System {
+func (system *system) Audio() audio.System {
 	return system.audio
 }
 
-func (system *system) Graphics() *graphics.System {
+func (system *system) Graphics() graphics.System {
 	return system.graphics
 }
