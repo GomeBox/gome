@@ -1,6 +1,7 @@
 package game
 
 import (
+	"errors"
 	adapterMocks "github.com/GomeBox/gome/adapters/mocks"
 	audio "github.com/GomeBox/gome/internal/audio/interfaces"
 	audioMocks "github.com/GomeBox/gome/internal/audio/mocks"
@@ -63,6 +64,19 @@ func TestSystem_Update(t *testing.T) {
 	got = inputSystem.CallCntUpdate
 	if got != want {
 		t.Errorf("inputSystem.Update was not called expected number of times. Got: %d, want: %d", got, want)
+	}
+}
+
+func TestSystem_UpdateErrOnAdapterSystemErr(t *testing.T) {
+	adapters := new(adapterMocks.System)
+	adapters.OnUpdate = func() error {
+		return errors.New("test")
+	}
+	systemsFactory := new(mocks.SystemsFactory)
+	system := NewSystem(adapters, systemsFactory)
+	err := system.Update()
+	if err == nil {
+		t.Error("Update did not return expected error")
 	}
 }
 
