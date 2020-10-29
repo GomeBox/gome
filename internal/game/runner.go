@@ -45,6 +45,9 @@ func checkAdapters(adapters adapters.System, runner *runner) error {
 	if adapters.Input() == nil {
 		return errors.New("gome.checkAdapters(): input adapter is nil")
 	}
+	if adapters.Audio() == nil {
+		return errors.New("gome.checkAdapters(): audio adapter is nil")
+	}
 	runner.adapterSystem = adapters
 	return nil
 }
