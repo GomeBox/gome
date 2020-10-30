@@ -8,8 +8,6 @@ import (
 
 //Context is passed to Interface.Update and Interface.Draw to access the game's systems, etc.
 type Context interface {
-	//QuitGame stops the game loop and causes the Gome.Run to return
-	QuitGame()
 	//Graphics returns the graphics adapter
 	Graphics() graphics.System
 	//Graphics returns the input adapter

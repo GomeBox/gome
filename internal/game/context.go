@@ -8,19 +8,13 @@ import (
 )
 
 type context struct {
-	runner     interfaces.Runner
 	gameSystem interfaces.System
 }
 
-func newContext(runner interfaces.Runner, system interfaces.System) *context {
+func newContext(system interfaces.System) *context {
 	context := new(context)
-	context.runner = runner
 	context.gameSystem = system
 	return context
-}
-
-func (context *context) QuitGame() {
-	context.runner.Quit()
 }
 
 func (context *context) Graphics() graphics.System {
