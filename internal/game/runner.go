@@ -5,7 +5,6 @@ import (
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/game"
 	"github.com/GomeBox/gome/internal/game/interfaces"
-	"time"
 )
 
 func NewRunner() *runner {
@@ -52,9 +51,6 @@ func checkAdapters(adapters adapters.System, runner *runner) error {
 	return nil
 }
 
-var elapsedTime float32
-var frameStart time.Time
-
 func (runner *runner) Loop(initialize interfaces.InitializeCallback, update interfaces.UpdateCallback, draw interfaces.DrawCallback) error {
 	runner.running = true
 	defer func() { runner.running = false }()
@@ -63,36 +59,26 @@ func (runner *runner) Loop(initialize interfaces.InitializeCallback, update inte
 	if err != nil {
 		return err
 	}
-	for !runner.quit {
-		frameStart = time.Now()
-		err = runner.adapterSystem.Graphics().ScreenPresenter().Clear()
-		if err != nil {
-			break
-		}
-		err = context.Update()
-		if err != nil {
-			break
-		}
-		err = update(elapsedTime, context)
-		if err != nil {
-			break
-		}
-		err = draw(elapsedTime, context)
-		if err != nil {
-			break
-		}
-		err = runner.adapterSystem.Graphics().ScreenPresenter().Present()
-		if err != nil {
-			break
-		}
-		//TODO: Framecount should be customizable
-		time.Sleep(time.Millisecond)
-		elapsedTime = float32(time.Since(frameStart).Milliseconds()) // / 1000000.0
-		if elapsedTime <= 0 {
-			elapsedTime = 1.0
-		}
+	loopData := &loopData{
+		screenPresenter: runner.adapterSystem.Graphics().ScreenPresenter(),
+		update: func(timeDelta float32) (keepRunning bool, error error) {
+			return runner.update(update, context, timeDelta)
+		},
+		draw: func(timeDelta float32) error { return draw(timeDelta, context) },
 	}
-	return err
+	return singleThreadedLoop(loopData)
+}
+
+func (runner *runner) update(updateCallback interfaces.UpdateCallback, context *context, timeDelta float32) (keepRunning bool, error error) {
+	err := context.Update()
+	if err != nil {
+		return false, err
+	}
+	err = updateCallback(timeDelta, context)
+	if err != nil {
+		return false, err
+	}
+	return !runner.quit, nil
 }
 
 func (runner *runner) onInitialize(callback interfaces.InitializeCallback) (*context, error) {
