@@ -17,32 +17,29 @@ type initializeType func(adapterSystem adapters.System,
 	context *context,
 	initCallback interfaces.InitializeCallback) error
 
-type runType func(loopData *loopData, loopFunc loop) error
+type runType func(adapterSystem adapters.System,
+	settings game.Settings,
+	context *context,
+	callbacks *Callbacks,
+	loopFunc loop) error
 
 func Run(callbacks Callbacks, adapterSystem adapters.System, settings game.Settings) error {
-	return initAndRun(callbacks, adapterSystem, settings, singleThreadedLoop, initialize, run)
+	return initAndRun(&callbacks, adapterSystem, settings, singleThreadedLoop, initialize, run)
 }
 
 func initAndRun(
-	callbacks Callbacks,
+	callbacks *Callbacks,
 	adapterSystem adapters.System,
 	settings game.Settings,
 	loop loop,
 	init initializeType,
 	run runType) error {
 	context := createContext(adapterSystem)
-	screenPresenter := adapterSystem.Graphics().ScreenPresenter()
-
 	err := init(adapterSystem, context, callbacks.OnInitialize)
 	if err != nil {
 		return err
 	}
-	err = adapterSystem.Graphics().WindowAdapter().OpenWindow(settings.WindowSettings())
-	if err != nil {
-		return err
-	}
-	loopData := createLoopData(screenPresenter, context, callbacks.OnUpdate, callbacks.OnDraw)
-	return run(loopData, loop)
+	return run(adapterSystem, settings, context, callbacks, loop)
 }
 
 func createContext(adapterSystem adapters.System) *context {
@@ -80,7 +77,17 @@ func initialize(
 	return nil
 }
 
-func run(loopData *loopData, loopFunc loop) error {
+func run(adapterSystem adapters.System,
+	settings game.Settings,
+	context *context,
+	callbacks *Callbacks,
+	loopFunc loop) error {
+	err := adapterSystem.Graphics().WindowAdapter().OpenWindow(settings.WindowSettings())
+	if err != nil {
+		return err
+	}
+	screenPresenter := adapterSystem.Graphics().ScreenPresenter()
+	loopData := createLoopData(screenPresenter, context, callbacks.OnUpdate, callbacks.OnDraw)
 	return loopFunc(loopData)
 }
 
