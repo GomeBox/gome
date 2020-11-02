@@ -1,12 +1,14 @@
 package mocks
 
-import "github.com/GomeBox/gome/input"
+import (
+	"github.com/GomeBox/gome/internal/input/interfaces"
+)
 
 type System struct {
 	CallCntUpdate int
 }
 
-func (s *System) Keyboard() input.Keyboard {
+func (s *System) Keyboard() interfaces.Keyboard {
 	panic("implement me")
 }
 

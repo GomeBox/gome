@@ -2,101 +2,72 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters"
-	"github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/game"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 )
 
-type Callbacks struct {
-	OnInitialize interfaces.InitializeCallback
-	OnUpdate     interfaces.UpdateCallback
-	OnDraw       interfaces.DrawCallback
-}
-
-type initializeType func(adapterSystem adapters.System,
-	context *context,
-	initCallback interfaces.InitializeCallback) error
-
-type runType func(adapterSystem adapters.System,
-	settings game.Settings,
-	context *context,
-	callbacks *Callbacks,
-	loopFunc loop) error
-
-func Run(callbacks Callbacks, adapterSystem adapters.System, settings game.Settings) error {
-	return initAndRun(&callbacks, adapterSystem, settings, singleThreadedLoop, initialize, run)
-}
-
-func initAndRun(
-	callbacks *Callbacks,
-	adapterSystem adapters.System,
-	settings game.Settings,
-	loop loop,
-	init initializeType,
-	run runType) error {
-	context := createContext(adapterSystem)
-	err := init(adapterSystem, context, callbacks.OnInitialize)
+func Run(callbacks *interfaces.Callbacks, settings interfaces.Settings) error {
+	adapterSystem, err := callbacks.CreateAdapters()
 	if err != nil {
 		return err
 	}
-	return run(adapterSystem, settings, context, callbacks, loop)
+	gameSystem := createGameSystem(adapterSystem)
+	err = initialize(gameSystem, settings, callbacks.Init)
+	if err != nil {
+		return err
+	}
+	return run(gameSystem, callbacks, singleThreadedLoop)
 }
 
-func createContext(adapterSystem adapters.System) *context {
+func createGameSystem(adapterSystem adapters.System) interfaces.System {
 	systemsFactory := newSystemsFactory(adapterSystem)
-	system := NewSystem(adapterSystem, systemsFactory)
-	return newContext(system)
+	return newSystem(adapterSystem, systemsFactory)
 }
 
-func createLoopData(
-	screenPresenter graphics.ScreenPresenter,
-	context *context,
-	updateCallback interfaces.UpdateCallback,
-	drawCallback interfaces.DrawCallback) *loopData {
-	return &loopData{
-		screenPresenter: screenPresenter,
-		update: func(timeDelta float32) (keepRunning bool, error error) {
-			return update(updateCallback, context, timeDelta)
-		},
-		draw: func(timeDelta float32) error { return drawCallback(timeDelta, context) },
-	}
-}
-
-func initialize(
-	adapterSystem adapters.System,
-	context *context,
+func initialize(gameSystem interfaces.System,
+	settings interfaces.Settings,
 	initCallback interfaces.InitializeCallback) error {
-	err := adapterSystem.Initialize()
+	err := gameSystem.Initialize()
 	if err != nil {
 		return err
 	}
-	err = initCallback(context)
+	err = gameSystem.Graphics().Window().Open(settings.WindowSettings())
+	if err != nil {
+		return err
+	}
+	err = initCallback(gameSystem)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func run(adapterSystem adapters.System,
-	settings game.Settings,
-	context *context,
-	callbacks *Callbacks,
+func run(gameSystem interfaces.System,
+	callbacks *interfaces.Callbacks,
 	loopFunc loop) error {
-	err := adapterSystem.Graphics().WindowAdapter().OpenWindow(settings.WindowSettings())
-	if err != nil {
-		return err
-	}
-	screenPresenter := adapterSystem.Graphics().ScreenPresenter()
-	loopData := createLoopData(screenPresenter, context, callbacks.OnUpdate, callbacks.OnDraw)
+	loopData := createLoopData(gameSystem, callbacks.Update, callbacks.Draw)
 	return loopFunc(loopData)
 }
 
-func update(updateCallback interfaces.UpdateCallback, context *context, timeDelta float32) (keepRunning bool, err error) {
-	err = context.Update()
+func createLoopData(gameSystem interfaces.System,
+	updateCallback interfaces.UpdateCallback,
+	drawCallback interfaces.DrawCallback) *loopData {
+	return &loopData{
+		gameSystem: gameSystem,
+		update: func(timeDelta float32) (keepRunning bool, error error) {
+			return update(updateCallback, gameSystem, timeDelta)
+		},
+		draw: func(timeDelta float32) error { return drawCallback(timeDelta) },
+	}
+}
+
+func update(updateCallback interfaces.UpdateCallback,
+	gameSystem interfaces.System,
+	timeDelta float32) (keepRunning bool, err error) {
+	err = gameSystem.Update()
 	if err != nil {
 		return false, err
 	}
-	keepRunning, err = updateCallback(timeDelta, context)
+	keepRunning, err = updateCallback(timeDelta)
 	if err != nil {
 		return false, err
 	}

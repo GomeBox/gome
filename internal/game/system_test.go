@@ -16,9 +16,9 @@ import (
 func TestSystem_NewSystem(t *testing.T) {
 	adapters := new(adapterMocks.System)
 	systemsFactory := new(mocks.SystemsFactory)
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	if system == nil {
-		t.Fatal("NewSystem() returned nil")
+		t.Fatal("newSystem() returned nil")
 	}
 	want := 1
 	got := systemsFactory.CallCntCreateGraphicsSystem
@@ -38,7 +38,7 @@ func TestSystem_NewSystem(t *testing.T) {
 func TestSystem_Initialize(t *testing.T) {
 	adapters := new(adapterMocks.System)
 	systemsFactory := new(mocks.SystemsFactory)
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	_ = system.Initialize()
 	want := 1
 	got := adapters.CallCntInitialize
@@ -54,7 +54,7 @@ func TestSystem_Update(t *testing.T) {
 	systemsFactory.OnCreateInputSystem = func() input.System {
 		return inputSystem
 	}
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	_ = system.Update()
 	want := 1
 	got := adapters.CallCntUpdate
@@ -73,7 +73,7 @@ func TestSystem_UpdateErrOnAdapterSystemErr(t *testing.T) {
 		return errors.New("test")
 	}
 	systemsFactory := new(mocks.SystemsFactory)
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	err := system.Update()
 	if err == nil {
 		t.Error("Update did not return expected error")
@@ -87,7 +87,7 @@ func TestSystem_Input(t *testing.T) {
 	systemsFactory.OnCreateInputSystem = func() input.System {
 		return inputSystem
 	}
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	if system.Input() != inputSystem {
 		t.Error("Input() does not return created input system")
 	}
@@ -100,7 +100,7 @@ func TestSystem_Audio(t *testing.T) {
 	systemsFactory.OnCreateAudioSystem = func() audio.System {
 		return audioSystem
 	}
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	if system.Audio() != audioSystem {
 		t.Error("Audio() does not return created input system")
 	}
@@ -113,7 +113,7 @@ func TestSystem_Graphics(t *testing.T) {
 	systemsFactory.OnCreateGraphicsSystem = func() graphics.System {
 		return graphicsSystem
 	}
-	system := NewSystem(adapters, systemsFactory)
+	system := newSystem(adapters, systemsFactory)
 	if system.Graphics() != graphicsSystem {
 		t.Error("Audio() does not return created input system")
 	}

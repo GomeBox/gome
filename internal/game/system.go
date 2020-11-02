@@ -8,8 +8,8 @@ import (
 	input "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
-func NewSystem(adapters adapters.System, factory interfaces.SystemsFactory) interfaces.System {
-	return &system{
+func newSystem(adapters adapters.System, factory systemsFactory) interfaces.System {
+	return &systemImpl{
 		adapterSystem: adapters,
 		graphics:      factory.CreateGraphicsSystem(),
 		input:         factory.CreateInputSystem(),
@@ -17,18 +17,18 @@ func NewSystem(adapters adapters.System, factory interfaces.SystemsFactory) inte
 	}
 }
 
-type system struct {
+type systemImpl struct {
 	adapterSystem adapters.System
 	graphics      graphics.System
 	input         input.System
 	audio         audio.System
 }
 
-func (system *system) Initialize() error {
+func (system *systemImpl) Initialize() error {
 	return system.adapterSystem.Initialize()
 }
 
-func (system *system) Update() error {
+func (system *systemImpl) Update() error {
 	err := system.adapterSystem.Update()
 	if err != nil {
 		return err
@@ -36,14 +36,14 @@ func (system *system) Update() error {
 	return system.input.Update()
 }
 
-func (system *system) Input() input.System {
+func (system *systemImpl) Input() input.System {
 	return system.input
 }
 
-func (system *system) Audio() audio.System {
+func (system *systemImpl) Audio() audio.System {
 	return system.audio
 }
 
-func (system *system) Graphics() graphics.System {
+func (system *systemImpl) Graphics() graphics.System {
 	return system.graphics
 }

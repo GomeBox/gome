@@ -1,14 +1,14 @@
 package game
 
 import (
-	"github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/internal/game/interfaces"
 	"time"
 )
 
 type loopData struct {
-	screenPresenter graphics.ScreenPresenter
-	update          func(timeDelta float32) (keepRunning bool, error error)
-	draw            func(timeDelta float32) error
+	gameSystem interfaces.System
+	update     func(timeDelta float32) (keepRunning bool, error error)
+	draw       func(timeDelta float32) error
 }
 
 type loop func(loopData *loopData) error
@@ -20,7 +20,7 @@ func singleThreadedLoop(loopData *loopData) error {
 	keepRunning := true
 	for keepRunning {
 		loopStart = time.Now()
-		err = loopData.screenPresenter.Clear()
+		err = loopData.gameSystem.Graphics().Clear()
 		if err != nil {
 			return err
 		}
@@ -32,7 +32,7 @@ func singleThreadedLoop(loopData *loopData) error {
 		if err != nil {
 			return err
 		}
-		err = loopData.screenPresenter.Present()
+		err = loopData.gameSystem.Graphics().Present()
 		if err != nil {
 			return err
 		}

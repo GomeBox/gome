@@ -9,7 +9,7 @@ import (
 type System interface {
 	Initialize() error
 	Update() error
-	Graphics() graphics.System
 	Input() input.System
 	Audio() audio.System
+	Graphics() graphics.System
 }
