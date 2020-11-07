@@ -4,6 +4,10 @@ import (
 	"github.com/GomeBox/gome/adapters"
 )
 
+type Runner interface {
+	Run() error
+}
+
 type Callbacks struct {
 	Init           InitializeCallback
 	Update         UpdateCallback

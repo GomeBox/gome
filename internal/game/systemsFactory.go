@@ -4,19 +4,14 @@ import (
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/internal/audio"
 	audioInterfaces "github.com/GomeBox/gome/internal/audio/interfaces"
+	"github.com/GomeBox/gome/internal/game/interfaces"
 	"github.com/GomeBox/gome/internal/graphics"
 	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/internal/input"
 	inputInterfaces "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
-type systemsFactory interface {
-	CreateGraphicsSystem() graphicsInterfaces.System
-	CreateInputSystem() inputInterfaces.System
-	CreateAudioSystem() audioInterfaces.System
-}
-
-func newSystemsFactory(adapterSystem adapters.System) systemsFactory {
+func newSystemsFactory(adapterSystem adapters.System) interfaces.SystemsFactory {
 	factory := new(systemsFactoryImpl)
 	factory.adapterSystem = adapterSystem
 	return factory

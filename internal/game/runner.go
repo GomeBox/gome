@@ -1,26 +1,43 @@
 package game
 
 import (
-	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 )
 
-func Run(callbacks *interfaces.Callbacks, settings interfaces.Settings) error {
-	adapterSystem, err := callbacks.CreateAdapters()
-	if err != nil {
-		return err
-	}
-	gameSystem := createGameSystem(adapterSystem)
-	err = initialize(gameSystem, settings, callbacks.Init)
-	if err != nil {
-		return err
-	}
-	return run(gameSystem, callbacks, singleThreadedLoop)
+type runner struct {
+	initCallback   interfaces.InitializeCallback
+	getSettings    interfaces.GetSettings
+	updateCallback interfaces.UpdateCallback
+	drawCallback   interfaces.DrawCallback
+	gameSystem     interfaces.System
+	loop           loop
 }
 
-func createGameSystem(adapterSystem adapters.System) interfaces.System {
+func NewRunner(callbacks *interfaces.Callbacks) (interfaces.Runner, error) {
+	adapterSystem, err := callbacks.CreateAdapters()
+	if err != nil {
+		return nil, err
+	}
 	systemsFactory := newSystemsFactory(adapterSystem)
-	return newSystem(adapterSystem, systemsFactory)
+	gameSystem := newSystem(adapterSystem, systemsFactory)
+	runner := runner{
+		initCallback:   callbacks.Init,
+		getSettings:    callbacks.GetSettings,
+		updateCallback: callbacks.Update,
+		drawCallback:   callbacks.Draw,
+		gameSystem:     gameSystem,
+		loop:           singleThreadedLoop,
+	}
+	return &runner, nil
+}
+
+func (runner *runner) Run() error {
+	settings := runner.getSettings()
+	err := initialize(runner.gameSystem, settings, runner.initCallback)
+	if err != nil {
+		return err
+	}
+	return run(runner.gameSystem, runner.updateCallback, runner.drawCallback, runner.loop)
 }
 
 func initialize(gameSystem interfaces.System,
@@ -42,10 +59,11 @@ func initialize(gameSystem interfaces.System,
 }
 
 func run(gameSystem interfaces.System,
-	callbacks *interfaces.Callbacks,
-	loopFunc loop) error {
-	loopData := createLoopData(gameSystem, callbacks.Update, callbacks.Draw)
-	return loopFunc(loopData)
+	update interfaces.UpdateCallback,
+	draw interfaces.DrawCallback,
+	loop loop) error {
+	loopData := createLoopData(gameSystem, update, draw)
+	return loop(loopData)
 }
 
 func createLoopData(gameSystem interfaces.System,

@@ -24,7 +24,11 @@ func (gome *GomeImpl) Run(callbacks *interfaces.Callbacks) error {
 	}
 	gome.running = true
 	defer func() { gome.running = false }()
-	return game.Run(callbacks, gome.gameSettings)
+	runner, err := game.NewRunner(callbacks)
+	if err != nil {
+		return err
+	}
+	return runner.Run()
 }
 
 func (gome *GomeImpl) Settings() interfaces.Settings {
