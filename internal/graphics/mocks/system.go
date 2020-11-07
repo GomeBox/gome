@@ -6,7 +6,10 @@ import (
 )
 
 type System struct {
-	OnWindow func() interfaces.Window
+	OnWindow       func() interfaces.Window
+	OnClear        func() error
+	CallCntClear   int
+	CallCntPresent int
 }
 
 func (s *System) LoadTexture(filename string) (interfaces.Texture, error) {
@@ -29,9 +32,14 @@ func (s *System) Window() interfaces.Window {
 }
 
 func (s *System) Clear() error {
-	panic("implement me")
+	s.CallCntClear++
+	if s.OnClear != nil {
+		return s.OnClear()
+	}
+	return nil
 }
 
 func (s *System) Present() error {
-	panic("implement me")
+	s.CallCntPresent++
+	return nil
 }
