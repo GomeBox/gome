@@ -20,7 +20,7 @@ func (s *System) LoadFont(fileName string, size int) (interfaces.Font, error) {
 	panic("implement me")
 }
 
-func (s *System) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (interfaces.Texture, error) {
+func (s *System) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (interfaces.Texture, error) {
 	panic("implement me")
 }
 

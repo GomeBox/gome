@@ -12,7 +12,7 @@ type System interface {
 	//LoadFont loads a font from a file, assigns it a size and returns a Font
 	LoadFont(fileName string, size int) (Font, error)
 	//CreateTexture creates a rectangular, unicolored Texture from a file and returns it
-	CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (Texture, error)
+	CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error)
 	//Window returns a Window-instance, which holds information about the game's window
 	Window() Window
 }
@@ -41,7 +41,7 @@ func (sys *system) LoadFont(fileName string, size int) (Font, error) {
 	return &font{internalFont: f}, nil
 }
 
-func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (Texture, error) {
+func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error) {
 	tex, err := sys.internalSystem.CreateTexture(dimensions, color)
 	if err != nil {
 		return nil, err

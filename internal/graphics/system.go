@@ -51,7 +51,7 @@ func (sys *system) LoadFont(fileName string, size int) (interfaces.Font, error) 
 	return newFont(drawer), nil
 }
 
-func (sys *system) CreateTexture(dimensions *primitives.Dimensions, color *primitives.Color) (interfaces.Texture, error) {
+func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (interfaces.Texture, error) {
 	drawer, err := sys.textureCreator.Create(dimensions, color)
 	if err != nil {
 		return nil, err
