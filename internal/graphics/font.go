@@ -6,14 +6,14 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
+type font struct {
+	creator adapters.TextCreator
+}
+
 func newFont(creator adapters.TextCreator) interfaces.Font {
 	font := new(font)
 	font.creator = creator
 	return font
-}
-
-type font struct {
-	creator adapters.TextCreator
 }
 
 func (font *font) CreateText(text string, color primitives.Color) (interfaces.Text, error) {
