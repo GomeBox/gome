@@ -16,7 +16,7 @@ func NewSystem(adapters Adapters) interfaces.System {
 }
 
 type system struct {
-	keyboard *keyboard
+	keyboard keyboard
 }
 
 func (sys *system) Keyboard() interfaces.Keyboard {
