@@ -16,7 +16,7 @@ func TestNewSystem(t *testing.T) {
 func TestSystem_Keyboard(t *testing.T) {
 	kb := new(keyboardImpl)
 	system := system{keyboard: kb}
-	assert.Same(t, kb, system.keyboard)
+	assert.Same(t, kb, system.Keyboard())
 }
 
 func TestSystem_Update(t *testing.T) {
