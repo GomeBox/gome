@@ -1,35 +1,35 @@
 package sprite
 
 import (
+	"github.com/GomeBox/gome/internal/sprite/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func New(drawer drawer, position primitives.PointF) *Implementation {
-	s := new(Implementation)
+func New(drawer drawer, position primitives.PointF) interfaces.Sprite {
+	s := new(spriteImpl)
 	s.drawer = drawer
 	s.pos = position
 	return s
 }
 
-type Implementation struct {
+type spriteImpl struct {
 	drawer drawer
 	pos    primitives.PointF
 }
 
-func (sprite *Implementation) Dimensions() primitives.Dimensions {
-	return sprite.Dimensions()
+func (sprite *spriteImpl) Dimensions() primitives.Dimensions {
+	return sprite.drawer.Dimensions()
 }
 
-func (sprite *Implementation) Position() primitives.PointF {
+func (sprite *spriteImpl) Position() primitives.PointF {
 	return sprite.pos
 }
 
-func (sprite *Implementation) SetPosition(x, y float32) error {
+func (sprite *spriteImpl) SetPosition(x, y float32) {
 	sprite.pos.X = x
 	sprite.pos.Y = y
-	return nil
 }
 
-func (sprite *Implementation) Draw() error {
+func (sprite *spriteImpl) Draw() error {
 	return sprite.drawer.DrawTo(&sprite.pos)
 }

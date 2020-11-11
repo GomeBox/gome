@@ -9,7 +9,7 @@ type Interface interface {
 	//Position returns the position of the sprite on the game window
 	Position() primitives.PointF
 	//SetPosition sets the position of the sprite on the game window
-	SetPosition(x, y float32) error
+	SetPosition(x, y float32)
 	//Draw draws the sprite to it's Position
 	Draw() error
 }
