@@ -1,6 +1,6 @@
 package interfaces
 
 type System interface {
-	LoadSound(fileName string) (Sound, error)
-	LoadSong(fileName string) (Song, error)
+	LoadSound(fileName string) (Player, error)
+	LoadSong(fileName string) (Player, error)
 }

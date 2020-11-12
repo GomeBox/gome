@@ -1,5 +1,5 @@
 package interfaces
 
-type Song interface {
+type Player interface {
 	Play() error
 }

@@ -22,7 +22,7 @@ type system struct {
 	songLoader  adapters.SongLoader
 }
 
-func (sys *system) LoadSound(fileName string) (interfaces.Sound, error) {
+func (sys *system) LoadSound(fileName string) (interfaces.Player, error) {
 	player, err := sys.soundLoader.Load(fileName)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (sys *system) LoadSound(fileName string) (interfaces.Sound, error) {
 	return &sound{soundPlayer: player}, nil
 }
 
-func (sys *system) LoadSong(fileName string) (interfaces.Song, error) {
+func (sys *system) LoadSong(fileName string) (interfaces.Player, error) {
 	player, err := sys.songLoader.Load(fileName)
 	if err != nil {
 		return nil, err

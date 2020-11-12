@@ -5,12 +5,16 @@ import (
 )
 
 type System struct {
+	CallCntLoadSound int
+	CallCntLoadSong  int
 }
 
-func (s System) LoadSound(fileName string) (interfaces.Sound, error) {
-	panic("implement me")
+func (s *System) LoadSound(fileName string) (interfaces.Player, error) {
+	s.CallCntLoadSound++
+	return nil, nil
 }
 
-func (s System) LoadSong(fileName string) (interfaces.Song, error) {
-	panic("implement me")
+func (s *System) LoadSong(fileName string) (interfaces.Player, error) {
+	s.CallCntLoadSong++
+	return nil, nil
 }
