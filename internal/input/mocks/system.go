@@ -6,10 +6,14 @@ import (
 
 type System struct {
 	CallCntUpdate int
+	OnKeyboard    func() interfaces.Keyboard
 }
 
 func (s *System) Keyboard() interfaces.Keyboard {
-	panic("implement me")
+	if s.OnKeyboard != nil {
+		return s.OnKeyboard()
+	}
+	return nil
 }
 
 func (s *System) Update() error {

@@ -1,6 +1,7 @@
 package input
 
 import (
+	"github.com/GomeBox/gome/internal/input/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -20,7 +21,7 @@ func TestSystem_Keyboard(t *testing.T) {
 }
 
 func TestSystem_Update(t *testing.T) {
-	kb := new(keyboardStub)
+	kb := new(mocks.Keyboard)
 	system := system{keyboard: kb}
 	_ = system.Update()
 	assert.Equal(t, 1, kb.CallCntUpdate)
