@@ -1,4 +1,4 @@
-package game
+package gome
 
 import (
 	"github.com/GomeBox/gome/audio"
@@ -17,7 +17,7 @@ type Context interface {
 	Audio() audio.System
 }
 
-func NewContext(gameSystem interfaces.System) Context {
+func newContext(gameSystem interfaces.System) Context {
 	c := new(context)
 	c.graphics = graphics.NewSystem(gameSystem.Graphics())
 	c.input = input.NewSystem(gameSystem.Input())

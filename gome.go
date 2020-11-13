@@ -1,7 +1,6 @@
 package gome
 
 import (
-	gomeGame "github.com/GomeBox/gome/game"
 	"github.com/GomeBox/gome/internal"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 )
@@ -9,8 +8,8 @@ import (
 //Gome is used to run a game
 type Gome interface {
 	//Run starts the interfaces. Returns when the game ends
-	Run(game gomeGame.Interface) error
-	Settings() gomeGame.Settings
+	Run(game Interface) error
+	Settings() Settings
 }
 
 //New returns a new instance of Gome
@@ -23,13 +22,13 @@ func New() Gome {
 
 type gome struct {
 	impl        *internal.GomeImpl
-	gameContext gomeGame.Context
+	gameContext Context
 }
 
-func (gome *gome) Run(game gomeGame.Interface) error {
+func (gome *gome) Run(game Interface) error {
 	callbacks := interfaces.Callbacks{
 		Init: func(gameSystem interfaces.System) error {
-			gome.gameContext = gomeGame.NewContext(gameSystem)
+			gome.gameContext = newContext(gameSystem)
 			return game.Initialize(gome.gameContext)
 		},
 		Update: func(timeDelta float32) (keepRunning bool, error error) {
@@ -46,6 +45,6 @@ func (gome *gome) Run(game gomeGame.Interface) error {
 	return gome.impl.Run(&callbacks)
 }
 
-func (gome *gome) Settings() gomeGame.Settings {
+func (gome *gome) Settings() Settings {
 	return gome.impl.Settings()
 }

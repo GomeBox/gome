@@ -1,6 +1,8 @@
-package game
+package gome
 
-import "github.com/GomeBox/gome/adapters"
+import (
+	"github.com/GomeBox/gome/adapters"
+)
 
 //Interface must be implemented to be run by Gome
 type Interface interface {
