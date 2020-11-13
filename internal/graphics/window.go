@@ -3,17 +3,14 @@ package graphics
 import (
 	"errors"
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newWindow(adapter adapters.WindowAdapter) (graphics.Window, error) {
-	if adapter == nil {
-		return nil, errors.New("argument nil: adapter")
-	}
+func newWindow(adapter adapters.WindowAdapter) interfaces.Window {
 	w := new(window)
 	w.adapter = adapter
-	return w, nil
+	return w
 }
 
 type window struct {
@@ -25,4 +22,8 @@ func (w *window) Dimensions() (primitives.Dimensions, error) {
 		return primitives.Dimensions{}, errors.New("window is not open and has no dimensions")
 	}
 	return w.adapter.Size(), nil
+}
+
+func (w *window) Open(settings *adapters.WindowSettings) error {
+	return w.adapter.OpenWindow(settings)
 }

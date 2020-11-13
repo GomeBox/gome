@@ -2,23 +2,29 @@ package input
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/input"
-	"github.com/GomeBox/gome/input"
+	"github.com/GomeBox/gome/internal/input/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newKeyboard(adapter adapters.KeyboardAdapter) *keyboard {
-	keyboard := new(keyboard)
+func newKeyboard(adapter adapters.KeyboardAdapter) *keyboardImpl {
+	keyboard := new(keyboardImpl)
 	keyboard.adapter = adapter
 	keyboard.registeredKeys = make(map[primitives.KeyType]*key)
 	return keyboard
 }
 
-type keyboard struct {
+type keyboard interface {
+	RegisterKey(keyType primitives.KeyType) (interfaces.Key, error)
+	UnregisterKey(keyType primitives.KeyType)
+	Update() error
+}
+
+type keyboardImpl struct {
 	adapter        adapters.KeyboardAdapter
 	registeredKeys map[primitives.KeyType]*key
 }
 
-func (keyboard *keyboard) RegisterKey(keyType primitives.KeyType) (input.Key, error) {
+func (keyboard *keyboardImpl) RegisterKey(keyType primitives.KeyType) (interfaces.Key, error) {
 	pressed, err := keyboard.adapter.KeyPressed(keyType)
 	if err != nil {
 		return nil, err
@@ -36,13 +42,13 @@ func (keyboard *keyboard) RegisterKey(keyType primitives.KeyType) (input.Key, er
 	return keyInstance, nil
 }
 
-func (keyboard *keyboard) UnregisterKey(keyType primitives.KeyType) {
+func (keyboard *keyboardImpl) UnregisterKey(keyType primitives.KeyType) {
 	if _, ok := keyboard.registeredKeys[keyType]; ok {
 		delete(keyboard.registeredKeys, keyType)
 	}
 }
 
-func (keyboard *keyboard) Update() error {
+func (keyboard *keyboardImpl) Update() error {
 	for keyType, key := range keyboard.registeredKeys {
 		pressed, err := keyboard.adapter.KeyPressed(keyType)
 		if err != nil {

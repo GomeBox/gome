@@ -31,5 +31,5 @@ func (text *text) DrawF(position *primitives.PointF) error {
 }
 
 func (text *text) Dimensions() primitives.Dimensions {
-	return text.Dimensions()
+	return text.drawer.Dimensions()
 }

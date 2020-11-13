@@ -2,7 +2,7 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/game"
+	"github.com/GomeBox/gome/internal/game/interfaces"
 )
 
 //Settings contains all settings to run a game
@@ -16,7 +16,7 @@ func (s settings) WindowSettings() *graphics.WindowSettings {
 }
 
 //NewSettings initializes new Settings with default values
-func NewSettings() game.Settings {
+func NewSettings() interfaces.Settings {
 	s := new(settings)
 	s.windowSettings = new(graphics.WindowSettings)
 	s.windowSettings.Resolution.Width = 800

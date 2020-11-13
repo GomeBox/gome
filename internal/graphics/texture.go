@@ -2,18 +2,18 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newTexture(tex adapters.Texture) graphics.Texture {
+func newTexture(tex adapters.Texture) interfaces.Texture {
 	texture := new(texture)
 	texture.tex = tex
 	return texture
 }
 
 type texture struct {
-	tex graphics.Texture
+	tex adapters.Texture
 }
 
 func (texture *texture) Draw(source, dest *primitives.Rectangle) error {
