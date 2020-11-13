@@ -3,7 +3,6 @@ package audio
 import (
 	adapters "github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/adapters/audio/mocks"
-	"github.com/GomeBox/gome/internal/audio/interfaces"
 	"testing"
 )
 
@@ -51,18 +50,4 @@ func TestSystem_LoadSound_PassesFilename(t *testing.T) {
 		t.Errorf("fileName was not passed to soundLoader. got %v, want %v", got, want)
 		return
 	}
-}
-
-func createMockSystem(soundMock *mocks.Sound, songMock *mocks.Song) interfaces.System {
-	soundLoaderMock := mocks.SoundLoader{OnLoad: func(fileName string) (adapters.Sound, error) {
-		return soundMock, nil
-	}}
-	songLoaderMock := mocks.SongLoader{OnLoad: func(fileName string) (adapters.Song, error) {
-		return songMock, nil
-	}}
-	a := Adapters{
-		SoundLoader: soundLoaderMock,
-		SongLoader:  songLoaderMock,
-	}
-	return NewSystem(a)
 }

@@ -1,9 +1,9 @@
 package gome
 
 import (
-	"github.com/GomeBox/gome/audio"
 	"github.com/GomeBox/gome/graphics"
 	"github.com/GomeBox/gome/input"
+	interfaces2 "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 )
 
@@ -14,21 +14,21 @@ type Context interface {
 	//Graphics returns the input adapter
 	Input() input.System
 	//Audio returns the audio adapter
-	Audio() audio.System
+	Audio() interfaces2.Audio
 }
 
 func newContext(gameSystem interfaces.System) Context {
 	c := new(context)
 	c.graphics = graphics.NewSystem(gameSystem.Graphics())
 	c.input = input.NewSystem(gameSystem.Input())
-	c.audio = audio.NewSystem(gameSystem.Audio())
+	c.audio = gameSystem.Audio()
 	return c
 }
 
 type context struct {
 	graphics graphics.System
 	input    input.System
-	audio    audio.System
+	audio    interfaces2.Audio
 }
 
 func (context *context) Graphics() graphics.System {
@@ -39,6 +39,6 @@ func (context *context) Input() input.System {
 	return context.input
 }
 
-func (context *context) Audio() audio.System {
+func (context *context) Audio() interfaces2.Audio {
 	return context.audio
 }

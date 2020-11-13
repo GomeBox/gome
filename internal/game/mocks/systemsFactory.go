@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	audio "github.com/GomeBox/gome/internal/audio/interfaces"
+	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
 	input "github.com/GomeBox/gome/internal/input/interfaces"
 )
@@ -9,7 +9,7 @@ import (
 type SystemsFactory struct {
 	OnCreateGraphicsSystem      func() graphics.System
 	OnCreateInputSystem         func() input.System
-	OnCreateAudioSystem         func() audio.System
+	OnCreateAudioSystem         func() gomeInterfaces.Audio
 	CallCntCreateGraphicsSystem int
 	CallCntCreateInputSystem    int
 	CallCntCreateAudioSystem    int
@@ -31,7 +31,7 @@ func (s *SystemsFactory) CreateInputSystem() input.System {
 	return nil
 }
 
-func (s *SystemsFactory) CreateAudioSystem() audio.System {
+func (s *SystemsFactory) CreateAudioSystem() gomeInterfaces.Audio {
 	s.CallCntCreateAudioSystem++
 	if s.OnCreateAudioSystem != nil {
 		return s.OnCreateAudioSystem()

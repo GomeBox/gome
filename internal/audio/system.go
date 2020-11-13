@@ -2,7 +2,7 @@ package audio
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/audio"
-	"github.com/GomeBox/gome/internal/audio/interfaces"
+	"github.com/GomeBox/gome/interfaces"
 )
 
 type Adapters struct {
@@ -10,7 +10,7 @@ type Adapters struct {
 	SongLoader  adapters.SongLoader
 }
 
-func NewSystem(adapters Adapters) interfaces.System {
+func NewSystem(adapters Adapters) interfaces.Audio {
 	system := system{
 		soundLoader: adapters.SoundLoader,
 		songLoader:  adapters.SongLoader}

@@ -2,7 +2,7 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters"
-	audio "github.com/GomeBox/gome/internal/audio/interfaces"
+	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
 	input "github.com/GomeBox/gome/internal/input/interfaces"
@@ -21,7 +21,7 @@ type systemImpl struct {
 	adapterSystem adapters.System
 	graphics      graphics.System
 	input         input.System
-	audio         audio.System
+	audio         gomeInterfaces.Audio
 }
 
 func (system *systemImpl) Initialize() error {
@@ -40,7 +40,7 @@ func (system *systemImpl) Input() input.System {
 	return system.input
 }
 
-func (system *systemImpl) Audio() audio.System {
+func (system *systemImpl) Audio() gomeInterfaces.Audio {
 	return system.audio
 }
 

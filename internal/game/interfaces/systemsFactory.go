@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	audioInterfaces "github.com/GomeBox/gome/internal/audio/interfaces"
+	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
 	inputInterfaces "github.com/GomeBox/gome/internal/input/interfaces"
 )
@@ -9,5 +9,5 @@ import (
 type SystemsFactory interface {
 	CreateGraphicsSystem() graphicsInterfaces.System
 	CreateInputSystem() inputInterfaces.System
-	CreateAudioSystem() audioInterfaces.System
+	CreateAudioSystem() gomeInterfaces.Audio
 }

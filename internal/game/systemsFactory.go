@@ -2,8 +2,8 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters"
+	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/audio"
-	audioInterfaces "github.com/GomeBox/gome/internal/audio/interfaces"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 	"github.com/GomeBox/gome/internal/graphics"
 	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
@@ -42,7 +42,7 @@ func (factory systemsFactoryImpl) CreateInputSystem() inputInterfaces.System {
 			Keyboard: factory.adapterSystem.Input().Keyboard()})
 }
 
-func (factory systemsFactoryImpl) CreateAudioSystem() audioInterfaces.System {
+func (factory systemsFactoryImpl) CreateAudioSystem() gomeInterfaces.Audio {
 	songLoader := factory.adapterSystem.Audio().SongLoader()
 	soundLoader := factory.adapterSystem.Audio().SoundLoader()
 	return audio.NewSystem(
