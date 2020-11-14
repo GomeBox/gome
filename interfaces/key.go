@@ -1,7 +1,6 @@
-package input
+package interfaces
 
 import (
-	"github.com/GomeBox/gome/internal/input/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
@@ -13,20 +12,4 @@ type Key interface {
 	IsPressed() bool
 	//WasPressed is true if the key was pressed during the last run of update
 	WasPressed() bool
-}
-
-type key struct {
-	internalKey interfaces.Key
-}
-
-func (k *key) KeyType() primitives.KeyType {
-	return k.internalKey.KeyType()
-}
-
-func (k *key) IsPressed() bool {
-	return k.internalKey.IsPressed()
-}
-
-func (k *key) WasPressed() bool {
-	return k.internalKey.WasPressed()
 }

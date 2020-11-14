@@ -2,11 +2,11 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newText(drawer adapters.TextDrawer) graphics.Text {
+func newText(drawer adapters.TextDrawer) interfaces.Text {
 	return &text{drawer: drawer}
 }
 

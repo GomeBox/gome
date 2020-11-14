@@ -1,16 +1,16 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics"
+	interfaces2 "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/sprite/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type textDrawer struct {
-	text graphics.Text
+	text interfaces2.Text
 }
 
-func NewTextDrawer(text graphics.Text) interfaces.Drawer {
+func NewTextDrawer(text interfaces2.Text) interfaces.Drawer {
 	return &textDrawer{text: text}
 }
 

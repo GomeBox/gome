@@ -12,9 +12,9 @@ import (
 )
 
 func TestSystemsFactory_newSystemsFactory(t *testing.T) {
-	factory := newSystemsFactory(nil)
+	factory := NewSystemsFactory(nil)
 	if factory == nil {
-		t.Error("newSystemsFactory returned nil")
+		t.Error("NewSystemsFactory returned nil")
 	}
 }
 
@@ -34,7 +34,7 @@ func TestSystemsFactory_CreateGraphicsSystem(t *testing.T) {
 			return graphicsAdapter
 		},
 	}
-	systemsFactory := newSystemsFactory(&adapterSystem)
+	systemsFactory := NewSystemsFactory(&adapterSystem)
 	_ = systemsFactory.CreateGraphicsSystem()
 	want := 1
 	got := graphicsAdapter.CallCntTextureLoader
@@ -64,7 +64,7 @@ func TestSystemsFactory_CreateInputSystem(t *testing.T) {
 	adapterSystem := &mocks.System{
 		OnInput: func() input.Adapters { return inputAdapter },
 	}
-	systemsFactory := newSystemsFactory(adapterSystem)
+	systemsFactory := NewSystemsFactory(adapterSystem)
 	_ = systemsFactory.CreateInputSystem()
 	want := 1
 	got := inputAdapter.CallCntKeyboard
@@ -87,7 +87,7 @@ func TestSystemsFactory_CreateAudioSystem(t *testing.T) {
 			return audioAdapter
 		},
 	}
-	systemsFactory := newSystemsFactory(adapterSystem)
+	systemsFactory := NewSystemsFactory(adapterSystem)
 	_ = systemsFactory.CreateAudioSystem()
 	want := 1
 	got := audioAdapter.CallCntSongLoader

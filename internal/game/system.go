@@ -8,7 +8,7 @@ import (
 	input "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
-func newSystem(adapters adapters.System, factory interfaces.SystemsFactory) interfaces.System {
+func NewSystem(adapters adapters.System, factory interfaces.SystemsFactory) interfaces.System {
 	return &systemImpl{
 		adapterSystem: adapters,
 		graphics:      factory.CreateGraphicsSystem(),
@@ -44,6 +44,6 @@ func (system *systemImpl) Audio() gomeInterfaces.Audio {
 	return system.audio
 }
 
-func (system *systemImpl) Graphics() graphics.System {
+func (system *systemImpl) Graphics() gomeInterfaces.Graphics {
 	return system.graphics
 }

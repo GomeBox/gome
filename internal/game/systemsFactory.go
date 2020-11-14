@@ -11,7 +11,7 @@ import (
 	inputInterfaces "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
-func newSystemsFactory(adapterSystem adapters.System) interfaces.SystemsFactory {
+func NewSystemsFactory(adapterSystem adapters.System) interfaces.SystemsFactory {
 	factory := new(systemsFactoryImpl)
 	factory.adapterSystem = adapterSystem
 	return factory

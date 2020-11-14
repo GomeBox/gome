@@ -2,6 +2,7 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
+	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
@@ -35,7 +36,7 @@ type system struct {
 	screenPresenter adapters.ScreenPresenter
 }
 
-func (sys *system) LoadTexture(filename string) (interfaces.Texture, error) {
+func (sys *system) LoadTexture(filename string) (gomeInterfaces.Texture, error) {
 	drawer, err := sys.textureLoader.Load(filename)
 	if err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ func (sys *system) LoadTexture(filename string) (interfaces.Texture, error) {
 	return newTexture(drawer), nil
 }
 
-func (sys *system) LoadFont(fileName string, size int) (interfaces.Font, error) {
+func (sys *system) LoadFont(fileName string, size int) (gomeInterfaces.Font, error) {
 	drawer, err := sys.fontLoader.Load(fileName, size)
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func (sys *system) LoadFont(fileName string, size int) (interfaces.Font, error) 
 	return newFont(drawer), nil
 }
 
-func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (interfaces.Texture, error) {
+func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (gomeInterfaces.Texture, error) {
 	drawer, err := sys.textureCreator.Create(dimensions, color)
 	if err != nil {
 		return nil, err

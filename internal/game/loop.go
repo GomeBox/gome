@@ -13,7 +13,7 @@ type loopData struct {
 
 type loop func(loopData *loopData) error
 
-func singleThreadedLoop(loopData *loopData) error {
+func SingleThreadedLoop(loopData *loopData) error {
 	var loopStart time.Time
 	var timeDelta float32
 	var err error

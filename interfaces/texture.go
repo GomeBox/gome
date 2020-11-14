@@ -1,7 +1,6 @@
-package graphics
+package interfaces
 
 import (
-	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
@@ -15,20 +14,4 @@ type Texture interface {
 	DrawF(source *primitives.Rectangle, dest *primitives.RectangleF) error
 	//Dimensions returns the textures dimensions
 	Dimensions() primitives.Dimensions
-}
-
-type texture struct {
-	internalTexture interfaces.Texture
-}
-
-func (t *texture) Draw(source, dest *primitives.Rectangle) error {
-	return t.internalTexture.Draw(source, dest)
-}
-
-func (t *texture) DrawF(source *primitives.Rectangle, dest *primitives.RectangleF) error {
-	return t.internalTexture.DrawF(source, dest)
-}
-
-func (t *texture) Dimensions() primitives.Dimensions {
-	return t.internalTexture.Dimensions()
 }

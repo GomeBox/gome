@@ -1,7 +1,7 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/sprite"
 	"github.com/GomeBox/gome/primitives"
 )
@@ -15,7 +15,7 @@ type TextSpriteBuilder interface {
 }
 
 //FromText returns a TextSpriteBuilder that can be used to create a sprite
-func FromText(text graphics.Text) TextSpriteBuilder {
+func FromText(text interfaces.Text) TextSpriteBuilder {
 	return &textSpriteBuilder{
 		text: text,
 		pos:  primitives.PointF{},
@@ -23,7 +23,7 @@ func FromText(text graphics.Text) TextSpriteBuilder {
 }
 
 type textSpriteBuilder struct {
-	text graphics.Text
+	text interfaces.Text
 	pos  primitives.PointF
 }
 

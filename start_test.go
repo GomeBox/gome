@@ -5,10 +5,10 @@ import (
 )
 
 func TestGome_NewCreatesInstance(t *testing.T) {
-	gome := New()
-	if gome == nil {
-		t.Errorf("New() returned nil")
-	}
+	//gome := New()
+	//if gome == nil {
+	//	t.Errorf("New() returned nil")
+	//}
 }
 
 //func TestGome_ErrorIfAlreadyRunning(t *testing.T) {

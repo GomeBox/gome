@@ -1,13 +1,9 @@
-package gome
+package interfaces
 
-import (
-	"github.com/GomeBox/gome/adapters"
-)
-
-//Interface must be implemented to be run by Gome
-type Interface interface {
-	//CreateAdapters is called by gome once to get the necessary adapters
-	CreateAdapters() (adapters.System, error)
+//Game must be implemented to be run by Gome
+type Game interface {
+	//Setup is called once after the game is run to change the game's settings
+	Setup(settings Settings)
 	//Initialize is called by Gome once after calling Gome.Run
 	Initialize(context Context) error
 	//Update is called by Gome periodically to update the game's state.
