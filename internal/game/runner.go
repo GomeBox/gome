@@ -1,17 +1,20 @@
 package game
 
 import (
-	gomeInterfaces "github.com/GomeBox/gome/interfaces"
-	"github.com/GomeBox/gome/internal/game/interfaces"
+	"github.com/GomeBox/gome/interfaces"
 )
 
-type runner struct {
-	context    gomeInterfaces.Context
-	gameSystem interfaces.System
-	loop       loop
+type Runner interface {
+	Run(game interfaces.Game) error
 }
 
-func NewRunner(gameSystem interfaces.System, gameLoop loop) interfaces.Runner {
+type runner struct {
+	context    interfaces.Context
+	gameSystem System
+	loop       Loop
+}
+
+func NewRunner(gameSystem System, gameLoop Loop) Runner {
 	runner := runner{
 		gameSystem: gameSystem,
 		loop:       gameLoop,
@@ -19,8 +22,8 @@ func NewRunner(gameSystem interfaces.System, gameLoop loop) interfaces.Runner {
 	return &runner
 }
 
-func (runner *runner) Run(game gomeInterfaces.Game) error {
-	settings := NewSettings()
+func (runner *runner) Run(game interfaces.Game) error {
+	settings := newSettings()
 	game.Setup(settings)
 	err := runner.initialize(game, settings)
 	if err != nil {
@@ -29,12 +32,12 @@ func (runner *runner) Run(game gomeInterfaces.Game) error {
 	return runner.startLoop(game)
 }
 
-func (runner *runner) initialize(game gomeInterfaces.Game, settings gomeInterfaces.Settings) error {
+func (runner *runner) initialize(game interfaces.Game, settings *settings) error {
 	err := runner.gameSystem.Initialize()
 	if err != nil {
 		return err
 	}
-	err = runner.gameSystem.OpenGameWindow(settings.WindowSettings())
+	err = runner.gameSystem.OpenGameWindow(settings.windowSettings)
 	if err != nil {
 		return err
 	}
@@ -45,13 +48,13 @@ func (runner *runner) initialize(game gomeInterfaces.Game, settings gomeInterfac
 	return nil
 }
 
-func (runner *runner) startLoop(game gomeInterfaces.Game) error {
+func (runner *runner) startLoop(game interfaces.Game) error {
 	loopData := runner.createLoopData(game)
 	return runner.loop(loopData)
 }
 
-func (runner *runner) createLoopData(game gomeInterfaces.Game) *loopData {
-	return &loopData{
+func (runner *runner) createLoopData(game interfaces.Game) *LoopData {
+	return &LoopData{
 		gameSystem: runner.gameSystem,
 		update: func(timeDelta float32) (keepRunning bool, error error) {
 			return runner.update(game, timeDelta)
@@ -62,7 +65,7 @@ func (runner *runner) createLoopData(game gomeInterfaces.Game) *loopData {
 	}
 }
 
-func (runner *runner) update(game gomeInterfaces.Game, timeDelta float32) (keepRunning bool, err error) {
+func (runner *runner) update(game interfaces.Game, timeDelta float32) (keepRunning bool, err error) {
 	err = runner.gameSystem.Update()
 	if err != nil {
 		return false, err

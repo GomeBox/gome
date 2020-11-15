@@ -2,34 +2,41 @@ package game
 
 import (
 	"github.com/GomeBox/gome/adapters"
-	gomeInterfaces "github.com/GomeBox/gome/interfaces"
-	"github.com/GomeBox/gome/internal/audio"
-	"github.com/GomeBox/gome/internal/game/interfaces"
-	"github.com/GomeBox/gome/internal/graphics"
-	input "github.com/GomeBox/gome/internal/input/interfaces"
+	"github.com/GomeBox/gome/interfaces"
+	"github.com/GomeBox/gome/internal/game/audio"
+	"github.com/GomeBox/gome/internal/game/graphics"
+	"github.com/GomeBox/gome/internal/game/input"
 )
 
-func NewSystem(adapters adapters.System, factory interfaces.SystemsFactory) interfaces.System {
-	return &systemImpl{
+type System interface {
+	Initialize() error
+	Update() error
+	Graphics() graphics.System
+	Context() interfaces.Context
+	OpenGameWindow(settings graphics.WindowSettings) error
+}
+
+func NewSystem(adapters adapters.System, graphics graphics.System, audio audio.System, input input.System) System {
+	return &system{
 		adapterSystem: adapters,
-		graphics:      factory.CreateGraphicsSystem(),
-		input:         factory.CreateInputSystem(),
-		audio:         factory.CreateAudioSystem(),
+		graphics:      graphics,
+		input:         input,
+		audio:         audio,
 	}
 }
 
-type systemImpl struct {
+type system struct {
 	adapterSystem adapters.System
 	graphics      graphics.System
 	input         input.System
 	audio         audio.System
 }
 
-func (system *systemImpl) Initialize() error {
+func (system *system) Initialize() error {
 	return system.adapterSystem.Initialize()
 }
 
-func (system *systemImpl) Update() error {
+func (system *system) Update() error {
 	err := system.adapterSystem.Update()
 	if err != nil {
 		return err
@@ -37,14 +44,14 @@ func (system *systemImpl) Update() error {
 	return system.input.Update()
 }
 
-func (system *systemImpl) Graphics() graphics.System {
+func (system *system) Graphics() graphics.System {
 	return system.graphics
 }
 
-func (system *systemImpl) Context() gomeInterfaces.Context {
+func (system *system) Context() interfaces.Context {
 	return nil
 }
 
-func (system *systemImpl) OpenGameWindow(settings graphics.WindowSettings) error {
-	return system.graphics.Window().Open(settings)
+func (system *system) OpenGameWindow(settings graphics.WindowSettings) error {
+	return system.graphics.OpenWindow(settings)
 }

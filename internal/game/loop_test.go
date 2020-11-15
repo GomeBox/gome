@@ -1,10 +1,7 @@
 package game
 
 import (
-	"github.com/GomeBox/gome/internal/game/interfaces"
-	"github.com/GomeBox/gome/internal/game/mocks"
-	"github.com/GomeBox/gome/internal/graphics"
-	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
+	graphicsAdapters "github.com/GomeBox/gome/internal/game/graphics"
 	"testing"
 )
 
@@ -12,10 +9,10 @@ func TestLoop_SingleThreadedLoop_ClearsGraphics(t *testing.T) {
 	loopRuns := 3
 	loopCnt := 0
 	drawCnt := 0
-	graphicsSystem := new(graphics.SystemMock)
-	var gameSystem interfaces.System
-	gameSystem = &mocks.System{
-		OnGraphics: func() graphicsInterfaces.System {
+	graphicsSystem := new(graphicsAdapters.SystemMock)
+	var gameSystem System
+	gameSystem = &systemMock{
+		OnGraphics: func() graphicsAdapters.System {
 			return graphicsSystem
 		},
 	}
@@ -30,12 +27,12 @@ func TestLoop_SingleThreadedLoop_ClearsGraphics(t *testing.T) {
 		drawCnt++
 		return nil
 	}
-	loopData := &loopData{
+	loopData := &LoopData{
 		gameSystem: gameSystem,
 		update:     update,
 		draw:       draw,
 	}
-	err := singleThreadedLoop(loopData)
+	err := SingleThreadedLoop(loopData)
 	if err != nil {
 		t.Fatal("singleThreadedLoop() returned unexpected error")
 	}
