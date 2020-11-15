@@ -1,11 +1,13 @@
 package input
 
+import "github.com/GomeBox/gome/interfaces"
+
 type SystemMock struct {
 	CallCntUpdate int
-	OnKeyboard    func() Keyboard
+	OnKeyboard    func() interfaces.Keyboard
 }
 
-func (s *SystemMock) Keyboard() Keyboard {
+func (s *SystemMock) Keyboard() interfaces.Keyboard {
 	if s.OnKeyboard != nil {
 		return s.OnKeyboard()
 	}

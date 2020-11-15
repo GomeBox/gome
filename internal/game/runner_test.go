@@ -3,7 +3,7 @@ package game
 import (
 	"errors"
 	"github.com/GomeBox/gome/interfaces"
-	graphicsAdapters "github.com/GomeBox/gome/internal/game/graphics"
+	"github.com/GomeBox/gome/internal/game/graphics"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -50,16 +50,16 @@ func TestRunner_initialize_InitializesGameSystem(t *testing.T) {
 
 func TestRunner_initialize_OpenWindow(t *testing.T) {
 	runner, sysMock := createRunner(nil)
-	var gotSettings graphicsAdapters.WindowSettings
+	var gotSettings graphics.WindowSettings
 	retErr := false
-	sysMock.OnOpenGameWindow = func(settings graphicsAdapters.WindowSettings) error {
+	sysMock.OnOpenGameWindow = func(settings graphics.WindowSettings) error {
 		if retErr {
 			return errors.New("test")
 		}
 		gotSettings = settings
 		return nil
 	}
-	wantSettings := graphicsAdapters.WindowSettings{
+	wantSettings := graphics.WindowSettings{
 		Fullscreen: true,
 		Resolution: primitives.Dimensions{
 			Width:  456,
@@ -95,28 +95,6 @@ func TestRunner_initialize_InitializesGame(t *testing.T) {
 	err := runner.initialize(game, new(settings))
 	assert.NoError(t, err)
 	assert.Same(t, context, gotContext)
-
-	//gameSystem := new(systemMock)
-	//graphicsMock := createGraphicsMock(nil)
-	//gameSystem.OnGraphics = graphicsMock
-	//settings := new(mocks.Settings)
-	//initCallbackCallCnt := 0
-	//var wantGameSystem interfaces.System
-	//initCallback := func(gameSystem interfaces.System) error {
-	//	initCallbackCallCnt++
-	//	wantGameSystem = gameSystem
-	//	return nil
-	//}
-	//err := initialize(gameSystem, settings, initCallback)
-	//if err != nil {
-	//	t.Fatalf("initialize returned error %v", err)
-	//}
-	//if initCallbackCallCnt != 1 {
-	//	t.Errorf("InitCallback was not called correct number of times. Got %v, want %v", initCallbackCallCnt, 1)
-	//}
-	//if wantGameSystem != gameSystem {
-	//	t.Error("gameSystem was not passed to initCallback")
-	//}
 }
 
 func TestRunner_Run(t *testing.T) {
@@ -134,7 +112,7 @@ func TestRunner_Run(t *testing.T) {
 		return nil
 	}
 	runner, sysMock := createRunner(loop)
-	sysMock.OnOpenGameWindow = func(settings graphicsAdapters.WindowSettings) error {
+	sysMock.OnOpenGameWindow = func(settings graphics.WindowSettings) error {
 		return nil
 	}
 	err := runner.Run(game)

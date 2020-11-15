@@ -1,7 +1,7 @@
 package audio
 
 import (
-	adapters "github.com/GomeBox/gome/adapters/audio"
+	"github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/interfaces"
 )
 
@@ -10,21 +10,16 @@ type System interface {
 	LoadSong(fileName string) (interfaces.Player, error)
 }
 
-type Adapters struct {
-	SoundLoader adapters.SoundLoader
-	SongLoader  adapters.SongLoader
-}
-
-func NewSystem(adapters Adapters) interfaces.Audio {
+func NewSystem(audioAdapters audio.Adapters) interfaces.Audio {
 	system := system{
-		soundLoader: adapters.SoundLoader,
-		songLoader:  adapters.SongLoader}
+		soundLoader: audioAdapters.SoundLoader(),
+		songLoader:  audioAdapters.SongLoader()}
 	return &system
 }
 
 type system struct {
-	soundLoader adapters.SoundLoader
-	songLoader  adapters.SongLoader
+	soundLoader audio.SoundLoader
+	songLoader  audio.SongLoader
 }
 
 func (sys *system) LoadSound(fileName string) (interfaces.Player, error) {

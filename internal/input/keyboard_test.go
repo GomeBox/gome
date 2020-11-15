@@ -13,7 +13,10 @@ func TestKeyboard_RegisterKey(t *testing.T) {
 	errorOnKeyPress := false
 	keyPressed := false
 	adapter := createKeyboardAdapterMock(&errorOnKeyPress, &keyPressed)
-	keyboard := newKeyboard(adapter)
+	keyboard := keyboardImpl{
+		adapter:        adapter,
+		registeredKeys: make(map[primitives.KeyType]*key),
+	}
 	keyType := primitives.KeyS
 
 	errorOnKeyPress = true
@@ -41,7 +44,10 @@ func TestKeyboard_UnregisterKey(t *testing.T) {
 	errorOnKeyPress := false
 	keyPressed := false
 	adapter := createKeyboardAdapterMock(&errorOnKeyPress, &keyPressed)
-	keyboard := newKeyboard(adapter)
+	keyboard := keyboardImpl{
+		adapter:        adapter,
+		registeredKeys: make(map[primitives.KeyType]*key),
+	}
 	keyType := primitives.KeyS
 	keyType2 := primitives.KeySpace
 	_, _ = keyboard.RegisterKey(keyType)

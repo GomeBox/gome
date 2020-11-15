@@ -1,7 +1,7 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics/mocks"
+	"github.com/GomeBox/gome/internal/graphics"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -13,7 +13,7 @@ func TestNewTextureDrawer(t *testing.T) {
 		Width:  123,
 		Height: 234,
 	}
-	texture := &mocks.Texture{
+	texture := &graphics.TextureMock{
 		OnDimensions: func() primitives.Dimensions {
 			return dimensions
 		},
@@ -43,7 +43,7 @@ func TestTextureDrawer_DrawTo(t *testing.T) {
 		DimensionsF: dimensions.ToDimensionsF()}
 	var drawSourceRect *primitives.Rectangle
 	var drawDestRect *primitives.RectangleF
-	texture := &mocks.Texture{
+	texture := &graphics.TextureMock{
 		OnDrawF: func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
 			drawSourceRect = source
 			drawDestRect = dest

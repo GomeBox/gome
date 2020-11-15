@@ -3,12 +3,13 @@ package graphics
 import (
 	"errors"
 	adapters "github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/internal/game/graphics"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type Window interface {
 	Dimensions() (primitives.Dimensions, error)
-	Open(settings WindowSettings) error
+	Open(settings graphics.WindowSettings) error
 }
 
 func newWindow(adapter adapters.WindowAdapter) Window {
@@ -28,7 +29,7 @@ func (w *window) Dimensions() (primitives.Dimensions, error) {
 	return w.adapter.Size(), nil
 }
 
-func (w *window) Open(settings WindowSettings) error {
+func (w *window) Open(settings graphics.WindowSettings) error {
 	ws := adapters.WindowSettings{
 		Fullscreen: settings.Fullscreen,
 		Resolution: settings.Resolution,

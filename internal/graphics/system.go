@@ -1,49 +1,34 @@
 package graphics
 
 import (
-	adapters "github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/interfaces"
+	gameGraphics "github.com/GomeBox/gome/internal/game/graphics"
 	"github.com/GomeBox/gome/primitives"
 )
 
-type System interface {
-	LoadTexture(filename string) (Texture, error)
-	LoadFont(fileName string, size int) (Font, error)
-	CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error)
-	Window() Window
-	Clear() error
-	Present() error
-}
-
-type Adapters struct {
-	TextureLoader   adapters.TextureLoader
-	TextureCreator  adapters.TextureCreator
-	FontLoader      adapters.FontLoader
-	WindowAdapter   adapters.WindowAdapter
-	ScreenPresenter adapters.ScreenPresenter
-}
-
-func NewSystem(adapters Adapters) System {
+func NewSystem(graphicsAdapters graphics.Adapters) gameGraphics.System {
 	sys := new(system)
-	sys.textureLoader = adapters.TextureLoader
-	sys.fontLoader = adapters.FontLoader
-	sys.textureCreator = adapters.TextureCreator
-	sys.windowAdapter = adapters.WindowAdapter
-	window := newWindow(adapters.WindowAdapter)
+	sys.textureLoader = graphicsAdapters.TextureLoader()
+	sys.fontLoader = graphicsAdapters.FontLoader()
+	sys.textureCreator = graphicsAdapters.TextureCreator()
+	sys.windowAdapter = graphicsAdapters.WindowAdapter()
+	window := newWindow(graphicsAdapters.WindowAdapter())
 	sys.window = window
-	sys.screenPresenter = adapters.ScreenPresenter
+	sys.screenPresenter = graphicsAdapters.ScreenPresenter()
 	return sys
 }
 
 type system struct {
-	textureCreator  adapters.TextureCreator
-	textureLoader   adapters.TextureLoader
-	fontLoader      adapters.FontLoader
-	windowAdapter   adapters.WindowAdapter
+	textureCreator  graphics.TextureCreator
+	textureLoader   graphics.TextureLoader
+	fontLoader      graphics.FontLoader
+	windowAdapter   graphics.WindowAdapter
 	window          Window
-	screenPresenter adapters.ScreenPresenter
+	screenPresenter graphics.ScreenPresenter
 }
 
-func (sys *system) LoadTexture(filename string) (Texture, error) {
+func (sys *system) LoadTexture(filename string) (interfaces.Texture, error) {
 	drawer, err := sys.textureLoader.Load(filename)
 	if err != nil {
 		return nil, err
@@ -51,7 +36,7 @@ func (sys *system) LoadTexture(filename string) (Texture, error) {
 	return newTexture(drawer), nil
 }
 
-func (sys *system) LoadFont(fileName string, size int) (Font, error) {
+func (sys *system) LoadFont(fileName string, size int) (interfaces.Font, error) {
 	drawer, err := sys.fontLoader.Load(fileName, size)
 	if err != nil {
 		return nil, err
@@ -59,7 +44,7 @@ func (sys *system) LoadFont(fileName string, size int) (Font, error) {
 	return newFont(drawer), nil
 }
 
-func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error) {
+func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (interfaces.Texture, error) {
 	drawer, err := sys.textureCreator.Create(dimensions, color)
 	if err != nil {
 		return nil, err
@@ -67,7 +52,7 @@ func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primiti
 	return newTexture(drawer), nil
 }
 
-func (sys *system) Window() Window {
+func (sys *system) Window() interfaces.Window {
 	return sys.window
 }
 
@@ -77,4 +62,8 @@ func (sys *system) Clear() error {
 
 func (sys *system) Present() error {
 	return sys.screenPresenter.Present()
+}
+
+func (sys *system) OpenWindow(settings gameGraphics.WindowSettings) error {
+	return sys.window.Open(settings)
 }

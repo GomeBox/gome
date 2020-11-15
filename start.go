@@ -3,7 +3,10 @@ package gome
 import (
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/interfaces"
-	"github.com/GomeBox/gome/internal"
+	"github.com/GomeBox/gome/internal/audio"
+	"github.com/GomeBox/gome/internal/game"
+	"github.com/GomeBox/gome/internal/graphics"
+	"github.com/GomeBox/gome/internal/input"
 )
 
 type CreateAdapters func() (adapters.System, error)
@@ -15,34 +18,11 @@ func Start(yourGame interfaces.Game, createAdapters CreateAdapters) error {
 	if err != nil {
 		return err
 	}
-	return internal.Run(yourGame, a)
+	audioSystem := audio.NewSystem(a.Audio())
+	graphicsSystem := graphics.NewSystem(a.Graphics())
+	inputSystem := input.NewSystem(a.Input())
+	gameSystem := game.NewSystem(a, graphicsSystem, audioSystem, inputSystem)
+	gameLoop := game.SingleThreadedLoop
+	runner := game.NewRunner(gameSystem, gameLoop)
+	return runner.Run(yourGame)
 }
-
-//type gome struct {
-//	impl        *internal.GomeImpl
-//	gameContext Context
-//}
-
-//func (gome *gome) Run(game interfaces2.Game) error {
-//	callbacks := interfaces.Callbacks{
-//		Init: func(gameSystem interfaces.System) error {
-//			gome.gameContext = internal.newContext(gameSystem)
-//			return game.Initialize(gome.gameContext)
-//		},
-//		Update: func(timeDelta float32) (keepRunning bool, error error) {
-//			return game.Update(timeDelta, gome.gameContext)
-//		},
-//		Draw: func(timeDelta float32) error {
-//			return game.Draw(timeDelta, gome.gameContext)
-//		},
-//		CreateAdapters: game.CreateAdapters,
-//		GetSettings: func() interfaces.Settings {
-//			return gome.impl.Settings()
-//		},
-//	}
-//	return gome.impl.Run(&callbacks)
-//}
-//
-//func (gome *gome) Settings() interfaces2.Settings {
-//	return gome.impl.Settings()
-//}

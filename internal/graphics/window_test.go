@@ -1,8 +1,9 @@
 package graphics
 
 import (
-	"github.com/GomeBox/gome/adapters/graphics"
+	adapters "github.com/GomeBox/gome/adapters/graphics"
 	"github.com/GomeBox/gome/adapters/graphics/mocks"
+	"github.com/GomeBox/gome/internal/game/graphics"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -46,7 +47,7 @@ func TestWindow_Dimensions(t *testing.T) {
 }
 
 func TestWindow_Open(t *testing.T) {
-	want := WindowSettings{
+	want := graphics.WindowSettings{
 		Fullscreen: true,
 		Resolution: primitives.Dimensions{
 			Width:  499,
@@ -54,9 +55,9 @@ func TestWindow_Open(t *testing.T) {
 		},
 		Title: "test title",
 	}
-	var got *graphics.WindowSettings
+	var got *adapters.WindowSettings
 	adapter := &mocks.WindowAdapter{
-		OnOpenWindow: func(windowSettings *graphics.WindowSettings) error {
+		OnOpenWindow: func(windowSettings *adapters.WindowSettings) error {
 			got = windowSettings
 			return nil
 		},

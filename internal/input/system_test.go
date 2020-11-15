@@ -1,12 +1,13 @@
 package input
 
 import (
+	"github.com/GomeBox/gome/adapters/input/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewSystem(t *testing.T) {
-	adapters := Adapters{}
+	adapters := &mocks.Adapters{}
 	sys := NewSystem(adapters)
 	assert.NotEmpty(t, sys, "NewSystem returned nil")
 	system := sys.(*system)

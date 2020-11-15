@@ -31,7 +31,9 @@ func TestSystem_LoadTexture(t *testing.T) {
 				return nil, errors.New("test")
 			}
 		}}
-	adapters.TextureLoader = textureLoader
+	adapters.OnTextureLoader = func() graphics.TextureLoader {
+		return textureLoader
+	}
 	sys := NewSystem(adapters)
 	texture, err := sys.LoadTexture(testFileName)
 	if err != nil {
@@ -67,7 +69,9 @@ func TestSystem_LoadFont(t *testing.T) {
 				return nil, errors.New("test")
 			}
 		}}
-	adapters.FontLoader = fontLoader
+	adapters.OnFontLoader = func() graphics.FontLoader {
+		return fontLoader
+	}
 	sys := NewSystem(adapters)
 	font, err := sys.LoadFont(testFileName, testSize)
 	if err != nil {
@@ -109,7 +113,9 @@ func TestSystem_CreateTexture(t *testing.T) {
 				return nil, errors.New("test")
 			}
 		}}
-	adapters.TextureCreator = textureCreator
+	adapters.OnTextureCreator = func() graphics.TextureCreator {
+		return textureCreator
+	}
 	sys := NewSystem(adapters)
 	font, err := sys.CreateTexture(testDimensions, testColor)
 	if err != nil {
@@ -133,7 +139,9 @@ func TestSystem_CreateTexture(t *testing.T) {
 func TestSystem_Clear(t *testing.T) {
 	adapters := createAdapters()
 	screenPresenter := new(mocks.ScreenPresenter)
-	adapters.ScreenPresenter = screenPresenter
+	adapters.OnScreenPresenter = func() graphics.ScreenPresenter {
+		return screenPresenter
+	}
 	sys := NewSystem(adapters)
 	_ = sys.Clear()
 	if screenPresenter.CallCntClear != 1 {
@@ -144,7 +152,9 @@ func TestSystem_Clear(t *testing.T) {
 func TestSystem_Present(t *testing.T) {
 	adapters := createAdapters()
 	screenPresenter := new(mocks.ScreenPresenter)
-	adapters.ScreenPresenter = screenPresenter
+	adapters.OnScreenPresenter = func() graphics.ScreenPresenter {
+		return screenPresenter
+	}
 	sys := NewSystem(adapters)
 	_ = sys.Present()
 	if screenPresenter.CallCntPresent != 1 {
@@ -161,12 +171,22 @@ func TestSystem_Window(t *testing.T) {
 	}
 }
 
-func createAdapters() Adapters {
-	return Adapters{
-		TextureLoader:   new(mocks.TextureLoader),
-		TextureCreator:  new(mocks.TextureCreator),
-		FontLoader:      new(mocks.FontLoader),
-		WindowAdapter:   new(mocks.WindowAdapter),
-		ScreenPresenter: new(mocks.ScreenPresenter),
+func createAdapters() *mocks.Adapters {
+	return &mocks.Adapters{
+		OnTextureLoader: func() graphics.TextureLoader {
+			return new(mocks.TextureLoader)
+		},
+		OnTextureCreator: func() graphics.TextureCreator {
+			return new(mocks.TextureCreator)
+		},
+		OnFontLoader: func() graphics.FontLoader {
+			return new(mocks.FontLoader)
+		},
+		OnWindowAdapter: func() graphics.WindowAdapter {
+			return new(mocks.WindowAdapter)
+		},
+		OnScreenPresenter: func() graphics.ScreenPresenter {
+			return new(mocks.ScreenPresenter)
+		},
 	}
 }

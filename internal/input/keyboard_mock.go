@@ -1,16 +1,17 @@
 package input
 
 import (
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type KeyboardMock struct {
 	CallCntUpdate   int
-	OnRegisterKey   func(keyType primitives.KeyType) (Key, error)
+	OnRegisterKey   func(keyType primitives.KeyType) (interfaces.Key, error)
 	OnUnregisterKey func(keyType primitives.KeyType)
 }
 
-func (k *KeyboardMock) RegisterKey(keyType primitives.KeyType) (Key, error) {
+func (k *KeyboardMock) RegisterKey(keyType primitives.KeyType) (interfaces.Key, error) {
 	if k.OnRegisterKey != nil {
 		return k.OnRegisterKey(keyType)
 	}

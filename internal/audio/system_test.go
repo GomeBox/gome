@@ -13,9 +13,10 @@ func TestSystem_LoadSong_PassesFilename(t *testing.T) {
 		got = fileName
 		return nil, nil
 	}}
-	a := Adapters{
-		SoundLoader: nil,
-		SongLoader:  songLoaderMock,
+	a := &mocks.Adapters{
+		OnSongLoader: func() adapters.SongLoader {
+			return songLoaderMock
+		},
 	}
 	system := NewSystem(a)
 	_, err := system.LoadSong(want)
@@ -36,9 +37,10 @@ func TestSystem_LoadSound_PassesFilename(t *testing.T) {
 		got = fileName
 		return nil, nil
 	}}
-	a := Adapters{
-		SoundLoader: soundLoaderMock,
-		SongLoader:  nil,
+	a := &mocks.Adapters{
+		OnSoundLoader: func() adapters.SoundLoader {
+			return soundLoaderMock
+		},
 	}
 	system := NewSystem(a)
 	_, err := system.LoadSound(want)

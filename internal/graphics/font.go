@@ -2,11 +2,12 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type Font interface {
-	CreateText(text string, color primitives.Color) (Text, error)
+	CreateText(text string, color primitives.Color) (interfaces.Text, error)
 }
 
 type font struct {
@@ -19,7 +20,7 @@ func newFont(creator adapters.TextCreator) Font {
 	return font
 }
 
-func (font *font) CreateText(text string, color primitives.Color) (Text, error) {
+func (font *font) CreateText(text string, color primitives.Color) (interfaces.Text, error) {
 	drawer, err := font.creator.Create(text, color)
 	if err != nil {
 		return nil, err

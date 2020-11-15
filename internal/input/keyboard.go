@@ -1,16 +1,12 @@
 package input
 
 import (
-	adapters "github.com/GomeBox/gome/adapters/input"
+	"github.com/GomeBox/gome/adapters/input"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Keyboard interface {
-	RegisterKey(keyType primitives.KeyType) (Key, error)
-	UnregisterKey(keyType primitives.KeyType)
-}
-
-func newKeyboard(adapter adapters.KeyboardAdapter) *keyboardImpl {
+func newKeyboard(adapter input.KeyboardAdapter) keyboard {
 	keyboard := new(keyboardImpl)
 	keyboard.adapter = adapter
 	keyboard.registeredKeys = make(map[primitives.KeyType]*key)
@@ -18,17 +14,16 @@ func newKeyboard(adapter adapters.KeyboardAdapter) *keyboardImpl {
 }
 
 type keyboard interface {
-	RegisterKey(keyType primitives.KeyType) (Key, error)
-	UnregisterKey(keyType primitives.KeyType)
+	interfaces.Keyboard
 	Update() error
 }
 
 type keyboardImpl struct {
-	adapter        adapters.KeyboardAdapter
+	adapter        input.KeyboardAdapter
 	registeredKeys map[primitives.KeyType]*key
 }
 
-func (keyboard *keyboardImpl) RegisterKey(keyType primitives.KeyType) (Key, error) {
+func (keyboard *keyboardImpl) RegisterKey(keyType primitives.KeyType) (interfaces.Key, error) {
 	pressed, err := keyboard.adapter.KeyPressed(keyType)
 	if err != nil {
 		return nil, err
