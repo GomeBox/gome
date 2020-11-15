@@ -2,7 +2,7 @@ package interfaces
 
 import (
 	gomeInterfaces "github.com/GomeBox/gome/interfaces"
-	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
+	"github.com/GomeBox/gome/internal/graphics"
 )
 
 type System interface {
@@ -10,5 +10,5 @@ type System interface {
 	Update() error
 	Graphics() graphics.System
 	Context() gomeInterfaces.Context
-	OpenGameWindow(settings gomeInterfaces.WindowSettings) error
+	OpenGameWindow(settings graphics.WindowSettings) error
 }

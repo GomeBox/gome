@@ -42,6 +42,6 @@ func TestFromText_DrawerProperlySet(t *testing.T) {
 		t.Errorf("err was expected to be nil but was %v", err)
 	}
 	if !drawCalled {
-		t.Error("Text.DrawF was not called")
+		t.Error("TextMock.DrawF was not called")
 	}
 }

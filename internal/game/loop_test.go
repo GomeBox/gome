@@ -3,8 +3,8 @@ package game
 import (
 	"github.com/GomeBox/gome/internal/game/interfaces"
 	"github.com/GomeBox/gome/internal/game/mocks"
+	"github.com/GomeBox/gome/internal/graphics"
 	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
-	graphicsMocks "github.com/GomeBox/gome/internal/graphics/mocks"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func TestLoop_SingleThreadedLoop_ClearsGraphics(t *testing.T) {
 	loopRuns := 3
 	loopCnt := 0
 	drawCnt := 0
-	graphicsSystem := new(graphicsMocks.System)
+	graphicsSystem := new(graphics.SystemMock)
 	var gameSystem interfaces.System
 	gameSystem = &mocks.System{
 		OnGraphics: func() graphicsInterfaces.System {

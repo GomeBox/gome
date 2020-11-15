@@ -2,10 +2,17 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	gomeInterfaces "github.com/GomeBox/gome/interfaces"
-	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
+
+type System interface {
+	LoadTexture(filename string) (Texture, error)
+	LoadFont(fileName string, size int) (Font, error)
+	CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error)
+	Window() Window
+	Clear() error
+	Present() error
+}
 
 type Adapters struct {
 	TextureLoader   adapters.TextureLoader
@@ -15,7 +22,7 @@ type Adapters struct {
 	ScreenPresenter adapters.ScreenPresenter
 }
 
-func NewSystem(adapters Adapters) interfaces.System {
+func NewSystem(adapters Adapters) System {
 	sys := new(system)
 	sys.textureLoader = adapters.TextureLoader
 	sys.fontLoader = adapters.FontLoader
@@ -32,11 +39,11 @@ type system struct {
 	textureLoader   adapters.TextureLoader
 	fontLoader      adapters.FontLoader
 	windowAdapter   adapters.WindowAdapter
-	window          interfaces.Window
+	window          Window
 	screenPresenter adapters.ScreenPresenter
 }
 
-func (sys *system) LoadTexture(filename string) (gomeInterfaces.Texture, error) {
+func (sys *system) LoadTexture(filename string) (Texture, error) {
 	drawer, err := sys.textureLoader.Load(filename)
 	if err != nil {
 		return nil, err
@@ -44,7 +51,7 @@ func (sys *system) LoadTexture(filename string) (gomeInterfaces.Texture, error) 
 	return newTexture(drawer), nil
 }
 
-func (sys *system) LoadFont(fileName string, size int) (gomeInterfaces.Font, error) {
+func (sys *system) LoadFont(fileName string, size int) (Font, error) {
 	drawer, err := sys.fontLoader.Load(fileName, size)
 	if err != nil {
 		return nil, err
@@ -52,7 +59,7 @@ func (sys *system) LoadFont(fileName string, size int) (gomeInterfaces.Font, err
 	return newFont(drawer), nil
 }
 
-func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (gomeInterfaces.Texture, error) {
+func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (Texture, error) {
 	drawer, err := sys.textureCreator.Create(dimensions, color)
 	if err != nil {
 		return nil, err
@@ -60,7 +67,7 @@ func (sys *system) CreateTexture(dimensions primitives.Dimensions, color primiti
 	return newTexture(drawer), nil
 }
 
-func (sys *system) Window() interfaces.Window {
+func (sys *system) Window() Window {
 	return sys.window
 }
 

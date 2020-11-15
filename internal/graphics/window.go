@@ -3,11 +3,15 @@ package graphics
 import (
 	"errors"
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newWindow(adapter adapters.WindowAdapter) interfaces.Window {
+type Window interface {
+	Dimensions() (primitives.Dimensions, error)
+	Open(settings WindowSettings) error
+}
+
+func newWindow(adapter adapters.WindowAdapter) Window {
 	w := new(window)
 	w.adapter = adapter
 	return w
@@ -24,6 +28,11 @@ func (w *window) Dimensions() (primitives.Dimensions, error) {
 	return w.adapter.Size(), nil
 }
 
-func (w *window) Open(settings *adapters.WindowSettings) error {
-	return w.adapter.OpenWindow(settings)
+func (w *window) Open(settings WindowSettings) error {
+	ws := adapters.WindowSettings{
+		Fullscreen: settings.Fullscreen,
+		Resolution: settings.Resolution,
+		Title:      settings.Title,
+	}
+	return w.adapter.OpenWindow(&ws)
 }

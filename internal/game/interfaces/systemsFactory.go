@@ -2,7 +2,7 @@ package interfaces
 
 import (
 	gomeInterfaces "github.com/GomeBox/gome/interfaces"
-	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
+	"github.com/GomeBox/gome/internal/graphics"
 	inputInterfaces "github.com/GomeBox/gome/internal/input/interfaces"
 )
 

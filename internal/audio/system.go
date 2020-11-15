@@ -5,6 +5,11 @@ import (
 	"github.com/GomeBox/gome/interfaces"
 )
 
+type System interface {
+	LoadSound(fileName string) (interfaces.Player, error)
+	LoadSong(fileName string) (interfaces.Player, error)
+}
+
 type Adapters struct {
 	SoundLoader adapters.SoundLoader
 	SongLoader  adapters.SongLoader

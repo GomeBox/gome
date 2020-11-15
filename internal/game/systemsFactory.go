@@ -6,7 +6,6 @@ import (
 	"github.com/GomeBox/gome/internal/audio"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 	"github.com/GomeBox/gome/internal/graphics"
-	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/internal/input"
 	inputInterfaces "github.com/GomeBox/gome/internal/input/interfaces"
 )
@@ -21,7 +20,7 @@ type systemsFactoryImpl struct {
 	adapterSystem adapters.System
 }
 
-func (factory systemsFactoryImpl) CreateGraphicsSystem() graphicsInterfaces.System {
+func (factory systemsFactoryImpl) CreateGraphicsSystem() graphics.System {
 	textureLoader := factory.adapterSystem.Graphics().TextureLoader()
 	textureCreator := factory.adapterSystem.Graphics().TextureCreator()
 	windowAdapter := factory.adapterSystem.Graphics().WindowAdapter()

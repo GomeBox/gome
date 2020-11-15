@@ -12,6 +12,7 @@ import (
 	adapterMocks "github.com/GomeBox/gome/adapters/mocks"
 	"github.com/GomeBox/gome/internal/game/interfaces"
 	"github.com/GomeBox/gome/internal/game/mocks"
+	"github.com/GomeBox/gome/internal/graphics"
 	graphicsInterfaces "github.com/GomeBox/gome/internal/graphics/interfaces"
 	graphicsMocks "github.com/GomeBox/gome/internal/graphics/mocks"
 	"testing"
@@ -170,7 +171,7 @@ func TestRunner_initialize_ReturnsErrorOfInitCallback(t *testing.T) {
 
 func createGraphicsMock(onWindowOpen func(settings *graphicsAdapters.WindowSettings) error) func() graphicsInterfaces.System {
 	return func() graphicsInterfaces.System {
-		graphicsSystem := new(graphicsMocks.System)
+		graphicsSystem := new(graphics.SystemMock)
 		graphicsSystem.OnWindow = func() graphicsInterfaces.Window {
 			window := new(graphicsMocks.Window)
 			window.OnOpen = onWindowOpen

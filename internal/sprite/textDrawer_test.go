@@ -1,14 +1,14 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/internal/graphics/mocks"
+	"github.com/GomeBox/gome/internal/graphics"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestNewTextDrawer(t *testing.T) {
-	//text := new(mocks.Text)
+	//text := new(mocks.TextMock)
 	//drawer := NewTextDrawer(text)
 	//d := drawer.(*textDrawer)
 	//assert.Same(t, text, d.text)
@@ -20,7 +20,7 @@ func TestTextDrawer_DrawTo(t *testing.T) {
 		Y: 234.34,
 	}
 	var drawPos *primitives.PointF
-	text := mocks.Text{
+	text := graphics.TextMock{
 		OnDrawF: func(f *primitives.PointF) error {
 			drawPos = f
 			return nil
@@ -37,7 +37,7 @@ func TestTextDrawer_Dimensions(t *testing.T) {
 		Width:  100,
 		Height: 390,
 	}
-	text := mocks.Text{
+	text := graphics.TextMock{
 		OnDimensions: func() primitives.Dimensions {
 			return dimensions
 		},

@@ -3,8 +3,9 @@ package game
 import (
 	"github.com/GomeBox/gome/adapters"
 	gomeInterfaces "github.com/GomeBox/gome/interfaces"
+	"github.com/GomeBox/gome/internal/audio"
 	"github.com/GomeBox/gome/internal/game/interfaces"
-	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
+	"github.com/GomeBox/gome/internal/graphics"
 	input "github.com/GomeBox/gome/internal/input/interfaces"
 )
 
@@ -21,7 +22,7 @@ type systemImpl struct {
 	adapterSystem adapters.System
 	graphics      graphics.System
 	input         input.System
-	audio         gomeInterfaces.Audio
+	audio         audio.System
 }
 
 func (system *systemImpl) Initialize() error {
@@ -36,14 +37,14 @@ func (system *systemImpl) Update() error {
 	return system.input.Update()
 }
 
-func (system *systemImpl) Input() input.System {
-	return system.input
-}
-
-func (system *systemImpl) Audio() gomeInterfaces.Audio {
-	return system.audio
-}
-
-func (system *systemImpl) Graphics() gomeInterfaces.Graphics {
+func (system *systemImpl) Graphics() graphics.System {
 	return system.graphics
+}
+
+func (system *systemImpl) Context() gomeInterfaces.Context {
+	return nil
+}
+
+func (system *systemImpl) OpenGameWindow(settings graphics.WindowSettings) error {
+	return system.graphics.Window().Open(settings)
 }

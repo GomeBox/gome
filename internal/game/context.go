@@ -2,14 +2,16 @@ package game
 
 import (
 	gomeInterfaces "github.com/GomeBox/gome/interfaces"
-	"github.com/GomeBox/gome/internal/game/interfaces"
 )
 
-func newContext(gameSystem interfaces.System) gomeInterfaces.Context {
+func newContext(
+	graphics gomeInterfaces.Graphics,
+	input gomeInterfaces.Input,
+	audio gomeInterfaces.Audio) gomeInterfaces.Context {
 	c := new(context)
-	c.graphics = gameSystem.Graphics()
-	c.input = gomeInterfaces.NewSystem(gameSystem.Input())
-	c.audio = gameSystem.Audio()
+	c.graphics = graphics
+	c.input = input
+	c.audio = audio
 	return c
 }
 
