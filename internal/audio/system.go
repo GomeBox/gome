@@ -5,11 +5,6 @@ import (
 	"github.com/GomeBox/gome/interfaces"
 )
 
-type System interface {
-	LoadSound(fileName string) (interfaces.Player, error)
-	LoadSong(fileName string) (interfaces.Player, error)
-}
-
 func NewSystem(audioAdapters audio.Adapters) interfaces.Audio {
 	system := system{
 		soundLoader: audioAdapters.SoundLoader(),
