@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/GomeBox/gome/adapters/input/mocks"
-	"github.com/GomeBox/gome/internal/input/interfaces"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -65,7 +64,7 @@ func TestKeyboard_Update(t *testing.T) {
 		primitives.KeyEsc,
 		primitives.KeyRightAlt,
 	}
-	keys := make([]interfaces.Key, len(keyTypes))
+	keys := make([]Key, len(keyTypes))
 	for i, kt := range keyTypes {
 		k, _ := keyboard.RegisterKey(kt)
 		keys[i] = k

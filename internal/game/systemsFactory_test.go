@@ -69,7 +69,7 @@ func TestSystemsFactory_CreateInputSystem(t *testing.T) {
 	want := 1
 	got := inputAdapter.CallCntKeyboard
 	if got != want {
-		t.Errorf("Keyboard() was not called expected number of times. Got: %d, want: %d", got, want)
+		t.Errorf("KeyboardMock() was not called expected number of times. Got: %d, want: %d", got, want)
 	}
 }
 

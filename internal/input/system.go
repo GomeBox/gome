@@ -2,14 +2,18 @@ package input
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/input"
-	"github.com/GomeBox/gome/internal/input/interfaces"
 )
+
+type System interface {
+	Keyboard() Keyboard
+	Update() error
+}
 
 type Adapters struct {
 	Keyboard adapters.KeyboardAdapter
 }
 
-func NewSystem(adapters Adapters) interfaces.System {
+func NewSystem(adapters Adapters) System {
 	system := new(system)
 	system.keyboard = newKeyboard(adapters.Keyboard)
 	return system
@@ -19,7 +23,7 @@ type system struct {
 	keyboard keyboard
 }
 
-func (sys *system) Keyboard() interfaces.Keyboard {
+func (sys *system) Keyboard() Keyboard {
 	return sys.keyboard
 }
 
