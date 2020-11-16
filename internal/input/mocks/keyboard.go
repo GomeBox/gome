@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	"github.com/GomeBox/gome/internal/input/interfaces"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 

@@ -1,18 +1,18 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics"
+	interfaces2 "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/sprite/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type textureDrawer struct {
-	texture    graphics.Texture
+	texture    interfaces2.Texture
 	dimensions *primitives.Dimensions
 	sourceRect *primitives.Rectangle
 }
 
-func NewTextureDrawer(texture graphics.Texture, sourceRect *primitives.Rectangle) interfaces.Drawer {
+func NewTextureDrawer(texture interfaces2.Texture, sourceRect *primitives.Rectangle) interfaces.Drawer {
 	drawer := new(textureDrawer)
 	drawer.texture = texture
 	drawer.dimensions = &primitives.Dimensions{

@@ -1,91 +1,76 @@
 package game
 
 import (
-	"github.com/GomeBox/gome/internal/game/interfaces"
+	"github.com/GomeBox/gome/interfaces"
 )
 
+type Runner interface {
+	Run(game interfaces.Game) error
+}
+
 type runner struct {
-	initCallback   interfaces.InitializeCallback
-	getSettings    interfaces.GetSettings
-	updateCallback interfaces.UpdateCallback
-	drawCallback   interfaces.DrawCallback
-	gameSystem     interfaces.System
-	loop           loop
+	context    interfaces.Context
+	gameSystem System
+	loop       Loop
 }
 
-func NewRunner(callbacks *interfaces.Callbacks) (interfaces.Runner, error) {
-	adapterSystem, err := callbacks.CreateAdapters()
-	if err != nil {
-		return nil, err
-	}
-	systemsFactory := newSystemsFactory(adapterSystem)
-	gameSystem := newSystem(adapterSystem, systemsFactory)
+func NewRunner(gameSystem System, gameLoop Loop) Runner {
 	runner := runner{
-		initCallback:   callbacks.Init,
-		getSettings:    callbacks.GetSettings,
-		updateCallback: callbacks.Update,
-		drawCallback:   callbacks.Draw,
-		gameSystem:     gameSystem,
-		loop:           singleThreadedLoop,
+		gameSystem: gameSystem,
+		loop:       gameLoop,
 	}
-	return &runner, nil
+	return &runner
 }
 
-func (runner *runner) Run() error {
-	settings := runner.getSettings()
-	err := initialize(runner.gameSystem, settings, runner.initCallback)
+func (runner *runner) Run(game interfaces.Game) error {
+	settings := newSettings()
+	game.Setup(settings)
+	err := runner.initialize(game, settings)
 	if err != nil {
 		return err
 	}
-	return run(runner.gameSystem, runner.updateCallback, runner.drawCallback, runner.loop)
+	return runner.startLoop(game)
 }
 
-func initialize(gameSystem interfaces.System,
-	settings interfaces.Settings,
-	initCallback interfaces.InitializeCallback) error {
-	err := gameSystem.Initialize()
+func (runner *runner) initialize(game interfaces.Game, settings *settings) error {
+	err := runner.gameSystem.Initialize()
 	if err != nil {
 		return err
 	}
-	err = gameSystem.Graphics().Window().Open(settings.WindowSettings())
+	err = runner.gameSystem.OpenGameWindow(settings.windowSettings)
 	if err != nil {
 		return err
 	}
-	err = initCallback(gameSystem)
+	err = game.Initialize(runner.gameSystem.Context())
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func run(gameSystem interfaces.System,
-	update interfaces.UpdateCallback,
-	draw interfaces.DrawCallback,
-	loop loop) error {
-	loopData := createLoopData(gameSystem, update, draw)
-	return loop(loopData)
+func (runner *runner) startLoop(game interfaces.Game) error {
+	loopData := runner.createLoopData(game)
+	return runner.loop(loopData)
 }
 
-func createLoopData(gameSystem interfaces.System,
-	updateCallback interfaces.UpdateCallback,
-	drawCallback interfaces.DrawCallback) *loopData {
-	return &loopData{
-		gameSystem: gameSystem,
+func (runner *runner) createLoopData(game interfaces.Game) *LoopData {
+	return &LoopData{
+		gameSystem: runner.gameSystem,
 		update: func(timeDelta float32) (keepRunning bool, error error) {
-			return update(updateCallback, gameSystem, timeDelta)
+			return runner.update(game, timeDelta)
 		},
-		draw: func(timeDelta float32) error { return drawCallback(timeDelta) },
+		draw: func(timeDelta float32) error {
+			return game.Draw(timeDelta, runner.gameSystem.Context())
+		},
 	}
 }
 
-func update(updateCallback interfaces.UpdateCallback,
-	gameSystem interfaces.System,
-	timeDelta float32) (keepRunning bool, err error) {
-	err = gameSystem.Update()
+func (runner *runner) update(game interfaces.Game, timeDelta float32) (keepRunning bool, err error) {
+	err = runner.gameSystem.Update()
 	if err != nil {
 		return false, err
 	}
-	keepRunning, err = updateCallback(timeDelta)
+	keepRunning, err = game.Update(timeDelta, runner.gameSystem.Context())
 	if err != nil {
 		return false, err
 	}

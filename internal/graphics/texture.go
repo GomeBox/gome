@@ -2,11 +2,10 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/internal/graphics/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
-func newTexture(tex adapters.Texture) interfaces.Texture {
+func newTexture(tex adapters.Texture) *texture {
 	texture := new(texture)
 	texture.tex = tex
 	return texture

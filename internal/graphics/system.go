@@ -1,38 +1,31 @@
 package graphics
 
 import (
-	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/internal/graphics/interfaces"
+	"github.com/GomeBox/gome/adapters/graphics"
+	"github.com/GomeBox/gome/interfaces"
+	gameGraphics "github.com/GomeBox/gome/internal/game/graphics"
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Adapters struct {
-	TextureLoader   adapters.TextureLoader
-	TextureCreator  adapters.TextureCreator
-	FontLoader      adapters.FontLoader
-	WindowAdapter   adapters.WindowAdapter
-	ScreenPresenter adapters.ScreenPresenter
-}
-
-func NewSystem(adapters Adapters) interfaces.System {
+func NewSystem(graphicsAdapters graphics.Adapters) gameGraphics.System {
 	sys := new(system)
-	sys.textureLoader = adapters.TextureLoader
-	sys.fontLoader = adapters.FontLoader
-	sys.textureCreator = adapters.TextureCreator
-	sys.windowAdapter = adapters.WindowAdapter
-	window := newWindow(adapters.WindowAdapter)
+	sys.textureLoader = graphicsAdapters.TextureLoader()
+	sys.fontLoader = graphicsAdapters.FontLoader()
+	sys.textureCreator = graphicsAdapters.TextureCreator()
+	sys.windowAdapter = graphicsAdapters.WindowAdapter()
+	window := newWindow(graphicsAdapters.WindowAdapter())
 	sys.window = window
-	sys.screenPresenter = adapters.ScreenPresenter
+	sys.screenPresenter = graphicsAdapters.ScreenPresenter()
 	return sys
 }
 
 type system struct {
-	textureCreator  adapters.TextureCreator
-	textureLoader   adapters.TextureLoader
-	fontLoader      adapters.FontLoader
-	windowAdapter   adapters.WindowAdapter
-	window          interfaces.Window
-	screenPresenter adapters.ScreenPresenter
+	textureCreator  graphics.TextureCreator
+	textureLoader   graphics.TextureLoader
+	fontLoader      graphics.FontLoader
+	windowAdapter   graphics.WindowAdapter
+	window          *window
+	screenPresenter graphics.ScreenPresenter
 }
 
 func (sys *system) LoadTexture(filename string) (interfaces.Texture, error) {
@@ -69,4 +62,8 @@ func (sys *system) Clear() error {
 
 func (sys *system) Present() error {
 	return sys.screenPresenter.Present()
+}
+
+func (sys *system) OpenWindow(settings gameGraphics.WindowSettings) error {
+	return sys.window.Open(settings)
 }

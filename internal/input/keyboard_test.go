@@ -2,9 +2,8 @@ package input
 
 import (
 	"errors"
-	"fmt"
 	"github.com/GomeBox/gome/adapters/input/mocks"
-	"github.com/GomeBox/gome/internal/input/interfaces"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -14,7 +13,10 @@ func TestKeyboard_RegisterKey(t *testing.T) {
 	errorOnKeyPress := false
 	keyPressed := false
 	adapter := createKeyboardAdapterMock(&errorOnKeyPress, &keyPressed)
-	keyboard := newKeyboard(adapter)
+	keyboard := keyboardImpl{
+		adapter:        adapter,
+		registeredKeys: make(map[primitives.KeyType]*key),
+	}
 	keyType := primitives.KeyS
 
 	errorOnKeyPress = true
@@ -42,7 +44,10 @@ func TestKeyboard_UnregisterKey(t *testing.T) {
 	errorOnKeyPress := false
 	keyPressed := false
 	adapter := createKeyboardAdapterMock(&errorOnKeyPress, &keyPressed)
-	keyboard := newKeyboard(adapter)
+	keyboard := keyboardImpl{
+		adapter:        adapter,
+		registeredKeys: make(map[primitives.KeyType]*key),
+	}
 	keyType := primitives.KeyS
 	keyType2 := primitives.KeySpace
 	_, _ = keyboard.RegisterKey(keyType)
@@ -77,7 +82,6 @@ func TestKeyboard_Update(t *testing.T) {
 	}
 	adapter.CallCntKeyPressed = 0
 	for i, c := range cases {
-		fmt.Println(adapter.CallCntKeyPressed)
 		keyPressed = c.wantIsPressed
 		_ = keyboard.Update()
 		expectedCallCnt := len(keyTypes) * (i + 1)
@@ -87,6 +91,9 @@ func TestKeyboard_Update(t *testing.T) {
 			assert.Equal(t, c.wantWasPressed, k.WasPressed(), "WasPressed has unexpected value. got %t, want %t", k.WasPressed(), c.wantWasPressed)
 		}
 	}
+	errorOnKeyPress = true
+	err := keyboard.Update()
+	assert.Error(t, err)
 }
 
 type updateTestData struct {

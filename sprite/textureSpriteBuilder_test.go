@@ -1,8 +1,9 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics/mocks"
+	"github.com/GomeBox/gome/internal/graphics/mocks"
 	"github.com/GomeBox/gome/primitives"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -44,4 +45,14 @@ func TestFromTexture_DrawerProperlySet(t *testing.T) {
 	if !drawCalled {
 		t.Error("Texture.DrawF was not called")
 	}
+}
+
+func TestTextureSpriteBuilder_SetSourceRect(t *testing.T) {
+	textureSpriteBuilder := textureSpriteBuilder{
+		sourceRect: nil,
+	}
+	wantSourceRect := primitives.NewRectangle(0, 0, 10, 10)
+	returnedBuilder := textureSpriteBuilder.SetSourceRect(&wantSourceRect)
+	assert.Same(t, &wantSourceRect, textureSpriteBuilder.sourceRect)
+	assert.Same(t, &textureSpriteBuilder, returnedBuilder)
 }

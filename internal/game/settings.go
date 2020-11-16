@@ -1,25 +1,24 @@
 package game
 
 import (
-	"github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/internal/game/interfaces"
+	"github.com/GomeBox/gome/interfaces"
+	"github.com/GomeBox/gome/internal/game/graphics"
 )
 
 //Settings contains all settings to run a game
 type settings struct {
-	windowSettings *graphics.WindowSettings
+	windowSettings graphics.WindowSettings
 }
 
 //WindowSettings returns the settings of the game window
-func (s settings) WindowSettings() *graphics.WindowSettings {
-	return s.windowSettings
+func (s settings) WindowSettings() interfaces.WindowSettings {
+	return &s.windowSettings
 }
 
-//NewSettings initializes new Settings with default values
-func NewSettings() interfaces.Settings {
+//newSettings initializes new Settings with default values
+func newSettings() *settings {
 	s := new(settings)
-	s.windowSettings = new(graphics.WindowSettings)
-	s.windowSettings.Resolution.Width = 800
-	s.windowSettings.Resolution.Height = 600
-	return *s
+	s.windowSettings = graphics.WindowSettings{}
+	s.windowSettings.SetResolution(800, 600)
+	return s
 }

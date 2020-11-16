@@ -1,68 +1,71 @@
 package audio
 
 import (
+	"errors"
 	adapters "github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/adapters/audio/mocks"
-	"github.com/GomeBox/gome/internal/audio/interfaces"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestSystem_LoadSong_PassesFilename(t *testing.T) {
-	got := ""
-	want := "test.file"
-	songLoaderMock := mocks.SongLoader{OnLoad: func(fileName string) (adapters.Song, error) {
-		got = fileName
-		return nil, nil
-	}}
-	a := Adapters{
-		SoundLoader: nil,
-		SongLoader:  songLoaderMock,
+func TestNewSystem(t *testing.T) {
+	soundLoader := new(mocks.SoundLoader)
+	songLoader := new(mocks.SongLoader)
+	audioAdapters := &mocks.Adapters{
+		OnSoundLoader: func() adapters.SoundLoader {
+			return soundLoader
+		},
+		OnSongLoader: func() adapters.SongLoader {
+			return songLoader
+		},
 	}
-	system := NewSystem(a)
-	_, err := system.LoadSong(want)
-	if err != nil {
-		t.Errorf("expected err to be nil but was %v", err)
-		return
-	}
-	if got != want {
-		t.Errorf("fileName was not passed to songLoader. got %v, want %v", got, want)
-		return
-	}
+	sys := NewSystem(audioAdapters)
+	assert.NotNil(t, sys)
+	s := sys.(*system)
+	assert.Same(t, soundLoader, s.soundLoader)
+	assert.Same(t, songLoader, s.songLoader)
 }
 
-func TestSystem_LoadSound_PassesFilename(t *testing.T) {
+func TestSystem_LoadSong(t *testing.T) {
 	got := ""
 	want := "test.file"
-	soundLoaderMock := mocks.SoundLoader{OnLoad: func(fileName string) (adapters.Sound, error) {
+	retErr := false
+	songLoaderMock := mocks.SongLoader{OnLoad: func(fileName string) (adapters.Song, error) {
 		got = fileName
+		if retErr {
+			return nil, errors.New("test")
+		}
 		return nil, nil
 	}}
-	a := Adapters{
-		SoundLoader: soundLoaderMock,
-		SongLoader:  nil,
+	sys := system{
+		songLoader: songLoaderMock,
 	}
-	system := NewSystem(a)
-	_, err := system.LoadSound(want)
-	if err != nil {
-		t.Errorf("expected err to be nil but was %v", err)
-		return
-	}
-	if got != want {
-		t.Errorf("fileName was not passed to soundLoader. got %v, want %v", got, want)
-		return
-	}
+	_, err := sys.LoadSong(want)
+	assert.NoError(t, err)
+	assert.Equal(t, want, got)
+	retErr = true
+	_, err = sys.LoadSong(want)
+	assert.Error(t, err)
 }
 
-func createMockSystem(soundMock *mocks.Sound, songMock *mocks.Song) interfaces.System {
+func TestSystem_LoadSound(t *testing.T) {
+	got := ""
+	want := "test.file"
+	retErr := false
 	soundLoaderMock := mocks.SoundLoader{OnLoad: func(fileName string) (adapters.Sound, error) {
-		return soundMock, nil
+		got = fileName
+		if retErr {
+			return nil, errors.New("test")
+		}
+		return nil, nil
 	}}
-	songLoaderMock := mocks.SongLoader{OnLoad: func(fileName string) (adapters.Song, error) {
-		return songMock, nil
-	}}
-	a := Adapters{
-		SoundLoader: soundLoaderMock,
-		SongLoader:  songLoaderMock,
+	sys := system{
+		soundLoader: soundLoaderMock,
 	}
-	return NewSystem(a)
+	_, err := sys.LoadSound(want)
+	assert.NoError(t, err)
+	assert.Equal(t, want, got)
+	retErr = true
+	_, err = sys.LoadSound(want)
+	assert.Error(t, err)
 }

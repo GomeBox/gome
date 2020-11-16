@@ -2,7 +2,7 @@ package graphics
 
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
-	"github.com/GomeBox/gome/internal/graphics/interfaces"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
@@ -10,7 +10,7 @@ type font struct {
 	creator adapters.TextCreator
 }
 
-func newFont(creator adapters.TextCreator) interfaces.Font {
+func newFont(creator adapters.TextCreator) *font {
 	font := new(font)
 	font.creator = creator
 	return font

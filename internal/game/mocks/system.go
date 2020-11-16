@@ -1,19 +1,32 @@
 package mocks
 
 import (
-	audio "github.com/GomeBox/gome/internal/audio/interfaces"
-	graphics "github.com/GomeBox/gome/internal/graphics/interfaces"
-	input "github.com/GomeBox/gome/internal/input/interfaces"
+	"github.com/GomeBox/gome/interfaces"
+	"github.com/GomeBox/gome/internal/game/graphics"
 )
 
 type System struct {
 	OnGraphics        func() graphics.System
-	OnInput           func() input.System
-	OnAudio           func() audio.System
 	OnUpdate          func() error
 	OnInitialize      func() error
+	OnOpenGameWindow  func(settings graphics.WindowSettings) error
+	OnContext         func() interfaces.Context
 	CallCntUpdate     int
 	CallCntInitialize int
+}
+
+func (s *System) Context() interfaces.Context {
+	if s.OnContext != nil {
+		return s.OnContext()
+	}
+	return nil
+}
+
+func (s *System) OpenGameWindow(settings graphics.WindowSettings) error {
+	if s.OnOpenGameWindow != nil {
+		return s.OnOpenGameWindow(settings)
+	}
+	return nil
 }
 
 func (s *System) Initialize() error {
@@ -35,20 +48,6 @@ func (s *System) Update() error {
 func (s *System) Graphics() graphics.System {
 	if s.OnGraphics != nil {
 		return s.OnGraphics()
-	}
-	return nil
-}
-
-func (s *System) Input() input.System {
-	if s.OnInput != nil {
-		return s.OnInput()
-	}
-	return nil
-}
-
-func (s *System) Audio() audio.System {
-	if s.OnAudio != nil {
-		return s.OnAudio()
 	}
 	return nil
 }

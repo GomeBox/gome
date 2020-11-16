@@ -1,7 +1,7 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/sprite"
 	"github.com/GomeBox/gome/primitives"
 )
@@ -17,14 +17,14 @@ type TextureSpriteBuilder interface {
 	SetSourceRect(sourceRect *primitives.Rectangle) TextureSpriteBuilder
 }
 
-func FromTexture(texture graphics.Texture) TextureSpriteBuilder {
+func FromTexture(texture interfaces.Texture) TextureSpriteBuilder {
 	builder := new(textureSpriteBuilder)
 	builder.texture = texture
 	return builder
 }
 
 type textureSpriteBuilder struct {
-	texture    graphics.Texture
+	texture    interfaces.Texture
 	pos        primitives.PointF
 	sourceRect *primitives.Rectangle
 }

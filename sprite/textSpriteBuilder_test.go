@@ -1,7 +1,7 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/graphics/mocks"
+	"github.com/GomeBox/gome/internal/graphics/mocks"
 	"github.com/GomeBox/gome/primitives"
 	"testing"
 )
