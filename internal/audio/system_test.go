@@ -8,6 +8,24 @@ import (
 	"testing"
 )
 
+func TestNewSystem(t *testing.T) {
+	soundLoader := new(mocks.SoundLoader)
+	songLoader := new(mocks.SongLoader)
+	audioAdapters := &mocks.Adapters{
+		OnSoundLoader: func() adapters.SoundLoader {
+			return soundLoader
+		},
+		OnSongLoader: func() adapters.SongLoader {
+			return songLoader
+		},
+	}
+	sys := NewSystem(audioAdapters)
+	assert.NotNil(t, sys)
+	s := sys.(*system)
+	assert.Same(t, soundLoader, s.soundLoader)
+	assert.Same(t, songLoader, s.songLoader)
+}
+
 func TestSystem_LoadSong(t *testing.T) {
 	got := ""
 	want := "test.file"
