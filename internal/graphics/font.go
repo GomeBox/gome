@@ -6,15 +6,11 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Font interface {
-	CreateText(text string, color primitives.Color) (interfaces.Text, error)
-}
-
 type font struct {
 	creator adapters.TextCreator
 }
 
-func newFont(creator adapters.TextCreator) Font {
+func newFont(creator adapters.TextCreator) *font {
 	font := new(font)
 	font.creator = creator
 	return font

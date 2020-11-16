@@ -1,13 +1,13 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/internal/graphics"
+	"github.com/GomeBox/gome/internal/graphics/mocks"
 	"github.com/GomeBox/gome/primitives"
 	"testing"
 )
 
 func TestFromTexture_Get(t *testing.T) {
-	textureMock := new(graphics.TextureMock)
+	textureMock := new(mocks.TextureMock)
 	s := FromTexture(textureMock).Get()
 	if s == nil {
 		t.Error("sprite not properly created")
@@ -15,7 +15,7 @@ func TestFromTexture_Get(t *testing.T) {
 }
 
 func TestFromTexture_SetPosition(t *testing.T) {
-	textureMock := new(graphics.TextureMock)
+	textureMock := new(mocks.TextureMock)
 	wantX := float32(123.24)
 	wantY := float32(234.56)
 	s := FromTexture(textureMock).SetPosition(wantX, wantY).Get()
@@ -30,7 +30,7 @@ func TestFromTexture_SetPosition(t *testing.T) {
 }
 
 func TestFromTexture_DrawerProperlySet(t *testing.T) {
-	textureMock := new(graphics.TextureMock)
+	textureMock := new(mocks.TextureMock)
 	drawCalled := false
 	textureMock.OnDrawF = func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
 		drawCalled = true

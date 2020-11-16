@@ -5,13 +5,7 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Texture interface {
-	Draw(source, dest *primitives.Rectangle) error
-	DrawF(source *primitives.Rectangle, dest *primitives.RectangleF) error
-	Dimensions() primitives.Dimensions
-}
-
-func newTexture(tex adapters.Texture) Texture {
+func newTexture(tex adapters.Texture) *texture {
 	texture := new(texture)
 	texture.tex = tex
 	return texture

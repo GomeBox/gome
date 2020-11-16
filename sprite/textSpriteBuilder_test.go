@@ -1,13 +1,13 @@
 package sprite
 
 import (
-	"github.com/GomeBox/gome/internal/graphics"
+	"github.com/GomeBox/gome/internal/graphics/mocks"
 	"github.com/GomeBox/gome/primitives"
 	"testing"
 )
 
 func TestFromText_Get(t *testing.T) {
-	textMock := new(graphics.TextMock)
+	textMock := new(mocks.TextMock)
 	s := FromText(textMock).Get()
 	if s == nil {
 		t.Error("sprite not properly created")
@@ -15,7 +15,7 @@ func TestFromText_Get(t *testing.T) {
 }
 
 func TestFromText_SetPosition(t *testing.T) {
-	textMock := new(graphics.TextMock)
+	textMock := new(mocks.TextMock)
 	wantX := float32(123.24)
 	wantY := float32(234.56)
 	s := FromText(textMock).SetPosition(wantX, wantY).Get()
@@ -30,7 +30,7 @@ func TestFromText_SetPosition(t *testing.T) {
 }
 
 func TestFromText_DrawerProperlySet(t *testing.T) {
-	textMock := new(graphics.TextMock)
+	textMock := new(mocks.TextMock)
 	drawCalled := false
 	textMock.OnDrawF = func(f *primitives.PointF) error {
 		drawCalled = true

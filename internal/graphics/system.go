@@ -24,7 +24,7 @@ type system struct {
 	textureLoader   graphics.TextureLoader
 	fontLoader      graphics.FontLoader
 	windowAdapter   graphics.WindowAdapter
-	window          Window
+	window          *window
 	screenPresenter graphics.ScreenPresenter
 }
 

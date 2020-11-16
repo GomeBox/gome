@@ -7,12 +7,7 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Window interface {
-	Dimensions() (primitives.Dimensions, error)
-	Open(settings graphics.WindowSettings) error
-}
-
-func newWindow(adapter adapters.WindowAdapter) Window {
+func newWindow(adapter adapters.WindowAdapter) *window {
 	w := new(window)
 	w.adapter = adapter
 	return w

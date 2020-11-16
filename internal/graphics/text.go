@@ -5,13 +5,7 @@ import (
 	"github.com/GomeBox/gome/primitives"
 )
 
-type Text interface {
-	Draw(position *primitives.Point) error
-	DrawF(position *primitives.PointF) error
-	Dimensions() primitives.Dimensions
-}
-
-func newText(drawer adapters.TextDrawer) Text {
+func newText(drawer adapters.TextDrawer) *text {
 	return &text{drawer: drawer}
 }
 

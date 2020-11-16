@@ -1,4 +1,4 @@
-package graphics
+package mocks
 
 import "github.com/GomeBox/gome/primitives"
 
