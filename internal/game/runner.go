@@ -37,7 +37,7 @@ func (runner *runner) initialize(game interfaces.Game, settings *settings) error
 	if err != nil {
 		return err
 	}
-	err = runner.gameSystem.OpenGameWindow(settings.windowSettings)
+	err = runner.gameSystem.OpenGameWindow(*settings.windowSettings)
 	if err != nil {
 		return err
 	}

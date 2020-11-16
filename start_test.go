@@ -1,7 +1,6 @@
-package internal
+package gome
 
 import (
-	"errors"
 	"github.com/GomeBox/gome/adapters"
 	"github.com/GomeBox/gome/adapters/audio"
 	audioMocks "github.com/GomeBox/gome/adapters/audio/mocks"
@@ -17,11 +16,7 @@ import (
 )
 
 func TestStart(t *testing.T) {
-	retErr := false
-	createAdapters := func() (adapters.System, error) {
-		if retErr {
-			return nil, errors.New("test")
-		}
+	createAdapters := func() adapters.System {
 		return &mocks.System{
 			OnInput: func() input.Adapters {
 				return &inputMocks.Adapters{}
@@ -39,7 +34,7 @@ func TestStart(t *testing.T) {
 			OnAudio: func() audio.Adapters {
 				return &audioMocks.Adapters{}
 			},
-		}, nil
+		}
 	}
 	updateCalled := false
 	game := &internalMocks.Game{
@@ -51,8 +46,4 @@ func TestStart(t *testing.T) {
 	err := Start(game, createAdapters)
 	assert.NoError(t, err)
 	assert.True(t, updateCalled)
-
-	retErr = true
-	err = Start(game, createAdapters)
-	assert.Error(t, err)
 }
