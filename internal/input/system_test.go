@@ -22,7 +22,7 @@ func TestSystem_Keyboard(t *testing.T) {
 }
 
 func TestSystem_Update(t *testing.T) {
-	kb := new(mocks2.KeyboardMock)
+	kb := new(mocks2.Keyboard)
 	system := system{keyboard: kb}
 	_ = system.Update()
 	assert.Equal(t, 1, kb.CallCntUpdate)

@@ -2,6 +2,7 @@ package game
 
 import (
 	graphicsAdapters "github.com/GomeBox/gome/internal/game/graphics"
+	"github.com/GomeBox/gome/internal/game/mocks"
 	"testing"
 )
 
@@ -11,7 +12,7 @@ func TestLoop_SingleThreadedLoop_ClearsGraphics(t *testing.T) {
 	drawCnt := 0
 	graphicsSystem := new(graphicsAdapters.SystemMock)
 	var gameSystem System
-	gameSystem = &systemMock{
+	gameSystem = &mocks.System{
 		OnGraphics: func() graphicsAdapters.System {
 			return graphicsSystem
 		},

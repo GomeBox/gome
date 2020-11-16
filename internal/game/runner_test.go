@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/game/graphics"
+	"github.com/GomeBox/gome/internal/game/mocks"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -22,13 +23,13 @@ func TestNewRunner(t *testing.T) {
 	assert.True(t, loopCalled)
 }
 
-func createRunner(loop Loop) (*runner, *systemMock) {
+func createRunner(loop Loop) (*runner, *mocks.System) {
 	if loop == nil {
 		loop = func(loopData *LoopData) error {
 			return nil
 		}
 	}
-	sysMock := new(systemMock)
+	sysMock := new(mocks.System)
 	testRunner := NewRunner(sysMock, loop)
 	return testRunner.(*runner), sysMock
 }
@@ -42,7 +43,7 @@ func TestRunner_initialize_InitializesGameSystem(t *testing.T) {
 		}
 		return nil
 	}
-	gameMock := new(gameMock)
+	gameMock := new(mocks.Game)
 	err := runner.initialize(gameMock, new(settings))
 	assert.NoError(t, err)
 	assert.Equal(t, 1, sysMock.CallCntInitialize)
@@ -68,17 +69,17 @@ func TestRunner_initialize_OpenWindow(t *testing.T) {
 		Title: "test title",
 	}
 	settings := settings{windowSettings: wantSettings}
-	err := runner.initialize(new(gameMock), &settings)
+	err := runner.initialize(new(mocks.Game), &settings)
 	assert.NoError(t, err)
 	assert.Equal(t, gotSettings, wantSettings)
 	retErr = true
-	err = runner.initialize(new(gameMock), &settings)
+	err = runner.initialize(new(mocks.Game), &settings)
 	assert.Error(t, err)
 }
 
 func TestRunner_initialize_InitializesGame(t *testing.T) {
 	context := new(context)
-	game := new(gameMock)
+	game := new(mocks.Game)
 	retErr := false
 	var gotContext interfaces.Context
 	game.OnInitialize = func(context interfaces.Context) error {
@@ -99,7 +100,7 @@ func TestRunner_initialize_InitializesGame(t *testing.T) {
 
 func TestRunner_Run(t *testing.T) {
 	var gotSettings interfaces.Settings
-	game := &gameMock{
+	game := &mocks.Game{
 		OnSetup: func(settings interfaces.Settings) {
 			gotSettings = settings
 		},
@@ -124,7 +125,7 @@ func TestRunner_Run(t *testing.T) {
 	testUpdate(t, sysMock, game, gotLoopData)
 }
 
-func testUpdate(t *testing.T, gameSystem *systemMock, game *gameMock, loopData *LoopData) {
+func testUpdate(t *testing.T, gameSystem *mocks.System, game *mocks.Game, loopData *LoopData) {
 	var gotDelta float32
 	var retError error
 	game.OnUpdate = func(timeDelta float32, context interfaces.Context) (keepRunning bool, error error) {

@@ -7,7 +7,7 @@ import (
 )
 
 func TestFromText_Get(t *testing.T) {
-	textMock := new(mocks.TextMock)
+	textMock := new(mocks.Text)
 	s := FromText(textMock).Get()
 	if s == nil {
 		t.Error("sprite not properly created")
@@ -15,7 +15,7 @@ func TestFromText_Get(t *testing.T) {
 }
 
 func TestFromText_SetPosition(t *testing.T) {
-	textMock := new(mocks.TextMock)
+	textMock := new(mocks.Text)
 	wantX := float32(123.24)
 	wantY := float32(234.56)
 	s := FromText(textMock).SetPosition(wantX, wantY).Get()
@@ -30,7 +30,7 @@ func TestFromText_SetPosition(t *testing.T) {
 }
 
 func TestFromText_DrawerProperlySet(t *testing.T) {
-	textMock := new(mocks.TextMock)
+	textMock := new(mocks.Text)
 	drawCalled := false
 	textMock.OnDrawF = func(f *primitives.PointF) error {
 		drawCalled = true
@@ -42,6 +42,6 @@ func TestFromText_DrawerProperlySet(t *testing.T) {
 		t.Errorf("err was expected to be nil but was %v", err)
 	}
 	if !drawCalled {
-		t.Error("TextMock.DrawF was not called")
+		t.Error("Text.DrawF was not called")
 	}
 }

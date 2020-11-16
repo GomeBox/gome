@@ -8,7 +8,7 @@ import (
 )
 
 func TestNewTextDrawer(t *testing.T) {
-	//text := new(mocks.TextMock)
+	//text := new(mocks.Text)
 	//drawer := NewTextDrawer(text)
 	//d := drawer.(*textDrawer)
 	//assert.Same(t, text, d.text)
@@ -20,7 +20,7 @@ func TestTextDrawer_DrawTo(t *testing.T) {
 		Y: 234.34,
 	}
 	var drawPos *primitives.PointF
-	text := mocks.TextMock{
+	text := mocks.Text{
 		OnDrawF: func(f *primitives.PointF) error {
 			drawPos = f
 			return nil
@@ -37,7 +37,7 @@ func TestTextDrawer_Dimensions(t *testing.T) {
 		Width:  100,
 		Height: 390,
 	}
-	text := mocks.TextMock{
+	text := mocks.Text{
 		OnDimensions: func() primitives.Dimensions {
 			return dimensions
 		},

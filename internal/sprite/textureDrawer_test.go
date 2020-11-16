@@ -13,7 +13,7 @@ func TestNewTextureDrawer(t *testing.T) {
 		Width:  123,
 		Height: 234,
 	}
-	texture := &mocks.TextureMock{
+	texture := &mocks.Texture{
 		OnDimensions: func() primitives.Dimensions {
 			return dimensions
 		},
@@ -43,7 +43,7 @@ func TestTextureDrawer_DrawTo(t *testing.T) {
 		DimensionsF: dimensions.ToDimensionsF()}
 	var drawSourceRect *primitives.Rectangle
 	var drawDestRect *primitives.RectangleF
-	texture := &mocks.TextureMock{
+	texture := &mocks.Texture{
 		OnDrawF: func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
 			drawSourceRect = source
 			drawDestRect = dest

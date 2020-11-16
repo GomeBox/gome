@@ -1,11 +1,11 @@
-package game
+package mocks
 
 import (
 	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/game/graphics"
 )
 
-type systemMock struct {
+type System struct {
 	OnGraphics        func() graphics.System
 	OnUpdate          func() error
 	OnInitialize      func() error
@@ -15,21 +15,21 @@ type systemMock struct {
 	CallCntInitialize int
 }
 
-func (s *systemMock) Context() interfaces.Context {
+func (s *System) Context() interfaces.Context {
 	if s.OnContext != nil {
 		return s.OnContext()
 	}
 	return nil
 }
 
-func (s *systemMock) OpenGameWindow(settings graphics.WindowSettings) error {
+func (s *System) OpenGameWindow(settings graphics.WindowSettings) error {
 	if s.OnOpenGameWindow != nil {
 		return s.OnOpenGameWindow(settings)
 	}
 	return nil
 }
 
-func (s *systemMock) Initialize() error {
+func (s *System) Initialize() error {
 	s.CallCntInitialize++
 	if s.OnInitialize != nil {
 		return s.OnInitialize()
@@ -37,7 +37,7 @@ func (s *systemMock) Initialize() error {
 	return nil
 }
 
-func (s *systemMock) Update() error {
+func (s *System) Update() error {
 	s.CallCntUpdate++
 	if s.OnUpdate != nil {
 		return s.OnUpdate()
@@ -45,7 +45,7 @@ func (s *systemMock) Update() error {
 	return nil
 }
 
-func (s *systemMock) Graphics() graphics.System {
+func (s *System) Graphics() graphics.System {
 	if s.OnGraphics != nil {
 		return s.OnGraphics()
 	}

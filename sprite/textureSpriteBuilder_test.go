@@ -7,7 +7,7 @@ import (
 )
 
 func TestFromTexture_Get(t *testing.T) {
-	textureMock := new(mocks.TextureMock)
+	textureMock := new(mocks.Texture)
 	s := FromTexture(textureMock).Get()
 	if s == nil {
 		t.Error("sprite not properly created")
@@ -15,7 +15,7 @@ func TestFromTexture_Get(t *testing.T) {
 }
 
 func TestFromTexture_SetPosition(t *testing.T) {
-	textureMock := new(mocks.TextureMock)
+	textureMock := new(mocks.Texture)
 	wantX := float32(123.24)
 	wantY := float32(234.56)
 	s := FromTexture(textureMock).SetPosition(wantX, wantY).Get()
@@ -30,7 +30,7 @@ func TestFromTexture_SetPosition(t *testing.T) {
 }
 
 func TestFromTexture_DrawerProperlySet(t *testing.T) {
-	textureMock := new(mocks.TextureMock)
+	textureMock := new(mocks.Texture)
 	drawCalled := false
 	textureMock.OnDrawF = func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
 		drawCalled = true
