@@ -1,4 +1,4 @@
-package input
+package mocks
 
 import (
 	"github.com/GomeBox/gome/interfaces"

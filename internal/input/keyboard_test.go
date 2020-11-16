@@ -2,8 +2,8 @@ package input
 
 import (
 	"errors"
-	"fmt"
 	"github.com/GomeBox/gome/adapters/input/mocks"
+	"github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/primitives"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -70,7 +70,7 @@ func TestKeyboard_Update(t *testing.T) {
 		primitives.KeyEsc,
 		primitives.KeyRightAlt,
 	}
-	keys := make([]Key, len(keyTypes))
+	keys := make([]interfaces.Key, len(keyTypes))
 	for i, kt := range keyTypes {
 		k, _ := keyboard.RegisterKey(kt)
 		keys[i] = k
@@ -82,7 +82,6 @@ func TestKeyboard_Update(t *testing.T) {
 	}
 	adapter.CallCntKeyPressed = 0
 	for i, c := range cases {
-		fmt.Println(adapter.CallCntKeyPressed)
 		keyPressed = c.wantIsPressed
 		_ = keyboard.Update()
 		expectedCallCnt := len(keyTypes) * (i + 1)
@@ -92,6 +91,9 @@ func TestKeyboard_Update(t *testing.T) {
 			assert.Equal(t, c.wantWasPressed, k.WasPressed(), "WasPressed has unexpected value. got %t, want %t", k.WasPressed(), c.wantWasPressed)
 		}
 	}
+	errorOnKeyPress = true
+	err := keyboard.Update()
+	assert.Error(t, err)
 }
 
 type updateTestData struct {
