@@ -30,6 +30,7 @@ type system struct {
 	graphics      graphics.System
 	input         input.System
 	audio         audio.System
+	context       interfaces.Context
 }
 
 func (system *system) Initialize() error {
@@ -49,7 +50,10 @@ func (system *system) Graphics() graphics.System {
 }
 
 func (system *system) Context() interfaces.Context {
-	return nil
+	if system.context == nil {
+		system.context = newContext(system.graphics, system.input, system.audio)
+	}
+	return system.context
 }
 
 func (system *system) OpenGameWindow(settings graphics.WindowSettings) error {
