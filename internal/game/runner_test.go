@@ -44,7 +44,7 @@ func TestRunner_initialize_InitializesGameSystem(t *testing.T) {
 		return nil
 	}
 	gameMock := new(mocks.Game)
-	err := runner.initialize(gameMock, new(settings))
+	err := runner.initialize(gameMock, newSettings())
 	assert.NoError(t, err)
 	assert.Equal(t, 1, sysMock.CallCntInitialize)
 }
@@ -68,7 +68,7 @@ func TestRunner_initialize_OpenWindow(t *testing.T) {
 		},
 		Title: "test title",
 	}
-	settings := settings{windowSettings: wantSettings}
+	settings := settings{windowSettings: &wantSettings}
 	err := runner.initialize(new(mocks.Game), &settings)
 	assert.NoError(t, err)
 	assert.Equal(t, gotSettings, wantSettings)
@@ -93,7 +93,7 @@ func TestRunner_initialize_InitializesGame(t *testing.T) {
 	sys.OnContext = func() interfaces.Context {
 		return context
 	}
-	err := runner.initialize(game, new(settings))
+	err := runner.initialize(game, newSettings())
 	assert.NoError(t, err)
 	assert.Same(t, context, gotContext)
 }
