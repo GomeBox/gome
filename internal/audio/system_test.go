@@ -1,55 +1,53 @@
 package audio
 
 import (
+	"errors"
 	adapters "github.com/GomeBox/gome/adapters/audio"
 	"github.com/GomeBox/gome/adapters/audio/mocks"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestSystem_LoadSong_PassesFilename(t *testing.T) {
+func TestSystem_LoadSong(t *testing.T) {
 	got := ""
 	want := "test.file"
+	retErr := false
 	songLoaderMock := mocks.SongLoader{OnLoad: func(fileName string) (adapters.Song, error) {
 		got = fileName
+		if retErr {
+			return nil, errors.New("test")
+		}
 		return nil, nil
 	}}
-	a := &mocks.Adapters{
-		OnSongLoader: func() adapters.SongLoader {
-			return songLoaderMock
-		},
+	sys := system{
+		songLoader: songLoaderMock,
 	}
-	system := NewSystem(a)
-	_, err := system.LoadSong(want)
-	if err != nil {
-		t.Errorf("expected err to be nil but was %v", err)
-		return
-	}
-	if got != want {
-		t.Errorf("fileName was not passed to songLoader. got %v, want %v", got, want)
-		return
-	}
+	_, err := sys.LoadSong(want)
+	assert.NoError(t, err)
+	assert.Equal(t, want, got)
+	retErr = true
+	_, err = sys.LoadSong(want)
+	assert.Error(t, err)
 }
 
-func TestSystem_LoadSound_PassesFilename(t *testing.T) {
+func TestSystem_LoadSound(t *testing.T) {
 	got := ""
 	want := "test.file"
+	retErr := false
 	soundLoaderMock := mocks.SoundLoader{OnLoad: func(fileName string) (adapters.Sound, error) {
 		got = fileName
+		if retErr {
+			return nil, errors.New("test")
+		}
 		return nil, nil
 	}}
-	a := &mocks.Adapters{
-		OnSoundLoader: func() adapters.SoundLoader {
-			return soundLoaderMock
-		},
+	sys := system{
+		soundLoader: soundLoaderMock,
 	}
-	system := NewSystem(a)
-	_, err := system.LoadSound(want)
-	if err != nil {
-		t.Errorf("expected err to be nil but was %v", err)
-		return
-	}
-	if got != want {
-		t.Errorf("fileName was not passed to soundLoader. got %v, want %v", got, want)
-		return
-	}
+	_, err := sys.LoadSound(want)
+	assert.NoError(t, err)
+	assert.Equal(t, want, got)
+	retErr = true
+	_, err = sys.LoadSound(want)
+	assert.Error(t, err)
 }
