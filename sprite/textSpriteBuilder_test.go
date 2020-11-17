@@ -32,7 +32,7 @@ func TestFromText_SetPosition(t *testing.T) {
 func TestFromText_DrawerProperlySet(t *testing.T) {
 	textMock := new(mocks.Text)
 	drawCalled := false
-	textMock.OnDrawF = func(f *primitives.PointF) error {
+	textMock.OnDraw = func(f primitives.PointF) error {
 		drawCalled = true
 		return nil
 	}

@@ -3,11 +3,11 @@ package mocks
 import "github.com/GomeBox/gome/primitives"
 
 type Drawer struct {
-	OnDrawTo     func(pos *primitives.PointF) error
+	OnDrawTo     func(pos primitives.PointF) error
 	OnDimensions func() primitives.Dimensions
 }
 
-func (d *Drawer) DrawTo(pos *primitives.PointF) error {
+func (d *Drawer) DrawTo(pos primitives.PointF) error {
 	if d.OnDrawTo != nil {
 		return d.OnDrawTo(pos)
 	}

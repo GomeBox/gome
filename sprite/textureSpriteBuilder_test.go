@@ -33,7 +33,7 @@ func TestFromTexture_SetPosition(t *testing.T) {
 func TestFromTexture_DrawerProperlySet(t *testing.T) {
 	textureMock := new(mocks.Texture)
 	drawCalled := false
-	textureMock.OnDrawF = func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
+	textureMock.OnDraw = func(source *primitives.Rectangle, dest primitives.RectangleF) error {
 		drawCalled = true
 		return nil
 	}

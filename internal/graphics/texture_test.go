@@ -18,43 +18,11 @@ func TestTexture_newTexture(t *testing.T) {
 func TestTexture_Draw(t *testing.T) {
 	firstCall := true
 	wantSource := primitives.NewRectangle(100, 200, 34, 45)
-	wantDest := primitives.NewRectangle(5, 6, 7, 8)
-	var gotSource, gotDest *primitives.Rectangle
-	adapter := &mocks.Texture{
-		OnDraw: func(source, dest *primitives.Rectangle) error {
-			gotSource, gotDest = source, dest
-			if firstCall {
-				firstCall = false
-				return nil
-			}
-			return errors.New("test")
-		},
-	}
-	tex := newTexture(adapter)
-	err := tex.Draw(&wantSource, &wantDest)
-	if err != nil {
-		t.Error("Draw returned unexpected error")
-	}
-	if &wantSource != gotSource {
-		t.Errorf("source not as expected. Got %v, want %v", gotSource, wantSource)
-	}
-	if &wantDest != gotDest {
-		t.Errorf("dest not as expected. Got %v, want %v", gotDest, wantDest)
-	}
-	err = tex.Draw(&wantSource, &wantDest)
-	if err == nil {
-		t.Error("Draw did not return expected error of adapter")
-	}
-}
-
-func TestTexture_DrawF(t *testing.T) {
-	firstCall := true
-	wantSource := primitives.NewRectangle(100, 200, 34, 45)
 	wantDest := primitives.NewRectangleF(5, 6, 7, 8)
 	var gotSource *primitives.Rectangle
-	var gotDest *primitives.RectangleF
+	var gotDest primitives.RectangleF
 	adapter := &mocks.Texture{
-		OnDrawF: func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
+		OnDraw: func(source *primitives.Rectangle, dest primitives.RectangleF) error {
 			gotSource, gotDest = source, dest
 			if firstCall {
 				firstCall = false
@@ -64,17 +32,17 @@ func TestTexture_DrawF(t *testing.T) {
 		},
 	}
 	tex := newTexture(adapter)
-	err := tex.DrawF(&wantSource, &wantDest)
+	err := tex.Draw(&wantSource, wantDest)
 	if err != nil {
 		t.Error("DrawF returned unexpected error")
 	}
 	if &wantSource != gotSource {
 		t.Errorf("source not as expected. Got %v, want %v", gotSource, wantSource)
 	}
-	if &wantDest != gotDest {
+	if wantDest != gotDest {
 		t.Errorf("dest not as expected. Got %v, want %v", gotDest, wantDest)
 	}
-	err = tex.DrawF(&wantSource, &wantDest)
+	err = tex.Draw(&wantSource, wantDest)
 	if err == nil {
 		t.Error("DrawF did not return expected error of adapter")
 	}

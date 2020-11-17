@@ -31,5 +31,5 @@ func (sprite *spriteImpl) SetPosition(x, y float32) {
 }
 
 func (sprite *spriteImpl) Draw() error {
-	return sprite.drawer.DrawTo(&sprite.pos)
+	return sprite.drawer.DrawTo(sprite.pos)
 }
