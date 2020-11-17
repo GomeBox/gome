@@ -116,11 +116,20 @@ func TestRunner_Run(t *testing.T) {
 	sysMock.OnOpenGameWindow = func(settings graphics.WindowSettings) error {
 		return nil
 	}
+	var initError error
+	sysMock.OnInitialize = func() error {
+		return initError
+	}
 	err := runner.Run(game)
 	assert.NoError(t, err)
 	assert.Equal(t, newSettings(), gotSettings)
 	assert.Same(t, sysMock, gotLoopData.gameSystem)
 	assert.True(t, loopCalled)
+
+	initError = errors.New("test")
+	err = runner.Run(game)
+	assert.Error(t, err)
+	initError = nil
 
 	testUpdate(t, sysMock, game, gotLoopData)
 }
