@@ -38,13 +38,13 @@ func TestTextureDrawer_DrawTo(t *testing.T) {
 		X: 234.5,
 		Y: 145.34,
 	}
-	destRect := &primitives.RectangleF{
+	destRect := primitives.RectangleF{
 		PointF:      pos,
 		DimensionsF: dimensions.ToDimensionsF()}
 	var drawSourceRect *primitives.Rectangle
-	var drawDestRect *primitives.RectangleF
+	var drawDestRect primitives.RectangleF
 	texture := &mocks.Texture{
-		OnDrawF: func(source *primitives.Rectangle, dest *primitives.RectangleF) error {
+		OnDraw: func(source *primitives.Rectangle, dest primitives.RectangleF) error {
 			drawSourceRect = source
 			drawDestRect = dest
 			return nil
@@ -55,7 +55,7 @@ func TestTextureDrawer_DrawTo(t *testing.T) {
 		dimensions: &dimensions,
 		sourceRect: &sourceRect,
 	}
-	err := drawer.DrawTo(&pos)
+	err := drawer.DrawTo(pos)
 	assert.NoError(t, err)
 	assert.Equal(t, drawSourceRect, &sourceRect, "sourceRect not equal")
 	assert.Equal(t, destRect, drawDestRect, "destRect not equal")

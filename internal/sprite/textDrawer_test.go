@@ -7,21 +7,14 @@ import (
 	"testing"
 )
 
-func TestNewTextDrawer(t *testing.T) {
-	//text := new(mocks.Text)
-	//drawer := NewTextDrawer(text)
-	//d := drawer.(*textDrawer)
-	//assert.Same(t, text, d.text)
-}
-
 func TestTextDrawer_DrawTo(t *testing.T) {
-	pos := &primitives.PointF{
+	pos := primitives.PointF{
 		X: 123.23,
 		Y: 234.34,
 	}
-	var drawPos *primitives.PointF
+	var drawPos primitives.PointF
 	text := mocks.Text{
-		OnDrawF: func(f *primitives.PointF) error {
+		OnDraw: func(f primitives.PointF) error {
 			drawPos = f
 			return nil
 		},

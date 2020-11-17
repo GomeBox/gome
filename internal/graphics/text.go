@@ -13,16 +13,8 @@ type text struct {
 	drawer adapters.TextDrawer
 }
 
-func (text *text) Draw(position *primitives.Point) error {
+func (text *text) Draw(position primitives.PointF) error {
 	err := text.drawer.Draw(position)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (text *text) DrawF(position *primitives.PointF) error {
-	err := text.drawer.DrawF(position)
 	if err != nil {
 		return err
 	}

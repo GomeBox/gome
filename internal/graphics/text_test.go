@@ -16,14 +16,14 @@ func TestText_newText(t *testing.T) {
 }
 
 func TestText_Draw(t *testing.T) {
-	testPos := primitives.Point{
+	testPos := primitives.PointF{
 		X: 100,
 		Y: 200,
 	}
-	var gotPos *primitives.Point
+	var gotPos primitives.PointF
 	firstCall := true
 	drawer := &mocks.TextDrawer{
-		OnDraw: func(position *primitives.Point) error {
+		OnDraw: func(position primitives.PointF) error {
 			gotPos = position
 			if firstCall {
 				firstCall = false
@@ -33,47 +33,16 @@ func TestText_Draw(t *testing.T) {
 		},
 	}
 	text := newText(drawer)
-	err := text.Draw(&testPos)
+	err := text.Draw(testPos)
 	if err != nil {
 		t.Errorf("Draw returned unexpected error, %v", err)
 	}
-	if gotPos != &testPos {
+	if gotPos != testPos {
 		t.Errorf("position was not correctly passed to drawer")
 	}
-	err = text.Draw(&testPos)
+	err = text.Draw(testPos)
 	if err == nil {
 		t.Error("Draw did not return expected error")
-	}
-}
-
-func TestText_DrawF(t *testing.T) {
-	testPos := primitives.PointF{
-		X: 100.12,
-		Y: 200.34,
-	}
-	var gotPos *primitives.PointF
-	firstCall := true
-	drawer := &mocks.TextDrawer{
-		OnDrawF: func(position *primitives.PointF) error {
-			gotPos = position
-			if firstCall {
-				firstCall = false
-				return nil
-			}
-			return errors.New("test")
-		},
-	}
-	text := newText(drawer)
-	err := text.DrawF(&testPos)
-	if err != nil {
-		t.Errorf("DrawF returned unexpected error, %v", err)
-	}
-	if gotPos != &testPos {
-		t.Errorf("position was not correctly passed to drawer")
-	}
-	err = text.DrawF(&testPos)
-	if err == nil {
-		t.Error("DrawF did not return expected error")
 	}
 }
 

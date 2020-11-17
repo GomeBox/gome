@@ -60,9 +60,9 @@ func TestSpriteImpl_SetPosition(t *testing.T) {
 }
 
 func TestSpriteImpl_Draw(t *testing.T) {
-	var drawPos *primitives.PointF
+	var drawPos primitives.PointF
 	drawer := mocks.Drawer{
-		OnDrawTo: func(pos *primitives.PointF) error {
+		OnDrawTo: func(pos primitives.PointF) error {
 			drawPos = pos
 			return nil
 		},
@@ -77,5 +77,5 @@ func TestSpriteImpl_Draw(t *testing.T) {
 	}
 	err := sprite.Draw()
 	assert.NoError(t, err)
-	assert.Equal(t, &pos, drawPos)
+	assert.Equal(t, pos, drawPos)
 }

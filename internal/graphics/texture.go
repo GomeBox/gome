@@ -15,16 +15,8 @@ type texture struct {
 	tex adapters.Texture
 }
 
-func (texture *texture) Draw(source, dest *primitives.Rectangle) error {
+func (texture *texture) Draw(source *primitives.Rectangle, dest primitives.RectangleF) error {
 	err := texture.tex.Draw(source, dest)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (texture *texture) DrawF(source *primitives.Rectangle, dest *primitives.RectangleF) error {
-	err := texture.tex.DrawF(source, dest)
 	if err != nil {
 		return err
 	}

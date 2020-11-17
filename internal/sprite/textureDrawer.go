@@ -1,18 +1,18 @@
 package sprite
 
 import (
-	interfaces2 "github.com/GomeBox/gome/interfaces"
+	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 	"github.com/GomeBox/gome/internal/sprite/interfaces"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type textureDrawer struct {
-	texture    interfaces2.Texture
+	texture    gomeInterfaces.Texture
 	dimensions *primitives.Dimensions
 	sourceRect *primitives.Rectangle
 }
 
-func NewTextureDrawer(texture interfaces2.Texture, sourceRect *primitives.Rectangle) interfaces.Drawer {
+func NewTextureDrawer(texture gomeInterfaces.Texture, sourceRect *primitives.Rectangle) interfaces.Drawer {
 	drawer := new(textureDrawer)
 	drawer.texture = texture
 	drawer.dimensions = &primitives.Dimensions{
@@ -23,11 +23,11 @@ func NewTextureDrawer(texture interfaces2.Texture, sourceRect *primitives.Rectan
 	return drawer
 }
 
-func (drawer *textureDrawer) DrawTo(pos *primitives.PointF) error {
-	destRect := &primitives.RectangleF{
-		PointF:      *pos,
+func (drawer *textureDrawer) DrawTo(pos primitives.PointF) error {
+	destRect := primitives.RectangleF{
+		PointF:      pos,
 		DimensionsF: drawer.dimensions.ToDimensionsF()}
-	return drawer.texture.DrawF(drawer.sourceRect, destRect)
+	return drawer.texture.Draw(drawer.sourceRect, destRect)
 }
 
 func (drawer *textureDrawer) Dimensions() primitives.Dimensions {
