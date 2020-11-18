@@ -51,7 +51,7 @@ func (system *system) Graphics() graphics.System {
 
 func (system *system) Context() interfaces.Context {
 	if system.context == nil {
-		system.context = newContext(system.graphics, system.input, system.audio)
+		system.context = NewContext(system.graphics, system.input, system.audio)
 	}
 	return system.context
 }
