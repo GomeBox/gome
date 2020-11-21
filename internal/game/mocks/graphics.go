@@ -7,7 +7,9 @@ import (
 )
 
 type Graphics struct {
-	OnOpenWindow func(settings graphics.WindowSettings) error
+	OnOpenWindow  func(settings graphics.WindowSettings) error
+	OnLoadTexture func(fileName string) (interfaces.Texture, error)
+	OnLoadFont    func(fileName string, size int) (interfaces.Font, error)
 }
 
 func (g *Graphics) OpenWindow(settings graphics.WindowSettings) error {
@@ -26,11 +28,17 @@ func (g *Graphics) Present() error {
 }
 
 func (g *Graphics) LoadTexture(fileName string) (interfaces.Texture, error) {
-	panic("implement me")
+	if g.OnLoadTexture != nil {
+		return g.OnLoadTexture(fileName)
+	}
+	return nil, nil
 }
 
 func (g *Graphics) LoadFont(fileName string, size int) (interfaces.Font, error) {
-	panic("implement me")
+	if g.OnLoadFont != nil {
+		return g.OnLoadFont(fileName, size)
+	}
+	return nil, nil
 }
 
 func (g *Graphics) CreateTexture(dimensions primitives.Dimensions, color primitives.Color) (interfaces.Texture, error) {

@@ -10,7 +10,6 @@ type Content interface {
 func New(context interfaces.Context) Content {
 	c := new(content)
 	c.context = context
-	c.loadedContent = make([]interfaces.Unloader, 0)
 	return c
 }
 
@@ -21,28 +20,59 @@ type content struct {
 
 func (c *content) LoadSound(fileName string) (interfaces.Player, error) {
 	player, err := c.context.Audio().LoadSound(fileName)
-	c.loadedContent = append(c.loadedContent, player)
+	c.addLoadedContent(player)
 	return player, err
 }
 
 func (c *content) LoadSong(fileName string) (interfaces.Player, error) {
 	player, err := c.context.Audio().LoadSong(fileName)
-	c.loadedContent = append(c.loadedContent, player)
+	c.addLoadedContent(player)
 	return player, err
 }
 
 func (c *content) LoadTexture(fileName string) (interfaces.Texture, error) {
-	panic("implement me")
+	texture, err := c.context.Graphics().LoadTexture(fileName)
+	c.addLoadedContent(texture)
+	return texture, err
 }
 
 func (c *content) LoadFont(fileName string, size int) (interfaces.Font, error) {
-	panic("implement me")
+	font, err := c.context.Graphics().LoadFont(fileName, size)
+	c.addLoadedContent(font)
+	return font, err
 }
 
 func (c *content) Unload() error {
-	panic("implement me")
+	var err error
+	for _, cont := range c.loadedContent {
+		if cont.Unloaded() {
+			continue
+		}
+		tmpErr := cont.Unload()
+		if tmpErr != nil {
+			err = tmpErr
+		}
+	}
+	if err == nil {
+		c.loadedContent = nil
+	}
+	return err
 }
 
 func (c *content) Unloaded() bool {
-	return false
+	allUnloaded := true
+	for _, cont := range c.loadedContent {
+		if !cont.Unloaded() {
+			allUnloaded = false
+			break
+		}
+	}
+	return allUnloaded
+}
+
+func (c *content) addLoadedContent(content interfaces.Unloader) {
+	if c.loadedContent == nil {
+		c.loadedContent = make([]interfaces.Unloader, 0)
+	}
+	c.loadedContent = append(c.loadedContent, content)
 }

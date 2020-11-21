@@ -18,17 +18,17 @@ type system struct {
 }
 
 func (sys *system) LoadSound(fileName string) (interfaces.Player, error) {
-	player, err := sys.soundLoader.Load(fileName)
+	sound, err := sys.soundLoader.Load(fileName)
 	if err != nil {
 		return nil, err
 	}
-	return &sound{soundPlayer: player}, nil
+	return newPlayer(sound), nil
 }
 
 func (sys *system) LoadSong(fileName string) (interfaces.Player, error) {
-	player, err := sys.songLoader.Load(fileName)
+	song, err := sys.songLoader.Load(fileName)
 	if err != nil {
 		return nil, err
 	}
-	return &song{songPlayer: player}, nil
+	return newPlayer(song), nil
 }

@@ -13,7 +13,7 @@ func TestSong_Play(t *testing.T) {
 		playCalled = true
 		return nil
 	}}
-	song := song{songPlayer: adapterMock}
+	song := player{adapter: adapterMock}
 	_ = song.Play()
 	assert.True(t, playCalled)
 }
@@ -30,7 +30,7 @@ func TestSong_Unload(t *testing.T) {
 			return nil
 		},
 	}
-	song := song{songPlayer: adapterMock}
+	song := newPlayer(adapterMock)
 	err := song.Unload()
 	assert.NoError(t, err)
 	assert.True(t, unloadCalled)
@@ -52,12 +52,12 @@ func TestSong_Unloaded(t *testing.T) {
 			return nil
 		},
 	}
-	s := song{songPlayer: adapterMock}
+	s := newPlayer(adapterMock)
 	assert.False(t, s.Unloaded())
 	_ = s.Unload()
 	assert.True(t, s.Unloaded())
 
-	s = song{songPlayer: adapterMock}
+	s = newPlayer(adapterMock)
 	retErr = true
 	_ = s.Unload()
 	assert.False(t, s.Unloaded())
