@@ -6,6 +6,7 @@ import (
 
 //Font represents a loaded font of a defined size
 type Font interface {
+	Unloader
 	//CreateText creates a Text instance from the Font of the passed color, containing the passed text
 	CreateText(value string, color primitives.Color) (Text, error)
 }

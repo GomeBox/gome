@@ -4,7 +4,7 @@ import (
 	gomeInterfaces "github.com/GomeBox/gome/interfaces"
 )
 
-func newContext(
+func NewContext(
 	graphics gomeInterfaces.Graphics,
 	input gomeInterfaces.Input,
 	audio gomeInterfaces.Audio) gomeInterfaces.Context {

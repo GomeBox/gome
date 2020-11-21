@@ -29,5 +29,5 @@ func createContext(
 	graphics gomeInterfaces.Graphics,
 	input gomeInterfaces.Input,
 	audio gomeInterfaces.Audio) gomeInterfaces.Context {
-	return newContext(graphics, input, audio)
+	return NewContext(graphics, input, audio)
 }

@@ -1,10 +1,14 @@
 package mocks
 
-import "github.com/GomeBox/gome/primitives"
+import (
+	"github.com/GomeBox/gome/adapters/shared/mocks"
+	"github.com/GomeBox/gome/primitives"
+)
 
 type Texture struct {
 	OnDraw       func(source *primitives.Rectangle, dest primitives.RectangleF) error
 	OnDimensions func() primitives.Dimensions
+	mocks.Unloader
 }
 
 func (t *Texture) Draw(source *primitives.Rectangle, dest primitives.RectangleF) error {

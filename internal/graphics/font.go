@@ -3,16 +3,19 @@ package graphics
 import (
 	adapters "github.com/GomeBox/gome/adapters/graphics"
 	"github.com/GomeBox/gome/interfaces"
+	"github.com/GomeBox/gome/internal/shared"
 	"github.com/GomeBox/gome/primitives"
 )
 
 type font struct {
 	creator adapters.TextCreator
+	shared.Unloader
 }
 
 func newFont(creator adapters.TextCreator) *font {
 	font := new(font)
 	font.creator = creator
+	font.Unloader.Adapter = creator
 	return font
 }
 

@@ -7,6 +7,14 @@ type Texture struct {
 	OnDimensions func() primitives.Dimensions
 }
 
+func (t *Texture) Unload() error {
+	panic("implement me")
+}
+
+func (t *Texture) Unloaded() bool {
+	panic("implement me")
+}
+
 func (t *Texture) Draw(source *primitives.Rectangle, dest primitives.RectangleF) error {
 	if t.OnDraw != nil {
 		return t.OnDraw(source, dest)
